@@ -1,13 +1,24 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {mainRouter} from "./router";
 
 
-function App() {
+
+const App = () => {
     return (
-        <div className="App">
-            <header className="App-header">
-                123
-            </header>
-        </div>
+        <>
+            <Router>
+                <Routes>
+                    {
+                        mainRouter.map((r) => {
+                            return (
+                                <Route key={r.id} path={r.path} element={r.component} />
+                            )
+                        })
+                    }
+                </Routes>
+            </Router>
+        </>
     );
 }
 
