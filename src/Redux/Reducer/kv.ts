@@ -1,10 +1,9 @@
 import {IKvState} from "../../Type/base";
 import {KVAction} from "../Action/kv";
-import {keyboard} from "@testing-library/user-event/dist/keyboard";
 
 const initState: IKvState = {}
 
-export const KVReducer = (state: IKvState, action: KVAction) => {
+export const KVReducer = (state: IKvState = initState, action: KVAction) => {
     let State: IKvState = {...state};
     switch (action.type) {
         case "kvClearValue":

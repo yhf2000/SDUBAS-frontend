@@ -41,7 +41,7 @@ const dealResponse = async (resp: any, url: string) => {
         localStorage.setItem('server-time', response.data.timestamp)
         if (Math.abs(response.data.timestamp - Date.now()) > 60000) {
             message.error("本地时间异常")
-            return Promise.reject("本地时间异常")
+            // return Promise.reject("本地时间异常")
         }
         switch (response.data.code) {
             case 0:

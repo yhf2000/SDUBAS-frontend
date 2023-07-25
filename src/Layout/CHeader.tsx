@@ -7,6 +7,7 @@ import {headerMenu} from "../router";
 import {IState} from "../Type/base";
 import {browserTest} from "../Utils/browserTest";
 import UserAvatarByEmail from "../Component/User/UserAvatarByEmail";
+import sdu_logo from "../Assert/img/logo.jpg"
 
 const {Header} = Layout;
 
@@ -52,9 +53,9 @@ const CHeader = () => {
             justifyContent: "space-between", background: "#fff",
             boxShadow: "0 2px 8px rgba(0,0,0,.15)"
         }}>
-            <div style={{flex: "125px 0 0", margin: "-5px 16px 16px -10px", height: "32px"}} key={"logo"}>
-                {/*<img src={undefined} style={{width: "125px", height: '30px'}} alt={"logo"}/>*/}
-                山东大学
+            <div style={{flex: "125px 0 0", margin: "10px 16px 16px -26px"}} key={"logo"}>
+                <img src={sdu_logo} style={{width: "125px"}} alt={"山东大学 logo"}/>
+
             </div>
             <div style={{minWidth: 0, flex: "auto"}}>
                 <Menu

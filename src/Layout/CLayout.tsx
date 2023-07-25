@@ -23,27 +23,37 @@ const CLayout = () => {
     return (
         <>
             <UserLoginCheck jump={false}/>
-            <Layout style={{height: "max-content", minHeight: "100%", minWidth: "1300px"}}>
-                <Layout style={{minWidth: 500, backgroundColor: "#fff"}}>
-                    <CHeader/>
-                    <Content style={{
-                        backgroundColor: "#fff",
-                        paddingTop: 64,
-                        margin: '20px 16px 0',
-                        display: "table",
-                        height: "auto"
-                    }}>
+            <Layout style={{
+                backgroundColor: "#fff",
+                display: "flex", flexDirection: "column", minHeight: "100vh",
+            }}>
+                <CHeader/>
+                <Content style={{
+                    backgroundColor: "#fff",
+                    paddingTop: 64,
+                    margin: '20px 16px 0',
+                    display: "table",
+                    height: "auto",
+                    flex: "auto"
+                }}>
+                    <div style={{textAlign: "center", margin: "0 auto"}}>
                         <Routes>
+
                             {CLayoutRouter.map(({id, path, component}) =>
                                 <Route key={id} path={path} element={component}/>
                             )}
+
                         </Routes>
-                    </Content>
-                    <Footer style={{textAlign: 'center', backgroundColor: "white"}}>
-                        Copyright © 2023 Shandong University
-                    </Footer>
-                </Layout>
+                    </div>
+                </Content>
+                <Footer style={{
+                    textAlign: 'center', backgroundColor: "white", flex: 1,
+                    maxHeight: "80px"
+                }}>
+                    Copyright © 2023 Shandong University
+                </Footer>
             </Layout>
+
         </>
     )
 

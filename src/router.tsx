@@ -28,5 +28,9 @@ export const CLayoutRouter: IBaseRouter[] = [
 
 ]
 export const headerMenu: IRouter[] = [
-    {id: 0, title: "主页", path: "/c/home",}
+    {id: 0, title: "主页", path: "/c/home",},
+    {id: 1, title: "实验平台", path: "/c/experiment",},
+    {id: 2, title: "教学资源", path: "/c/resources",},
+    {id: 3, title: "课程平台", path: "/c/course",},
+    {id: 4, title: "教学档案", path: "/c/records",},
 ]
