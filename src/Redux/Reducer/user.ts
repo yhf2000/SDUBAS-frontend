@@ -4,6 +4,7 @@ import {IUserState} from "../../Type/user";
 
 const initState: IUserState = {
     isLogin: false,
+    queryLogin: false,
     userInfo: undefined
 }
 
@@ -19,6 +20,9 @@ export const UserReducer = (state: IUserState = initState, action: UserAction) =
         case "userLogout":
             State.isLogin = false
             State.userInfo = undefined
+            break
+        case "userQueryLogin":
+            State.queryLogin = action.data
             break
 
         default:

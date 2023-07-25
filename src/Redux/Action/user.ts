@@ -3,7 +3,8 @@ import {IUserInfo} from "../../Type/user";
 export type UserAction =
     setUserInfo |
     userLogin |
-    userLogout
+    userLogout |
+    userQueryLogin
 
 export interface setUserInfo {
     type: "setUserInfo"
@@ -12,6 +13,11 @@ export interface setUserInfo {
 
 export interface userLogin {
     type: "userLogin"
+}
+
+export interface userQueryLogin {
+    type: "userQueryLogin"
+    data: boolean
 }
 
 export interface userLogout {

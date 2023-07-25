@@ -1,9 +1,7 @@
 import request from "./request";
 
-const Api = {
-    getProfile: async () => {
-        return request.get("user/getProfile")
+export const Api: { [key: string]: any } = {
+    getProfile: async (data: any) => {
+        return request.get("user/getProfile", data)
     }
 }
-
-export default Api;

@@ -26,7 +26,7 @@ const CHeader = () => {
         } catch (e) {
             navigator("/error/browser", {replace: true})
         }
-    }, [])
+    }, [navigator])
 
     useEffect(() => {
         for (let i = 0; i < headerMenu.length; i++) {
@@ -44,30 +44,29 @@ const CHeader = () => {
             message.info("已退出登录").then();
         }
 
-    }, [isLogin, userLoginState])
+    }, [isLogin, userLoginState, navigator])
 
     return (
         <Header style={{
             position: 'fixed', zIndex: 1, width: '100%', display: "flex",
-            justifyContent: "space-between", background: "#fff"
+            justifyContent: "space-between", background: "#fff",
+            boxShadow: "0 2px 8px rgba(0,0,0,.15)"
         }}>
             <div style={{flex: "125px 0 0", margin: "-5px 16px 16px -10px", height: "32px"}} key={"logo"}>
-                <img src={undefined} style={{width: "125px", height: '30px'}} alt={"logo"}/>
+                {/*<img src={undefined} style={{width: "125px", height: '30px'}} alt={"logo"}/>*/}
+                山东大学
             </div>
             <div style={{minWidth: 0, flex: "auto"}}>
                 <Menu
                     mode="horizontal"
-                    theme={"light"}
+                    theme="light"
                     selectedKeys={[selectedKey]}
-                >
-                    {headerMenu.map((r) => {
-                        return (
-                            <Menu.Item key={r.id} icon={r.icon}>
-                                <Link to={r.path}>{r.title}</Link>
-                            </Menu.Item>
-                        )
-                    })}
-                </Menu>
+                    items={headerMenu.map((r) => ({
+                        key: r.id,
+                        icon: r.icon,
+                        label: <Link to={r.path}>{r.title}</Link>,
+                    }))}
+                />
             </div>
             <div style={{flex: "0"}} key={"operator"}>
                 {isLogin ? (

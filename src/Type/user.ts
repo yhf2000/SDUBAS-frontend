@@ -7,6 +7,7 @@ export interface IUserInfo {
 
 export interface IUserState {
     isLogin: boolean
+    queryLogin: boolean
     userInfo: IUserInfo | undefined
 }
 
