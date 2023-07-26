@@ -8,10 +8,10 @@ let cache: { [key: string]: number } = {};
 const getData = (
     name: string,
     key: any,
-    staleTime = 5 * 1000,
     onSuccess: any = undefined,
     onError: any = undefined,
-    onFinally: any = undefined
+    onFinally: any = undefined,
+    staleTime = 5 * 1000
 ): AppThunk => {
     return async (dispatch: Dispatch<AnyAction>, getState: any) => {
         // your code here) => {

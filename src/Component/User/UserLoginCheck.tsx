@@ -19,7 +19,6 @@ const UserLoginCheck = (props: IUserLoginCheck) => {
         dispatch(getData(
             "getProfile",
             {},
-            5 * 60 * 1000,
             (res: any) => {
                 dispatch({type: "setUserInfo", data: res});
                 dispatch({type: "userLogin"});

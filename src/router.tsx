@@ -1,6 +1,7 @@
 import CLayout from "./Layout/CLayout";
 import CRootJump from "./Layout/CRootJump";
 import Home from "./Page/Home";
+import ProjectInfo from "./Page/ProjectInfo";
 
 export interface IBaseRouter {
     id: number
@@ -25,6 +26,7 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 1, path: "/profile", component: <></>},
     {id: 2, path: "/login", component: <></>},
     {id: 3, path: "/register", component: <></>},
+    {id: 3, path: "/project-info/*", component: <ProjectInfo/>},
 
 ]
 export const headerMenu: IRouter[] = [
