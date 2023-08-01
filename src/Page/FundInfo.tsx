@@ -21,7 +21,7 @@ const FundInfo = () => {
                 </div>
                 <AddBill button={<Button type={"link"} size={'small'} style={{marginLeft:'1000px'}}>记账</Button>}/>
                 <TableWithPagination
-                    API={Api.getProfile}
+                    API={"getProfile"}
                     columns={[
                         {
                             title:'收支',

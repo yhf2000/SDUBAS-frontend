@@ -8,6 +8,8 @@ import ForgetPass from "./Form/ForgetPass";
 import {useDispatch} from "../../Redux/Store";
 import UserLoginTodo from "./userLoginTodo";
 import {loginInfo} from "../../Type/types";
+import getData from "../../API/getData";
+import UserLoginCheck from "./UserLoginCheck";
 
 type LoginType = 'SDUCAS' | 'account';
 
@@ -18,132 +20,140 @@ const Login = (props: any) => {
     const [loginType, setLoginType] = useState<LoginType>("account")
     const dispatch = useDispatch();
     const login = (data: loginInfo) => {
-        return <UserLoginTodo username={data.username} password={data.username}/>
+        dispatch(getData(
+            "login",
+            {data},
+            (r: any) => {
+                return <UserLoginCheck jump={false}/>
+            },
+            (error: any) => {
+
+            }
+        ))
     }
-    return (
-        <Card
-            style={{width: "400px", textAlign: "center", margin: "0 auto"}}>
-            <LoginForm
-                formRef={formRef}
-                logo={Logo}
-                title="用户登录"
-                subTitle="山东大学区块链学习系统"
-                actions={
-                    <></>
-                }
-                submitter={{
-                    resetButtonProps: false,
-                    render: (prop: any, def: any) => {
-                        if (loginType !== 'SDUCAS')
-                            return <Button type={"primary"} block onClick={() => {
+return (
+    <Card
+        style={{width: "400px", textAlign: "center", margin: "0 auto"}}>
+        <LoginForm
+            formRef={formRef}
+            logo={Logo}
+            title="用户登录"
+            subTitle="山东大学区块链学习系统"
+            actions={
+                <></>
+            }
+            submitter={{
+                resetButtonProps: false,
+                render: (prop: any, def: any) => {
+                    if (loginType !== 'SDUCAS')
+                        return <Button type={"primary"} block onClick={() => {
+                            formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                if (value.username && value.password)
+                                    login(value);
+                            }).catch((value) => {
+                                let sf = []
+                                value.username && sf.push(
+                                    {
+                                        name: 'username',
+                                        errors: ['用户名不能为空'],
+                                    },
+                                )
+                                value.password && sf.push(
+                                    {
+                                        name: 'password',
+                                        errors: ['密码不能为空'],
+                                    },
+                                )
+                                formRef.current?.setFields(sf);
+                            })
+                        }
+                        }> Login </Button>
+                },
+            }}
+        >
+            <Tabs activeKey={loginType} onChange={(activeKey) => setLoginType(activeKey as LoginType)}
+                  items={[
+                      {label: '账号密码登录', key: 'account'},
+                      {label: '统一身份认证登录', key: 'SDUCAS'}
+                  ]}
+            >
+            </Tabs>
+            {loginType === 'account' && (
+                <>
+                    <ProFormText
+                        name="username"
+                        fieldProps={{
+                            size: 'large',
+                            prefix: <UserOutlined className={'prefixIcon'}/>,
+                            onPressEnter: () => {
                                 formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                    if (value.username && value.password)
+                                    if (value)
                                         login(value);
-                                }).catch((value) => {
-                                    let sf = []
-                                    value.username&&sf.push(
-                                        {
-                                            name: 'username',
-                                            errors: ['用户名不能为空'],
-                                        },
+                                }).catch(() => {
+                                    formRef.current?.setFields(
+                                        [
+                                            {
+                                                name: 'username',
+                                                errors: ['用户名不能为空'],
+                                            },
+                                        ]
                                     )
-                                    value.password&&sf.push(
-                                        {
-                                            name: 'password',
-                                            errors: ['密码不能为空'],
-                                        },
-                                    )
-                                    formRef.current?.setFields(sf);
                                 })
                             }
-                            }> Login </Button>
-                    },
-                }}
-            >
-                <Tabs activeKey={loginType} onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-                      items={[
-                          {label: '账号密码登录', key: 'account'},
-                          {label: '统一身份认证登录', key: 'SDUCAS'}
-                      ]}
-                >
-                </Tabs>
-                {loginType === 'account' && (
-                    <>
-                        <ProFormText
-                            name="username"
-                            fieldProps={{
-                                size: 'large',
-                                prefix: <UserOutlined className={'prefixIcon'}/>,
-                                onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        if (value)
-                                            login(value);
-                                    }).catch(()=>{
-                                        formRef.current?.setFields(
-                                            [
-                                                {
-                                                    name: 'username',
-                                                    errors: ['用户名不能为空'],
-                                                },
-                                            ]
-                                        )
-                                    })
-                                }
-                            }}
-                            placeholder={'请输入用户名'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: '请输入用户名!',
-                                },
-                            ]}
-                        />
-                        <ProFormText.Password
-                            name="password"
-                            fieldProps={{
-                                size: 'large',
-                                prefix: <LockOutlined className={'prefixIcon'}/>,
-                                onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        if (value)
-                                            login(value);
-                                    }).catch(()=>{
-                                        formRef.current?.setFields(
-                                            [
-                                                {
-                                                    name: 'password',
-                                                    errors: ['密码不能为空'],
-                                                },
-                                            ]
-                                        )
-                                    })
-                                }
-                            }}
-                            placeholder={'请输入密码'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: '请输入密码！',
-                                },
-                            ]}
-                        />
-                    </>
-                )}
-                {
-                    loginType === 'account' && (
-                        <div style={{
-                            textAlign: "right", marginBottom: 10
-                        }}>
-                            <Space size={3}>
-                                {/*<Register button={<Button type={"link"} size={"small"}>注册</Button>}/>*/}
-                                <ForgetPass button={<Button type={"link"} size={"small"}>忘记密码</Button>}/>
-                            </Space>
-                        </div>
-                    )
-                }
-            </LoginForm>
-        </Card>
-    )
+                        }}
+                        placeholder={'请输入用户名'}
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入用户名!',
+                            },
+                        ]}
+                    />
+                    <ProFormText.Password
+                        name="password"
+                        fieldProps={{
+                            size: 'large',
+                            prefix: <LockOutlined className={'prefixIcon'}/>,
+                            onPressEnter: () => {
+                                formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                    login(value);
+                                }).catch(() => {
+                                    formRef.current?.setFields(
+                                        [
+                                            {
+                                                name: 'password',
+                                                errors: ['密码不能为空'],
+                                            },
+                                        ]
+                                    )
+                                })
+                            }
+                        }}
+                        placeholder={'请输入密码'}
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入密码！',
+                            },
+                        ]}
+                    />
+                </>
+            )}
+            {
+                loginType === 'account' && (
+                    <div style={{
+                        textAlign: "right", marginBottom: 10
+                    }}>
+                        <Space size={3}>
+                            {/*<Register button={<Button type={"link"} size={"small"}>注册</Button>}/>*/}
+                            <ForgetPass button={<Button type={"link"} size={"small"}>忘记密码</Button>}/>
+                        </Space>
+                    </div>
+                )
+            }
+        </LoginForm>
+    </Card>
+)
 }
 
 export default Login;

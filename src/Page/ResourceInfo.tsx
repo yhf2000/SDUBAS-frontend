@@ -40,7 +40,7 @@ const ResourceInfo = () => {
                 </div>
                 <TableWithPagination
                     search={true}
-                    API={Api.getProfile}
+                    API={"getProfile"}
                     columns={[
                         {
                             title:'描述',

@@ -11,7 +11,7 @@ const Resources = () => {
         <Card className="resources-card"> {/* 使用自定义样式类 */}
             <TableWithPagination
                 className="resources-table" // 使用自定义样式类
-                API={Api.getResource}
+                API={"getResource"}
                 columns={[
                     {
                         title: "项目",

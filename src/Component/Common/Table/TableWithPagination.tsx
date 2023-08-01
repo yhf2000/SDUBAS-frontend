@@ -7,11 +7,11 @@ import {ck} from "../../../Utils/isValueEmpty";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {ColumnsType} from "antd/lib/table/interface";
 import {useForm} from "antd/es/form/Form";
-import {useDispatch, useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 import {ITablePageInfo} from "../../../Type/table";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
-import resourceProfile from "../../Record/ResourceProfile";
+import getData from "../../../API/getData";
+import {useDispatch} from "../../../Redux/Store";
 
 
 export interface TableWithPaginationProps {
@@ -81,39 +81,42 @@ const TableWithPagination = (props: any) => {
         setPageSize(ps)
         setSearchText(sk)
         setLoading(true)
-        props.API({
-            pageNow: pn,
-            pageSize: ps,
-            searchKey: sk,
-            ...fmp
-        }).then((data: any) => {
-            console.log("data", data)
-            if (data.rows === null) data.rows = []
-            if (props.APIRowsTransForm !== undefined) {
-                setTableData(props.APIRowsTransForm(data.rows))
-            } else setTableData(data.rows)
-            if (data.totalNum !== undefined && data.totalNum !== "0") {
-                setTotal(data.totalNum)
-                props.name && setTableInfo(props.name, {
-                    total: data.totalNum,
-                    pageNow: pn,
-                    pageSize: ps,
-                    searchKey: sk,
-                    moreProps: fmp
-                })
-            } else {
-                setTotal(ps * data.totalPage);
-                props.name && setTableInfo(props.name, {
-                    total: ps * data.totalPage,
-                    pageNow: pn,
-                    pageSize: ps,
-                    searchKey: sk,
-                    moreProps: fmp
-                })
-            }
-            setLoading(false)
-        }).catch((error:any)=>console.log(error))
-
+        dispatch(getData(
+            props.API,
+            {
+                pageNow: pn,
+                pageSize: ps,
+                searchKey: sk,
+                ...fmp
+            },
+            (data:any)=>{
+                if (data.rows === null) data.rows = []
+                if (props.APIRowsTransForm !== undefined) {
+                    setTableData(props.APIRowsTransForm(data.rows))
+                } else setTableData(data.rows)
+                if (data.totalNum !== undefined && data.totalNum !== "0") {
+                    setTotal(data.totalNum)
+                    props.name && setTableInfo(props.name, {
+                        total: data.totalNum,
+                        pageNow: pn,
+                        pageSize: ps,
+                        searchKey: sk,
+                        moreProps: fmp
+                    })
+                } else {
+                    setTotal(ps * data.totalPage);
+                    props.name && setTableInfo(props.name, {
+                        total: ps * data.totalPage,
+                        pageNow: pn,
+                        pageSize: ps,
+                        searchKey: sk,
+                        moreProps: fmp
+                    })
+                }
+                setLoading(false)
+            },
+            (error:any)=>{console.log(error)}
+        ))
     }
 
     useEffect(() => {

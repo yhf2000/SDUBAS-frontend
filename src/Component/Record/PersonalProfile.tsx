@@ -15,7 +15,7 @@ const PersonalProfile = () => {
         Api.getPersonalProfile().then((data:any) => {
             setActivities(data.activities);
             setAwards(data.awards);
-        });
+        }).catch((error:any)=>console.log('error:',error));
     };
 
     useEffect(() => {

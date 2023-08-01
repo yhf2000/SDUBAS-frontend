@@ -19,7 +19,7 @@ const Experiment = () => {
         <>
             <TableWithPagination
                 useList={true}
-                API={Api.getCreditBank}
+                API={"getCreditBank"}
                 title={t("Experiment")}
                 size={'small'}
                 getForm={(onFinish: any) => {

@@ -6,7 +6,7 @@ const CreditBank = () => {
     return (
         <div>
             <TableWithPagination
-                API={Api.getCreditBank}
+                API={"getCreditBank"}
                 columns={[
                     {
                         title: 'proImage',

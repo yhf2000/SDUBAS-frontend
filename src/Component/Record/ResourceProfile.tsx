@@ -11,7 +11,7 @@ const ResourceProfile = () =>{
     return(
         <>
             <TableWithPagination
-                API={Api.getResourcePro}
+                API={"getResourcePro"}
                 columns={[
                     {
                         title:'名称',

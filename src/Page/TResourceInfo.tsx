@@ -10,7 +10,7 @@ const TResourceInfo = () => {
             <TableWithPagination
                 className="resource-info-table"
                 title={"项目资源详情"}
-                API={Api.getResource}
+                API={"getResource"}
                 columns={[
                     {
                         title: "名称",

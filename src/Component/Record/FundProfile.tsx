@@ -7,7 +7,7 @@ const FundProfile = () =>{
     return(
         <>
             <TableWithPagination
-                API={Api.getFundPro}
+                API={"getFundPro"}
                 columns={[
                     {
                         title:'资金',
