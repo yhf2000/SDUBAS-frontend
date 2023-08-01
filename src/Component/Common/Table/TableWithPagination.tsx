@@ -112,7 +112,8 @@ const TableWithPagination = (props: any) => {
                 })
             }
             setLoading(false)
-        })
+        }).catch((error:any)=>console.log(error))
+
     }
 
     useEffect(() => {

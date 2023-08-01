@@ -6,6 +6,8 @@ import userLoginTodo from "./userLoginTodo";
 import Logo from "../../Assert/img/blocklogo.png"
 import ForgetPass from "./Form/ForgetPass";
 import {useDispatch} from "../../Redux/Store";
+import UserLoginTodo from "./userLoginTodo";
+import {loginInfo} from "../../Type/types";
 
 type LoginType = 'SDUCAS' | 'account';
 
@@ -15,8 +17,8 @@ const Login = (props: any) => {
     const formRef = useRef<ProFormInstance>()
     const [loginType, setLoginType] = useState<LoginType>("account")
     const dispatch = useDispatch();
-    const login=(data:any)=>{
-        dispatch(userLoginTodo(data));
+    const login = (data: loginInfo) => {
+        return <UserLoginTodo username={data.username} password={data.username}/>
     }
     return (
         <Card
@@ -31,11 +33,27 @@ const Login = (props: any) => {
                 }
                 submitter={{
                     resetButtonProps: false,
-                    render: (prop:any, def:any) => {
+                    render: (prop: any, def: any) => {
                         if (loginType !== 'SDUCAS')
                             return <Button type={"primary"} block onClick={() => {
-                                formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
-                                    login(value);
+                                formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                    if (value.username && value.password)
+                                        login(value);
+                                }).catch((value) => {
+                                    let sf = []
+                                    value.username&&sf.push(
+                                        {
+                                            name: 'username',
+                                            errors: ['用户名不能为空'],
+                                        },
+                                    )
+                                    value.password&&sf.push(
+                                        {
+                                            name: 'password',
+                                            errors: ['密码不能为空'],
+                                        },
+                                    )
+                                    formRef.current?.setFields(sf);
                                 })
                             }
                             }> Login </Button>
@@ -43,10 +61,10 @@ const Login = (props: any) => {
                 }}
             >
                 <Tabs activeKey={loginType} onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-                    items={[
-                        {label:'账号密码登录',key:'account'},
-                        {label:'统一身份认证登录',key:'SDUCAS'}
-                    ]}
+                      items={[
+                          {label: '账号密码登录', key: 'account'},
+                          {label: '统一身份认证登录', key: 'SDUCAS'}
+                      ]}
                 >
                 </Tabs>
                 {loginType === 'account' && (
@@ -57,8 +75,18 @@ const Login = (props: any) => {
                                 size: 'large',
                                 prefix: <UserOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
-                                        login(value);
+                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                        if (value)
+                                            login(value);
+                                    }).catch(()=>{
+                                        formRef.current?.setFields(
+                                            [
+                                                {
+                                                    name: 'username',
+                                                    errors: ['用户名不能为空'],
+                                                },
+                                            ]
+                                        )
                                     })
                                 }
                             }}
@@ -69,7 +97,6 @@ const Login = (props: any) => {
                                     message: '请输入用户名!',
                                 },
                             ]}
-
                         />
                         <ProFormText.Password
                             name="password"
@@ -77,8 +104,18 @@ const Login = (props: any) => {
                                 size: 'large',
                                 prefix: <LockOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
-                                        login(value);
+                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                        if (value)
+                                            login(value);
+                                    }).catch(()=>{
+                                        formRef.current?.setFields(
+                                            [
+                                                {
+                                                    name: 'password',
+                                                    errors: ['密码不能为空'],
+                                                },
+                                            ]
+                                        )
                                     })
                                 }
                             }}
