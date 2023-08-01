@@ -41,7 +41,7 @@ const CHeader = () => {
     useEffect(() => {
         if (!isLogin && userLoginState) {
             setUserLoginState(false)
-            navigator("/home");
+            navigator("/c/home");
             message.info("已退出登录").then();
         }
 
