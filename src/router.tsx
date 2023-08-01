@@ -26,7 +26,8 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 1, path: "/profile", component: <></>},
     {id: 2, path: "/login", component: <></>},
     {id: 3, path: "/register", component: <></>},
-    {id: 3, path: "/project-info/*", component: <ProjectInfo/>},
+    {id: 4, path: "/project-info/*", component: <ProjectInfo/>},
+    {id: 5, path: "/records", component: <>123</>},
 
 ]
 export const headerMenu: IRouter[] = [

@@ -19,7 +19,7 @@ const getData = (
         // 如果没有访问过，或者长时间没有访问过
         if (cache[key_name] === undefined || cache[key_name] + staleTime <= Date.now()) {
             cache[key_name] = Date.now();
-            console.log(key)
+            // console.log(key)
             const apiPromise = !isValueEmpty(key) ? Api[name](key) : Api[name]();
             apiPromise.then((res: any) => {
                 dispatch({type: "kvSetValue", key: key_name, data: res})

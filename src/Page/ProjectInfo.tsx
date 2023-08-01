@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {Button, Card, Col, Layout, Row, Space, Tree, Image, Tag} from 'antd';
+import {Button, Layout, Space, Tree, Image, Tag} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import Text from "antd/es/typography/Text";
 import Link from "antd/es/typography/Link";
+import ReactPlayer from "react-player";
+import ReactMarkdown from "react-markdown";
 
 const {Sider, Content} = Layout;
 
@@ -34,8 +36,52 @@ const treeData: DataNode[] = [
     },
 ];
 
+
+type IProjectContentType = "file-video" | "file-office" | "file-pdf" | "markdown"
+
+
+interface IProjectContent {
+    type: string
+}
+
+const md_str: string =
+    "# Hello, Markdown!\n" +
+    "\n" +
+    "This is a sample Markdown document to demonstrate its syntax.\n" +
+    "\n" +
+    "## Sub-heading\n" +
+    "\n" +
+    "Here is a paragraph with **bold text** and *italic text*.\n" +
+    "\n" +
+    "### Sub-sub-heading\n" +
+    "\n" +
+    "Here is a list:\n" +
+    "\n" +
+    "- Item 1\n" +
+    "- Item 2\n" +
+    "  - Sub-item 2.1\n" +
+    "  - Sub-item 2.2\n" +
+    "\n" +
+    "And a numbered list:\n" +
+    "\n" +
+    "1. First item\n" +
+    "2. Second item\n" +
+    "\n" +
+    "You can also insert hyperlinks, like [this link to OpenAI](https://www.openai.com/).\n" +
+    "\n" +
+    "Here is a blockquote:\n" +
+    "\n" +
+    "> \"Markdown is a lightweight markup language with plain-text-formatting syntax. Its design allows it to be converted to many output formats.\" - [Wikipedia](https://en.wikipedia.org/wiki/Markdown)\n" +
+    "\n" +
+    "Lastly, here is some code:\n" +
+    "\n" +
+    "```python\n" +
+    "print(\"Hello, world!\")\n" +
+    "```\n";
+
 const ProjectInfo: React.FC = () => {
     const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
+    const [type, setType] = useState<IProjectContentType>("markdown")
 
     const handleMenuSelect = (selectedKeys: React.Key[], {node}: any) => {
         setSelectedMenuId(String(node.key));
@@ -91,6 +137,53 @@ const ProjectInfo: React.FC = () => {
                 <Layout>
                     <Content style={{padding: '24px'}}>
                         <div>当前选中的菜单ID: {selectedMenuId}</div>
+                        {type === "file-video" && (
+                            <ReactPlayer
+                                className='react-player'
+                                controls
+                                url='https://zhstatic.zhihu.com/cfe/griffith/zhihu2018_hd.mp4'
+                                width="100%"
+                                height='720px'
+                            />
+                        )}
+                        {type === "file-office" && (
+                            <iframe
+                                title="demo.docx"
+                                src="https://view.officeapps.live.com/op/view.aspx?src=https://calibre-ebook.com/downloads/demos/demo.docx"
+                                width="100%"
+                                height="720px"
+                            />
+                        )}
+                        {type === "file-pdf" && (
+                            <iframe
+                                title="pdf.pdf"
+                                src="http://www.pdf995.com/samples/pdf.pdf"
+                                width="100%"
+                                height="720px"
+                            />
+                        )}
+                        {type === "markdown" && (
+                            <div style={{textAlign: "left"}}>
+                                <ReactMarkdown children={md_str}/>
+                            </div>
+                        )}
+
+
+                        {/*<iframe*/}
+                        {/*    title="spurious.xls"*/}
+                        {/*    src="https://view.officeapps.live.com/op/view.aspx?src=http://www.principlesofeconometrics.com/excel/spurious.xls"*/}
+                        {/*    width="100%"*/}
+                        {/*    height="720px"*/}
+                        {/*/>*/}
+
+                        {/*<iframe*/}
+                        {/*    title="Presentations-Tips.ppt"*/}
+                        {/*    src="https://view.officeapps.live.com/op/view.aspx?src=http://www.iasted.org/conferences/formatting/Presentations-Tips.ppt"*/}
+                        {/*    width="100%"*/}
+                        {/*    height="720px"*/}
+                        {/*/>*/}
+
+
                     </Content>
                 </Layout>
             </Layout>
