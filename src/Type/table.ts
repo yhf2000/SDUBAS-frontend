@@ -4,7 +4,7 @@ export interface ITableState {
     tableData: {
         [key: string]: {
             selectedRowKeys: React.Key[]
-            dataSource: { [key: string]: any }
+            dataSource: any
             tableVersion: number,
             tablePageInfo: ITablePageInfo | undefined
         }
@@ -16,5 +16,5 @@ export interface ITablePageInfo {
     pageNow: number
     pageSize: number
     searchKey: string
-    moreProps: { [key: string]: any }
+    moreProps: { [key: string]: any } | undefined
 }

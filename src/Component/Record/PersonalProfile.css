@@ -1,0 +1,70 @@
+.profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.profile-card {
+    width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    background-color: #1890ff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    color: #fff;
+}
+
+.profile-avatar {
+    margin-right: 16px;
+}
+
+.profile-username {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.profile-body {
+    padding: 24px;
+}
+
+.profile-contact {
+    margin-bottom: 24px;
+}
+
+.profile-email {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.profile-activities,
+.profile-awards {
+    margin-bottom: 24px;
+}
+
+.profile-activities h3,
+.profile-awards h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.profile-list {
+    margin-top: 8px;
+}
+
+.profile-list-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-list-item:last-child {
+    border-bottom: none;
+}

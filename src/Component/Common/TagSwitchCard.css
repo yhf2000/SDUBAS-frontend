@@ -1,0 +1,58 @@
+/* 根容器 */
+.tag-switch-card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Tabs组件样式 */
+.ant-tabs {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ant-tabs-nav {
+    background-color: #f0f2f5;
+    padding: 10px;
+}
+
+.ant-tabs-tab {
+    color: #333;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.ant-tabs-tab:hover {
+    color: #1890ff;
+}
+
+.ant-tabs-tab-active {
+    color: #1890ff;
+}
+
+/* Card组件样式 */
+.ant-card {
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.ant-card-head {
+    background-color: #1890ff;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+}
+
+.ant-card-body {
+    padding: 20px;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+    .ant-card {
+        width: 100%;
+    }
+}
