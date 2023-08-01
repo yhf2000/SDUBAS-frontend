@@ -32,7 +32,7 @@ export const TableReducer = (state: ITableState = initState, action: TableAction
 
         case "setDataSource":
             State.tableData[action.name].dataSource = action.data
-            if (action.updateTable) {
+            if(action.add) {
                 const nv = State.tableData[action.name].tableVersion
                 State.tableData[action.name].tableVersion = -(Math.abs(nv) + 1)
             }

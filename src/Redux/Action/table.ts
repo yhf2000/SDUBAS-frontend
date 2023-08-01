@@ -24,8 +24,8 @@ export interface addTableVersion {
 export interface setDataSource {
     type: "setDataSource"
     name: string
-    data: { [key: string]: any }
-    updateTable: boolean
+    data: any
+    add: boolean
 }
 
 export interface setTablePageInfo{
