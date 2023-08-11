@@ -8,10 +8,13 @@ import ItemEmail from "../../User/Form/Item/ItemEmail";
 import {Api} from "../../../API/api";
 import TabPane from "antd/es/tabs/TabPane";
 import ItemNumber from "./Item/ItemNumber";
+import {useDispatch} from "../../../Redux/Store";
+import getData from "../../../API/getData";
 
 const RequestResource = (props: any) => {
 
     const [active, setActive] = useState<string>("1")
+    const dispatch = useDispatch();
 
     return (
         <ModalForm<any>
@@ -38,38 +41,43 @@ const RequestResource = (props: any) => {
             //         return true
             //     })
             // }}
+            onFinish={async (value:any)=>{
+                dispatch(getData(
+                    'applyResource',
+                    {rId:props.rId,data:value},
+                    (res:any)=>{
+                        message.success('提交成功');
+                        return Promise.resolve(res);
+                    },
+                    ()=>{
+                        message.error('提交失败')
+                    }
+                ))
+            }}
         >
-            {/*<Tabs*/}
-            {/*    onChange={setActive}*/}
-            {/*    activeKey={active}*/}
-            {/*    items={[*/}
-            {/*        {label: '收入', key: '1',children:active==='1'&&<ItemNumber notRequired={active !== '1'} />},*/}
-            {/*    ]}*/}
-            {/*>*/}
-            {/*</Tabs>*/}
             <Form.Item
                 label="姓名"
                 name="name"
-                rules={[{ required: true, message: "请输入您的姓名" }]}
+                rules={[{required: true, message: "请输入您的姓名"}]}
             >
-                <Input placeholder="请输入您的姓名" />
+                <Input placeholder="请输入您的姓名"/>
             </Form.Item>
             <Form.Item
                 label="电子邮件"
                 name="email"
                 rules={[
-                    { required: true, message: "请输入您的电子邮件" },
-                    { type: "email", message: "请输入有效的电子邮件地址" },
+                    {required: true, message: "请输入您的电子邮件"},
+                    {type: "email", message: "请输入有效的电子邮件地址"},
                 ]}
             >
-                <Input placeholder="请输入您的电子邮件" />
+                <Input placeholder="请输入您的电子邮件"/>
             </Form.Item>
             <Form.Item
                 label="简介"
                 name="description"
-                rules={[{ required: true, message: "请输入简介" }]}
+                rules={[{required: true, message: "请输入简介"}]}
             >
-                <Input.TextArea placeholder="请输入简介" />
+                <Input.TextArea placeholder="请输入简介"/>
             </Form.Item>
         </ModalForm>
     )

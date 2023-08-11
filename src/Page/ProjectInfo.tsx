@@ -1,40 +1,21 @@
-import React, {useState} from 'react';
-import {Button, Layout, Space, Tree, Image, Tag} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Button, Layout, Space, Tree, Image, Tag, message} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import Text from "antd/es/typography/Text";
 import Link from "antd/es/typography/Link";
 import ReactPlayer from "react-player";
 import ReactMarkdown from "react-markdown";
+import {useNavigate, useParams} from "react-router-dom";
+import {useDispatch} from "../Redux/Store";
+import getData from "../API/getData";
+import {stringify} from "querystring";
+import {md_str} from "../Config/Project/data";
+import ModalContentSubmit from "../Component/Project/ModalContentSubmit";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
 
 const {Sider, Content} = Layout;
-
-const treeData: DataNode[] = [
-    {
-        title: '第一章 时间复杂度基础',
-        key: '0',
-        children: [
-            {
-                title: '第一节 渐进时间复杂度',
-                key: '0-0',
-                children: [
-                    {
-                        title: '课程',
-                        key: '0-0-0',
-                    },
-                    {
-                        title: '作业',
-                        key: '0-0-1',
-                    },
-                    {
-                        title: '课件',
-                        key: '0-0-2',
-                    },
-                ],
-            },
-        ],
-    },
-];
 
 
 type IProjectContentType = "file-video" | "file-office" | "file-pdf" | "markdown"
@@ -44,48 +25,81 @@ interface IProjectContent {
     type: string
 }
 
-const md_str: string =
-    "# Hello, Markdown!\n" +
-    "\n" +
-    "This is a sample Markdown document to demonstrate its syntax.\n" +
-    "\n" +
-    "## Sub-heading\n" +
-    "\n" +
-    "Here is a paragraph with **bold text** and *italic text*.\n" +
-    "\n" +
-    "### Sub-sub-heading\n" +
-    "\n" +
-    "Here is a list:\n" +
-    "\n" +
-    "- Item 1\n" +
-    "- Item 2\n" +
-    "  - Sub-item 2.1\n" +
-    "  - Sub-item 2.2\n" +
-    "\n" +
-    "And a numbered list:\n" +
-    "\n" +
-    "1. First item\n" +
-    "2. Second item\n" +
-    "\n" +
-    "You can also insert hyperlinks, like [this link to OpenAI](https://www.openai.com/).\n" +
-    "\n" +
-    "Here is a blockquote:\n" +
-    "\n" +
-    "> \"Markdown is a lightweight markup language with plain-text-formatting syntax. Its design allows it to be converted to many output formats.\" - [Wikipedia](https://en.wikipedia.org/wiki/Markdown)\n" +
-    "\n" +
-    "Lastly, here is some code:\n" +
-    "\n" +
-    "```python\n" +
-    "print(\"Hello, world!\")\n" +
-    "```\n";
+interface keyIdMap {
+    [key: string]: any;
+}
+
+const keyIdMap: keyIdMap = {}//key和id的字典
 
 const ProjectInfo: React.FC = () => {
-    const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
-    const [type, setType] = useState<IProjectContentType>("markdown")
+    const [selectedMenuKey, setSelectedMenuKey] = useState<string | null>(null);
+    const [type, setType] = useState<IProjectContentType>("file-video")//原本的数据
+    const [treeData, setTreeData] = useState<DataNode[]>([]);//树形数据
+    const [leafContent, setLeafContent] = useState();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {pId} = useParams();
+    const userinfo = useSelector((state:IState)=>state.UserReducer.userInfo);
 
-    const handleMenuSelect = (selectedKeys: React.Key[], {node}: any) => {
-        setSelectedMenuId(String(node.key));
+    const generateTreeData = (data: any, parentKey = '') => {//根据后端数据递归获得treeData
+        return data.map((item: any, index: any) => {
+            const {name, children} = item;
+            const key = parentKey ? `${parentKey}-${index}` : `${index}`;
+
+            keyIdMap[key] = item;
+            const treeNode: DataNode = {
+                key: key,
+                title: name,
+            };
+
+            //如果存在孩子则递归
+            if (children && children.length > 0) {
+                treeNode.children = generateTreeData(children, key);
+            }
+
+            return treeNode;
+        });
     };
+    const handleMenuSelect = (selectedKeys: React.Key[], {node}: any) => {
+        setSelectedMenuKey(String(node.key));
+    };
+
+    const getLeafContentBykey = () => {
+        if (selectedMenuKey && keyIdMap[selectedMenuKey]
+            && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0)) {
+            console.log('key:', selectedMenuKey);
+            dispatch(getData(
+                'getProConInfo',
+                {pId: pId, cId: keyIdMap[selectedMenuKey].id},
+                (res: any) => {
+                    setLeafContent(res.file);
+                    setType(res.type);
+                    Promise.resolve(res);
+                },
+                () => {
+                    //onError
+                }
+            ))
+        }
+    }
+
+    useEffect(() => {
+        dispatch(getData(
+            'getProContent',
+            {pId: pId},
+            (data: any) => {
+                setTreeData(generateTreeData(data));
+                Promise.resolve();
+            },
+            () => {
+
+            }
+        ))
+    }, [])
+
+    useEffect(() => {
+        getLeafContentBykey();
+    }, [selectedMenuKey]);
 
     return (
         <div style={{minWidth: 800}}>
@@ -116,9 +130,18 @@ const ProjectInfo: React.FC = () => {
                 </Space>
                 <div style={{float: "right", marginRight: 6}}>
                     <Space size={12}>
-                        <Button>我的学习时长</Button>
-                        <Button>评价课程</Button>
-                        <Button type="primary">申请认证证书</Button>
+                        {/*还有一些待传的参数*/}
+                        {
+                            selectedMenuKey && keyIdMap[selectedMenuKey]
+                            && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0) && (
+                                <ModalContentSubmit
+                                    pId={pId}
+                                    cId={keyIdMap[selectedMenuKey].id}
+                                    username={userinfo?.username}
+                                />)
+                        }
+
+                        pid:{pId}
                     </Space>
                 </div>
             </div>
@@ -129,14 +152,14 @@ const ProjectInfo: React.FC = () => {
                         autoExpandParent={true}
                         defaultExpandAll={true}
                         onSelect={handleMenuSelect}
-                        selectedKeys={selectedMenuId !== null ? [selectedMenuId] : []}
+                        selectedKeys={selectedMenuKey !== null ? [selectedMenuKey] : []}
                         treeData={treeData}
                         style={{background: '#f0f2f5', paddingTop: 8, paddingLeft: 4, paddingBottom: 8}}
                     />
                 </Sider>
                 <Layout>
                     <Content style={{padding: '24px'}}>
-                        <div>当前选中的菜单ID: {selectedMenuId}</div>
+                        <div>当前选中的菜单ID: {selectedMenuKey}</div>
                         {type === "file-video" && (
                             <ReactPlayer
                                 className='react-player'
@@ -168,7 +191,6 @@ const ProjectInfo: React.FC = () => {
                             </div>
                         )}
 
-
                         {/*<iframe*/}
                         {/*    title="spurious.xls"*/}
                         {/*    src="https://view.officeapps.live.com/op/view.aspx?src=http://www.principlesofeconometrics.com/excel/spurious.xls"*/}
@@ -182,8 +204,6 @@ const ProjectInfo: React.FC = () => {
                         {/*    width="100%"*/}
                         {/*    height="720px"*/}
                         {/*/>*/}
-
-
                     </Content>
                 </Layout>
             </Layout>

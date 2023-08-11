@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { IState } from "../../Type/base";
-import { Api } from "../../API/api";
-import { Avatar, Card, List } from "antd";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
+import {Api} from "../../API/api";
+import {Avatar, Card, List} from "antd";
 import UserAvatarByEmail from "../User/UserAvatarByEmail";
 import "./PersonalProfile.css"; // 引入 CSS 样式文件
 
@@ -12,10 +12,10 @@ const PersonalProfile = () => {
     const [awards, setAwards] = useState([]);
 
     const getPro = () => {
-        Api.getPersonalProfile().then((data:any) => {
+        Api.getPersonalProfile().then((data: any) => {
             setActivities(data.activities);
             setAwards(data.awards);
-        }).catch((error:any)=>console.log('error:',error));
+        }).catch((error: any) => console.log('error:', error));
     };
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const PersonalProfile = () => {
             <Card className="profile-card">
                 <div className="profile-header">
                     <div className="profile-avatar">
-                        <UserAvatarByEmail email={userInfo?.email} size={64} />
+                        <UserAvatarByEmail email={userInfo?.email} size={64}/>
                     </div>
                     <div className="profile-username">{userInfo?.username}</div>
                 </div>

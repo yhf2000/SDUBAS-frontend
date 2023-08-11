@@ -43,8 +43,8 @@ const ForgetPass = (props: any) => {
                 onChange={setActive}
                 activeKey={active}
                 items={[
-                    {label: '用戶名', key: '1',children:<ItemUsername notRequired={active !== '1'} />},
-                    {label: '邮箱', key: '2',children:<ItemEmail needVerify={false} notCheck={active !== '2'} />}
+                    {label: '用戶名', key: '1', children: <ItemUsername notRequired={active !== '1'}/>},
+                    {label: '邮箱', key: '2', children: <ItemEmail needVerify={false} notCheck={active !== '2'}/>}
                 ]}
             >
             </Tabs>

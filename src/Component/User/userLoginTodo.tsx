@@ -18,9 +18,9 @@ export default function UserLoginTodo(props: loginInfo) {
             "login",
             {props},
             (r: any) => {
-                return <UserLoginCheck jump={false} />
+                return <UserLoginCheck jump={false}/>
             },
-            (error:any)=>{
+            (error: any) => {
 
             }
         ))

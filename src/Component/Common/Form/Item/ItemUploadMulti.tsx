@@ -28,7 +28,7 @@ const ItemUploadMulti = (props: ItemUploadPropsType & any) => {
     )
 }
 
-const UploadPro = (props: any)=>{
+const UploadPro = (props: any) => {
 
     const {onChange} = props
 
@@ -51,9 +51,9 @@ const UploadPro = (props: any)=>{
                 listType="text"
                 showUploadList={true}
                 beforeUpload={() => false}
-                onChange={(info)=>{
+                onChange={(info) => {
                     let fileListOrg: any = []
-                    for(let x of info.fileList){
+                    for (let x of info.fileList) {
                         fileListOrg.push(x.originFileObj)
                     }
                     onChange(fileListOrg)

@@ -1,31 +1,58 @@
-import tableWithPagination from "../Component/Common/Table/TableWithPagination";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
-import {Api} from "../API/api";
 import {useTranslation} from "react-i18next";
-import {Avatar, Card, Col, Divider, Form, Image, Input, List, Row, Select, Space, Typography} from "antd";
-import Title from "antd/es/typography/Title";
-import Meta from "antd/es/card/Meta";
-import {useState} from "react";
-import EptCard from "../Component/Common/EptCard";
+import {
+    Card,
+    Form,
+    Input,
+    List,
+    message,
+    Space,
+} from "antd";
+import ProCard from "../Component/Project/ProCard";
 import {useNavigate} from "react-router-dom";
+import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
+import ProjectForm from "../Component/Project/Form/ProjectForm";
+import {Api} from "../API/api";
+import {useMemo} from "react";
+
 
 const Experiment = () => {
-    const {t} = useTranslation();
     const navigate = useNavigate();
-    function handleClick(){
-        navigate('/c/project-info');
+    // useMemo
+    function handleClick(item: any) {
+        navigate(`/c/project-info/${item.id}`);
     }
+    console.log('there is ')
     return (
-        <>
+        <Card
+            title={'Experiment'}
+            extra={
+                <ModalFormUseForm
+                    titile={'新建实验'}
+                    type={'create'}
+                    subForm={[
+                        {
+                            component: ProjectForm,
+                            label: "",
+                        },
+                    ]}
+                    dataSubmitter={(value: any) => {
+                        console.log('value:', value);
+                        return Api.newPro({
+                            data: value
+                        });
+                    }}
+                />}
+        >
             <TableWithPagination
+                name={'ExperimentMainTable'}
                 useList={true}
-                API={"getCreditBank"}
-                title={t("Experiment")}
+                API={async (data:any)=>{return Api.getProList({data:{...data}})}}
                 size={'small'}
                 getForm={(onFinish: any) => {
                     return (
                         <Space size={30}>
-                            <Form.Item label={t("Search")} name={"title"}>
+                            <Form.Item label={"Search"} name={"title"}>
                                 <Input onPressEnter={() => {
                                     onFinish()
                                 }}/>
@@ -38,12 +65,12 @@ const Experiment = () => {
                 renderItem={(item: any) => {
                     return (
                         <List.Item key={item.name}>
-                            <EptCard item={item} onClick={()=>handleClick()}/>
+                            <ProCard item={item} onClick={() => handleClick(item)}/>
                         </List.Item>
                     )
                 }}
             />
-        </>
+        </Card>
     );
 }
 

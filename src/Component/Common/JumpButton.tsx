@@ -16,7 +16,7 @@ const JumpButton: React.FC<MyButtonProps> = ({title, link, img}) => {
             style={{backgroundImage: `url(${img})`, backgroundSize: 'cover'}}
         >
             <div className="button-content">
-                <span>{title} <ArrowRightOutlined /></span>
+                <span>{title} <ArrowRightOutlined/></span>
             </div>
         </div>
     );

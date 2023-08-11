@@ -1,41 +1,45 @@
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import {Api} from "../API/api";
-import {Button, Card} from "antd";
+import {Button, Card, Upload} from "antd";
 import '../Config/CSS/ResourceInfo.css'
+import FileUpload from "../Component/Common/FileUpload";
+import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const TResourceInfo = () => {
+    const [t] = useTranslation();
     return (
-        <div>
-            <h2 className="resource-info-title">项目资源详情</h2>
-            <TableWithPagination
-                className="resource-info-table"
-                title={"项目资源详情"}
-                API={"getResource"}
-                columns={[
-                    {
-                        title: "名称",
-                        dataIndex: "name",
-                    },
-                    {
-                        title: "描述",
-                        dataIndex: "description",
-                    },
-                    {
-                        title: "预览",
-                        dataIndex: "preview",
-                        render: () => {
-                            return <Button type={"link"}>预览</Button>;
+        <div style={{display: 'flex', justifyContent: 'center',}}>
+            <Card
+                title={'项目资源详情'}
+                extra={
+                    <FileUpload/>
+                }
+                style={{width: '70%', alignItems: 'center', height: '100vh'}}
+            >
+                <TableWithPagination
+                    className="resource-info-table"
+                    title={"项目资源详情"}
+                    API={"getProList"}
+                    columns={[
+                        {
+                            title: "名称",
+                            dataIndex: "name",
+                            render:(name:string,row:any)=>{
+                                return(
+                                    <Link to={`/c/project-info/${row.pId}`}>
+                                        {t(name)}
+                                    </Link>
+                                )
+                            }
                         },
-                    },
-                    {
-                        title: "下载",
-                        dataIndex: "download",
-                        render: (row: any) => {
-                            return row && <Button type={"link"}>下载</Button>;
+                        {
+                            title: "描述",
+                            dataIndex: "description",
                         },
-                    },
-                ]}
-            />
+                    ]}
+                />
+            </Card>
         </div>
     );
 }

@@ -4,7 +4,7 @@ import {withTranslation} from "react-i18next";
 import {Api} from "../../../../API/api";
 import ItemCaptcha from "./ItemCaptcha";
 
-export interface ItemEmailProps{
+export interface ItemEmailProps {
     needVerify: boolean
     editable: boolean
     getEmail: any
@@ -55,7 +55,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                 email: email,
                                 captcha: captcha,
                                 captchaId: imgId
-                            }).then((res:any) => {
+                            }).then((res: any) => {
                                 message.success("验证码已发送至您的邮箱")
                                 setCanSend(60);
                                 setModalVis(false)

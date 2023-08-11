@@ -1,18 +1,16 @@
 import {ModalForm} from "@ant-design/pro-form";
 import {message, Tabs} from "antd";
-import ItemCaptcha from "../../User/Form/Item/ItemCaptcha";
 import React, {useState} from "react";
-import {withTranslation} from "react-i18next";
-import ItemUsername from "../../User/Form/Item/ItemUsername";
-import ItemEmail from "../../User/Form/Item/ItemEmail";
-import {Api} from "../../../API/api";
-import TabPane from "antd/es/tabs/TabPane";
 import ItemNumber from "./Item/ItemNumber";
+import ItemText from "../../Common/Form/Item/ItemText";
+import {useDispatch} from "../../../Redux/Store";
+import getData from "../../../API/getData";
 
 const AddBill = (props: any) => {
 
     const [imgId, setImgId] = useState<string>()
     const [active, setActive] = useState<string>("1")
+    const dispatch = useDispatch();
 
     return (
         <ModalForm<any>
@@ -27,25 +25,41 @@ const AddBill = (props: any) => {
                 width: 500,
                 okText: "提交"
             }}
-            // onFinish={async (values: any) => {
-            //     let data: any = {
-            //         captchaId: imgId,
-            //         captcha: values.captcha
-            //     }
-            //     if (active === "1") data.username = values.username
-            //     if (active === "2") data.email = values.email
-            //     return Api.forgetPassword(data).then(() => {
-            //         message.success('修改密码的链接已发送至您的邮箱');
-            //         return true
-            //     })
-            // }}重写记账修改的Api
+            onFinish={async (value:any)=>{
+                dispatch(getData(
+                    'newAccount',
+                    {fId:props.fId,data:{value}},
+                    ()=>{
+                        message.success('提交成功')
+                    },
+                    ()=>{
+                        message.error('提交失败')
+                    }
+                ))
+            }}
         >
             <Tabs
                 onChange={setActive}
                 activeKey={active}
                 items={[
-                    {label: '收入', key: '1',children:active==='1'&&<ItemNumber notRequired={active !== '1'} />},
-                    {label: '支出', key: '2',children:active==='2'&&<ItemNumber notRequired={active !== '2'} />}
+                    {
+                        label: '收入', key: '1', children: active === '1' && (
+                            <>
+                                <ItemNumber label='收入' name='income' notRequired={active !== '1'}/>
+                                <ItemText label={'收入描述'} name={'IncomeDsp'} required={true}/>
+                            </>
+                        )
+                    },
+                    {
+                        label: '支出',
+                        key: '2',
+                        children: active === '2' && (
+                            <>
+                                <ItemNumber label='支出' name='outcome' notRequired={active !== '2'}/>
+                                <ItemText label={'支出描述'} name={'OutcomeDsp'} required={true}/>
+                            </>
+                        )
+                    }
                 ]}
             >
             </Tabs>

@@ -12,6 +12,7 @@ import FundInfo from "./Page/FundInfo";
 import UserInfo from "./Page/UserInfo";
 import ResourceInfo from "./Page/ResourceInfo";
 import TResourceInfo from "./Page/TResourceInfo";
+import ProComplete from "./Page/ProComplete";
 
 export interface IBaseRouter {
     id: number
@@ -36,7 +37,7 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 1, path: "/profile", component: <></>},
     {id: 2, path: "/login", component: <CLogin/>},
     {id: 3, path: "/register", component: <></>},
-    {id: 4, path: "/project-info/*", component: <ProjectInfo/>},
+    {id: 4, path: "/Project-info/:pId", component: <ProjectInfo/>},
     {id: 5, path: "/experiment", component: <Experiment/>},
     {id: 6, path: "/resources", component: <Resources/>},
     {id: 7, path: "/course", component: <Course/>},
@@ -44,7 +45,8 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 9, path: "/fund-info", component: <FundInfo/>},
     {id: 10, path: "/user", component: <UserInfo/>},
     {id: 11, path: "/resource-info", component: <ResourceInfo/>},
-    {id: 12, path: "/tresource-info", component: <TResourceInfo/>}
+    {id: 12, path: "/tresource-info", component: <TResourceInfo/>},
+    {id: 13, path: "/pro-complete", component: <ProComplete/>},
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},
