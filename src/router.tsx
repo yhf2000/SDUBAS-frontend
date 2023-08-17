@@ -2,16 +2,6 @@ import CLayout from "./Layout/CLayout";
 import CRootJump from "./Layout/CRootJump";
 import Home from "./Page/Home";
 import ProjectInfo from "./Page/ProjectInfo";
-import Experiment from "./Page/Experiment"
-import CLogin from "./Page/Login"
-import Resources from "./Page/Resources";
-import Course from "./Page/Course";
-import ForgetPass from "./Component/User/Form/ForgetPass";
-import Records from "./Page/Records";
-import FundInfo from "./Page/FundInfo";
-import UserInfo from "./Page/UserInfo";
-import ResourceInfo from "./Page/ResourceInfo";
-import TResourceInfo from "./Page/TResourceInfo";
 
 export interface IBaseRouter {
     id: number
@@ -34,17 +24,11 @@ export const mainRouter: IBaseRouter[] = [
 export const CLayoutRouter: IBaseRouter[] = [
     {id: 0, path: "/home", component: <Home/>},
     {id: 1, path: "/profile", component: <></>},
-    {id: 2, path: "/login", component: <CLogin/>},
+    {id: 2, path: "/login", component: <></>},
     {id: 3, path: "/register", component: <></>},
     {id: 4, path: "/project-info/*", component: <ProjectInfo/>},
-    {id: 5, path: "/experiment", component: <Experiment/>},
-    {id: 6, path: "/resources", component: <Resources/>},
-    {id: 7, path: "/course", component: <Course/>},
-    {id: 8, path: "/records", component: <Records/>},
-    {id: 9, path: "/fund-info", component: <FundInfo/>},
-    {id: 10, path: "/user", component: <UserInfo/>},
-    {id: 11, path: "/resource-info", component: <ResourceInfo/>},
-    {id: 12, path: "/tresource-info", component: <TResourceInfo/>}
+    {id: 5, path: "/records", component: <>123</>},
+
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},

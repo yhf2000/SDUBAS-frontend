@@ -4,7 +4,6 @@ import md5 from "js-md5";
 import {IUserAvatar} from "../../Type/user";
 import {isValueEmpty} from "../../Utils/isValueEmpty";
 import {avatarServerUrl} from "../../config";
-import './UserProfile.css';
 
 
 const UserAvatarByEmail = (props: IUserAvatar) => {
@@ -12,7 +11,6 @@ const UserAvatarByEmail = (props: IUserAvatar) => {
         let avatarUrl = `${avatarServerUrl}/${md5(props.email as string)}?d=identicon`;
         return (
             <Avatar
-                className={props.className||""}
                 src={avatarUrl}
                 shape={props.shape}
                 size={props.size}

@@ -1,7 +1,4 @@
 import {IUserInfo} from "../../Type/user";
-import {Api} from "../../API/api";
-import {Dispatch} from "react";
-import getData from "../../API/getData";
 
 export type UserAction =
     setUserInfo |

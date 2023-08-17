@@ -73,7 +73,7 @@ const CHeader = () => {
                 {isLogin ? (
                     <Dropdown overlay={
                         <Menu>
-                            <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
+                            <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/user")}>
                                 用户概况
                             </Menu.Item>
                             <Menu.Item key="2" icon={<LogoutOutlined/>} onClick={() => dispatch({type: "userLogout"})}>
@@ -95,7 +95,7 @@ const CHeader = () => {
                 ) : (
                     <Space>
                         <Button type={"text"} onClick={() => {
-                            navigator("/c/login?to=" + location.pathname)
+                            navigator("/login?to=" + location.pathname)
                         }}>登录 / 注册</Button>
                     </Space>
                 )}
