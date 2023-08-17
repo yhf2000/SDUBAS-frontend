@@ -7,26 +7,46 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "../Redux/Store";
 import getData from "../API/getData";
 import {useParams} from "react-router-dom";
+import EditCard from "../Component/Common/EditCard";
 
 const {Meta} = Card;
 
+
 const ResourceInfo = () => {
+
+    const [fundInfo,setFundInfo] = useState<any>();
     const {rId} = useParams();
 
+    useEffect(()=>{
+        Api.getResourceInfo({rId:rId})
+            .then((res:any)=>{
+                setFundInfo(res);
+            }).catch(()=>{})
+    },[setFundInfo])
+
+    const handleChange = (note:any)=>{
+        let newInfo = fundInfo.slice();
+        newInfo.note = note;
+        setFundInfo(newInfo);
+    }
     return (
         <>
             <Card
                 title={'资源详情'}
             >
                 <div className={'card-container'}>
-                    <Card className={'card'}>
-                        <Meta title="Note" description="This is the content of Card 1."/>
-                    </Card>
+                    <EditCard
+                        title={'资源备注'}
+                        API={async (data:any)=>{return Api.updateNote({rId:rId,data:data})}}
+                        content={fundInfo?.note}
+                        setFundInfo={handleChange}
+                        className={'card'}
+                    />
                 </div>
                 <div style={{width: '1000px', marginLeft: '250px'}}>
                     <TableWithPagination
                         search={true}
-                        API={"getProfile"}
+                        API={async (data:any)=>{return Api.getResourceInfo({rId:rId,data:data})}}
                         columns={[
                             {
                                 title: '描述',

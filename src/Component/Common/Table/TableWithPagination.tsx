@@ -33,9 +33,7 @@ export interface TableWithPaginationProps {
 const TableWithPagination = (props: any) => {
     const roles = useSelector((state: IState) => state.UserReducer.userInfo?.roles);
     const tbData = useSelector((state: IState) => {
-        return (
-            {...state.TableReducer.tableData}
-        );
+        return {...state.TableReducer.tableData}
     });
     const dispatch = useDispatch();
     const [total, setTotal] = useState<number>(0)                   // 项的总数
@@ -88,7 +86,7 @@ const TableWithPagination = (props: any) => {
             searchKey: sk,
             ...fmp
         }).then((data: any) => {
-            // console.log("data", data)
+            // console.log('data',data)
             if (data.rows === null) data.rows = []
             if (props.APIRowsTransForm !== undefined) {
                 setTableData(props.APIRowsTransForm(data.rows))
@@ -214,6 +212,7 @@ const TableWithPagination = (props: any) => {
                         loading={loading}
                         size={props.size}
                         dataSource={tableData}
+                        // dataSource={props.initData}
                         renderItem={props.renderItem}
                         pagination={{
                             onChange: (page, pageSize) => {
@@ -276,6 +275,7 @@ const TableWithPagination = (props: any) => {
                         columns={props.columns}
                         rowSelection={props.rowSelection}
                         dataSource={tableData}
+                        // dataSource={props.initData}
                         pagination={{
                             onChange: (page, pageSize) => {
                                 getInfo(page, pageSize)

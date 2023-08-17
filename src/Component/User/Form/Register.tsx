@@ -32,11 +32,10 @@ const Register = (props: any) => {
             }}
             form={form}
             onFinish={(values) => {
-                return Api.register(values).then((res: any) => {
+                return Api.register({data:values}).then((res: any) => {
                     message.success('注册成功,请返回登录');
                     return true;
                 }).catch((error: any) => {
-                    message.error(error);
                 })
             }
             }
@@ -46,7 +45,7 @@ const Register = (props: any) => {
             <ItemEmail needVerify={true} getEmail={() => {
                 return form.validateFields(["email"]).then((data: any) => {
                     return Promise.resolve(data.email)
-                }).catch(() => Promise.reject())
+                }).catch(()=>Promise.reject())
             }}/>
         </ModalForm>
     )

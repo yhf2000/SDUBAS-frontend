@@ -1,11 +1,14 @@
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button} from "antd";
+import {Button, message} from "antd";
 import {useNavigate} from "react-router-dom";
-import {ModalForm} from "@ant-design/pro-form";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
 import ItemName from "../Common/Form/Item/ItemName";
 import ItemText from "../Common/Form/Item/ItemText";
+import DeleteConfirm from "../Common/DeleteConfirm";
+import getData from "../../API/getData";
+import React from "react";
+import {useDispatch} from "../../Redux/Store";
 
 const FundForm = (
     <>
@@ -14,7 +17,11 @@ const FundForm = (
     </>
 );
 const FundProfile = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const addTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name})
+    }
     return (
         <>
             <div style={{
@@ -26,45 +33,83 @@ const FundProfile = () => {
                 <ModalFormUseForm
                     title={'新建资金'}
                     type={'create'}
+                    TableName={'FundTable'}
+                    btnName={'新建资金'}
                     subForm={[
                         {
                             component: FundForm,
                             label: "",
                         }
                     ]}
-                    submitter={async (value:any)=>{
+                    dataSubmitter={async (value:any)=>{
+                        console.log('fundData:',value);
                         return Api.newFund({data:value});
                     }}
                 />
             </div>
             <TableWithPagination
-                API={"getFund"}
+                name={'FundTable'}
+                API={async (data:any)=>{return Api.getFund({data:data})}}
                 columns={[
                     {
                         title: '资金',
-                        dataIndex: 'fund',
-                        key: 'fund',
-                        render: (title: string) => {
+                        dataIndex: 'name',
+                        key: 'name',
+                        render: (title: string,row:any) => {
                             return (
-                                <Button type={'link'} onClick={() => navigate('/c/fund-info')}>{title}</Button>
+                                <Button type={'link'} onClick={() => navigate(`/c/fund-info/${row.Id}`,{state:{row:row}})}>{title}</Button>
                             )
                         }
                     },
                     {
-                        title: '创建者',
-                        dataIndex: 'creator',
-                        key: 'creator'
-                    },
-                    {
-                        title: '创建日期',
-                        dataIndex: 'createDate',
-                        key: 'createDate',
-                    },
-                    {
-                        title: '最近更新日期',
-                        dataIndex: 'date',
-                        key: 'date'
-                    },
+                        title: '操作',
+                        key:'operator',
+                        render:(_:any,rows:any)=>{
+                            return(
+                                <>
+                                    <ModalFormUseForm
+                                        title={'编辑资金'}
+                                        type={'update'}
+                                        btnName={'编辑'}
+                                        width={1000}
+                                        subForm={[
+                                            {
+                                                component: FundForm,
+                                                label: '',
+                                            },
+                                            // {
+                                            //     component: ProjectForm2,
+                                            //     label:'',
+                                            // }
+                                        ]}
+                                        // dataLoader={}
+                                        dataSubmitter={(value: any) => {
+                                            console.log('data:',value);
+                                        }}
+                                    />
+                                    <DeleteConfirm
+                                        onConfirm={() => {
+                                            dispatch(getData(
+                                                'deleteFund',
+                                                {fId:rows.Id},
+                                                (res: any) => {
+                                                    addTableVersion('FundTable');
+                                                    message.success('删除成功')
+                                                    return Promise.resolve(res);
+                                                },
+                                                (error: any) => {
+                                                    message.error('删除失败');
+                                                }
+                                            ));
+                                        }}//删除的Api
+                                        content={
+                                            <Button type={'link'} danger={true}>删除</Button>
+                                        }
+                                    />
+                                </>
+                            )
+                        }
+                    }
                 ]}
             />
         </>

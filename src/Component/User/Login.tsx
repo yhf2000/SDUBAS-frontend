@@ -34,10 +34,9 @@ const Login = (props: any) => {
     }
     return (
         <Card
-            style={{width: "400px", textAlign: "center", margin: "0 auto"}}>
+            style={{width: "450px", textAlign: "center", margin: "0 auto"}}>
             <LoginForm
                 formRef={formRef}
-                logo={Logo}
                 title="用户登录"
                 subTitle="山东大学区块链学习系统"
                 actions={

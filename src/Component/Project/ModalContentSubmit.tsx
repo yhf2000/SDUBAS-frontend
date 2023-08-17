@@ -1,31 +1,32 @@
-import {Button, Modal} from "antd";
+import {Button, Form, Input, Modal} from "antd";
 import TableWithPagination from "../Common/Table/TableWithPagination";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import projectInfo from "../../Page/ProjectInfo";
+import {Api} from "../../API/api";
+import ItemUpload from "../Common/Form/Item/ItemUpload";
+import SubmissionSForm from "./Form/SubmissionSForm";
 
 const columns = [
     {
-        title: "标题",
-        dataIndex: "title",
-        key: "title",
+        title: "名称",
+        dataIndex: "name",
+        key: "name",
     },
     {
-        title: "作者",
-        dataIndex: "author",
-        key: "author",
+        title: "提交类型",
+        dataIndex: "type",
+        key: "type",
+        render:(type:any)=>(type===0?<span>文本</span>:<span>文件</span>)
     },
     {
-        title: "日期",
-        dataIndex: "date",
-        key: "date",
-    },
-    {
-        title: "状态",
-        dataIndex: "status",
-        key: "status",
+        title: "提交",
+        key: "submit",
+        render: (_: any, rows: any) => {
+            return <SubmissionSForm rows={rows} />
+        }
     },
 ];
-const ModalContentSubmit = (props:any) => {
+const ModalContentSubmit = (props: any) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleViewSubmission = () => {
@@ -35,7 +36,8 @@ const ModalContentSubmit = (props:any) => {
     const handleModalClose = () => {
         setModalVisible(false);
     };
-
+    useEffect(()=>{},[props.cId])
+    console.log('contentId',props.cId);
     return (
         <div>
             <div style={{float: "right", marginRight: 6}}>
@@ -49,10 +51,17 @@ const ModalContentSubmit = (props:any) => {
                 footer={null}
             >
                 <TableWithPagination
-                    API={"submitProContent"}
+                    name={`SubmitContentTable-${props.cId}`}
+                    API={async (data: any) => {
+                        return Api.getPCSubmission({
+                            data: {
+                                userId: props.userId ?? "1",
+                                contentId: props.cId,
+                                ...data
+                            }
+                        })
+                    }}
                     columns={columns}
-                    pId={props.pId}
-                    cId={props.cId}
                 />
             </Modal>
         </div>

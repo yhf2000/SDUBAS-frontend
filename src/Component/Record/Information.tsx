@@ -7,7 +7,7 @@ const Information = () => {
     return (
         <div>
             <TableWithPagination
-                API={"getProList"}
+                API={async (data:any)=>{return Api.getProList({data:{...data}})}}
                 columns={[{title: '题目', dataIndex: 'title', key: 'title'}, {
                     title: '内容',
                     dataIndex: 'content',

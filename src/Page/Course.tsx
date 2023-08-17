@@ -5,11 +5,24 @@ import ProCard from "../Component/Project/ProCard";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import JoinProjectBtn from "../Component/Project/JoinProjectBtn";
 import {Link, useNavigate} from "react-router-dom";
-import ProjectForm from "../Component/Project/Form/ProjectForm";
+import ProjectForm1 from "../Component/Project/Form/ProjectForm1";
 import getData from "../API/getData";
 import {useDispatch} from "../Redux/Store";
 import {Api} from "../API/api";
 
+//
+// const initData=[
+//     {
+//         'id':'3',
+//         'name':'操作系统',
+//         'credit':'5',
+//         'progress':'3',
+//         'totalProjects':'10',
+//         'date':'2023-8-11',
+//         'proImage':'https://www.neea.edu.cn/res/Home/1711/171116582.jpg',
+//         'score':undefined
+//     }
+// ]
 const Course = () => {
     const [t] = useTranslation();
     const dispatch = useDispatch();
@@ -27,7 +40,7 @@ const Course = () => {
                         type={'create'}
                         subForm={[
                             {
-                                component: ProjectForm,
+                                component: ProjectForm1,
                                 label: "",
                             },
                         ]}
@@ -37,9 +50,10 @@ const Course = () => {
                     />}
             >
                 <TableWithPagination
-                    // name={'Course'}
+                    name={'Course'}
                     useList={true}
-                    API={"getProList"}
+                    API={async (data:any)=>{return Api.getProList({data:{...data}})}}
+                    // initData={initData}
                     getForm={(onFinish: any) => {
                         return (
                             <Space size={30}>

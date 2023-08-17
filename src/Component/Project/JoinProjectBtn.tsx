@@ -17,7 +17,7 @@ const JoinProjectBtn = (props: any) => {
         <>
             <Popconfirm
                 title={`你确定要申请加入${props.projectName}吗？`}
-                visible={visible}
+                open={visible}
                 onConfirm={()=>{
                     Api.joinGroupApply({pId: props.pId}).then(()=>{
                         setVisible(false);

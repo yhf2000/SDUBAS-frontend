@@ -11,10 +11,23 @@ import {
 import ProCard from "../Component/Project/ProCard";
 import {useNavigate} from "react-router-dom";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
-import ProjectForm from "../Component/Project/Form/ProjectForm";
+import ProjectForm1 from "../Component/Project/Form/ProjectForm1";
 import {Api} from "../API/api";
 import {useMemo} from "react";
+import ProjectForm2 from "../Component/Project/Form/ProjectForm2";
+// import ProjectForm2 from "../Component/Project/Form/ProjectForm2";
 
+
+// const initData=[{
+//     'id':'1',
+//     'name':'区块链实验',
+//     'credit':'4',
+//     'progress':'3',
+//     'totalProjects':'5',
+//     'date':'2023-8-11',
+//     'proImage':'https://seopic.699pic.com/photo/40171/9735.jpg_wh1200.jpg',
+//     'score':'95'
+// }]
 
 const Experiment = () => {
     const navigate = useNavigate();
@@ -30,11 +43,17 @@ const Experiment = () => {
                 <ModalFormUseForm
                     titile={'新建实验'}
                     type={'create'}
+                    btnName={'新建项目'}
+                    width={1000}
                     subForm={[
                         {
-                            component: ProjectForm,
+                            component: ProjectForm1,
                             label: "",
                         },
+                        // {
+                        //     component:ProjectForm2,
+                        //     label:""
+                        // }
                     ]}
                     dataSubmitter={(value: any) => {
                         console.log('value:', value);
@@ -48,6 +67,7 @@ const Experiment = () => {
                 name={'ExperimentMainTable'}
                 useList={true}
                 API={async (data:any)=>{return Api.getProList({data:{...data}})}}
+                // initData={initData}
                 size={'small'}
                 getForm={(onFinish: any) => {
                     return (

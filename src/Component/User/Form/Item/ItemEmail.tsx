@@ -47,11 +47,11 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                 <>
                     <Modal
                         title={"人机身份认证"}
-                        visible={modalVis}
+                        open={modalVis}
                         maskClosable={false}
                         destroyOnClose={true}
                         onOk={() => {
-                            Api.sendVerificationEmail({
+                            Api.sendVerificationEmail({//这里需要注意怎么写的
                                 email: email,
                                 captcha: captcha,
                                 captchaId: imgId
@@ -59,7 +59,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                 message.success("验证码已发送至您的邮箱")
                                 setCanSend(60);
                                 setModalVis(false)
-                            })
+                            }).catch(()=>{})
                         }}
                         onCancel={() => {
                             setModalVis(false)
@@ -81,7 +81,6 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                                else if (data === true) return Promise.reject("邮箱已存在")
                                                return Promise.reject("检验失败")
                                            }).catch((e: any) => {
-                                               return Promise.reject(e)
                                            })
                                        },
                                    }),
@@ -98,7 +97,6 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                             setEmail(data)
                                             setModalVis(true)
                                         }).catch(() => {
-                                            message.error("邮箱不合法")
                                         })
                                     }}
                                 >

@@ -7,22 +7,28 @@ import itemPassword from "../Component/User/Form/Item/ItemPassword";
 export const Api: { [key: string]: any } = {
     /*******************user************************/
     register: async (data: any) => {
-        return request.post('/user/register', data?.data);//用户注册
+        return request.post('/users/register', data?.data);//用户注册
     },
     login: async (data: any) => {
-        return request.get('/user/login', data?.data);//用户登录
+        return request.get('/users/login', data?.data);//用户登录
     },
     logout: async () => {
-        return request.get('/user/logout');//登出
+        return request.get('/users/logout');//登出
     },
     isExist: async (data: any) => {
-        return request.get("/user/isExist", data?.data);
+        return request.get("/users/isExist", data?.data);//检查字段是否存在
     },
     checkPwd: async (data: { password: string }) => {
-        return request.get("/user/checkPwd", data);//检查密码是否正确
+        return request.get("/users/checkPwd", data);//检查密码是否正确
+    },
+    getCaptcha:async ()=>{
+        return request.get("/users/getCaptcha")//获得验证码
+    },
+    sendVerificationEmail:async (data:any) =>{
+        return request.post('/users/sendVerificationEmail', data)//向用户发送验证码
     },
     getProfile: async (data: any) => {
-        return request.get('/user/getProfile');
+        return request.get('/users/getProfile');//获得用户信息
     },
 
 
@@ -47,14 +53,14 @@ export const Api: { [key: string]: any } = {
         return request.get(`/resources/resource/${data.rId}/apply}`, data?.data);//获取一个资源的所有申请
     },
     deleteResource: async (data: any) => {
-        return request.post(`/resources/resource/${data.rId}`, data?.data);//删除某一资源
+        return request.delete(`/resources/resource/${data.rId}`, data?.data);//删除某一资源
     },
 
 
     //资金
     /******************************资金*******************************/
     newFund: async (data: any) => {
-        return request.post('/resources/financial', data);//添加资金项目
+        return request.post('/resources/financial', data.data);//添加资金项目
     },
     newAccount: async (data: any) => {
         return request.post(`/resources/financial/${data.fId}/account`, data?.data);//添加收支记录
@@ -66,13 +72,19 @@ export const Api: { [key: string]: any } = {
         return request.get(`/resources/financial/${data.fId}/accountbook`, data?.data);//查看账单
     },
     deleteFund: async (data: any) => {
-        return request.post(`/resources/financial/${data.fid}`, data?.data);//删除资金项目
+        return request.delete(`/resources/financial/${data.fId}`, data?.data);//删除资金项目
     },
     updateFund: async (data: any) => {
         return request.put(`/resources/financial/${data.fId}`, data?.data);//修改资金项目
     },
     getFund: async (data: any) => {
         return request.get('/resources/financial', data?.data);//获得资金列表
+    },
+    updateNote:async (data:any)=>{
+        return Promise.resolve(true);//需要重写
+    },
+    deleteAccount:async (data:any)=>{
+        return request.delete(`/resources/financial/${data.fId}/${data.aId}`,data?.data);
     },
 
 
@@ -103,7 +115,7 @@ export const Api: { [key: string]: any } = {
     },
     submitProContent: async (data: any) => {
         return request.post(`/projects/${data.pId}/contents/${data.cId}/submissions`, data?.data);
-        //项目内容提交
+        //添加项目内容提交
     },
     scoreProCon: async (data: any) => {
         return request.post(`/projects/${data.pId}/contents/${data.cId}/scores`, data.data);
@@ -116,4 +128,7 @@ export const Api: { [key: string]: any } = {
     listProMember: async (data: any) => {
         return request.get(`/projects/${data.pId}/members`);//查看参加的项目成员
     },
+    getPCSubmission:async (data:any)=>{
+        return request.get('/projects/Content/submission',data.data);//查询一个项目内容的提交项
+    }
 }

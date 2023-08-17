@@ -1,50 +1,69 @@
-import {TableAction} from "../Action/table";
-import {ITableState} from "../../Type/table";
+import { TableAction } from "../Action/table";
+import { ITableState } from "../../Type/table";
 
 const initState: ITableState = {
     tableData: {}
 }
 
 export const TableReducer = (state: ITableState = initState, action: TableAction) => {
-    let State = {...state}
-    State.tableData = {...State.tableData}
+    const newState = { ...state }; // 创建状态副本
+    newState.tableData = { ...newState.tableData }; // 创建 tableData 副本
+
     const initTableData = (name: string) => {
-        if (State.tableData[name] === undefined)
-            State.tableData[name] = {
+        if (newState.tableData[name] === undefined) {
+            newState.tableData[name] = {
                 selectedRowKeys: [],
                 dataSource: [],
                 tableVersion: 0,
                 tablePageInfo: undefined
-            }
-    }
+            };
+        }
+    };
+
     if (action.name !== undefined) {
-        initTableData(action.name)
+        initTableData(action.name);
     }
+
     switch (action.type) {
         case "setSelectedRowKeys":
-            State.tableData[action.name].selectedRowKeys = action.data
-            break
+            newState.tableData[action.name] = {
+                ...newState.tableData[action.name], // 创建 name 对应的副本
+                selectedRowKeys: action.data
+            };
+            break;
 
         case "addTableVersion":
-            const nv = State.tableData[action.name].tableVersion
-            State.tableData[action.name].tableVersion = Math.abs(nv) + 1
-            break
+            const nv = newState.tableData[action.name].tableVersion;
+            newState.tableData[action.name] = {
+                ...newState.tableData[action.name], // 创建 name 对应的副本
+                tableVersion: Math.abs(nv) + 1
+            };
+            break;
 
         case "setDataSource":
-            State.tableData[action.name].dataSource = action.data
+            newState.tableData[action.name] = {
+                ...newState.tableData[action.name], // 创建 name 对应的副本
+                dataSource: action.data
+            };
             if (action.add) {
-                const nv = State.tableData[action.name].tableVersion
-                State.tableData[action.name].tableVersion = -(Math.abs(nv) + 1)
+                const nv = newState.tableData[action.name].tableVersion;
+                newState.tableData[action.name] = {
+                    ...newState.tableData[action.name], // 创建 name 对应的副本
+                    tableVersion: -(Math.abs(nv) + 1)
+                };
             }
-            break
+            break;
 
         case "setTablePageInfo":
-            State.tableData[action.name].tablePageInfo = action.data
-            break
+            newState.tableData[action.name] = {
+                ...newState.tableData[action.name], // 创建 name 对应的副本
+                tablePageInfo: action.data
+            };
+            break;
 
         default:
-            break
-
+            break;
     }
-    return State
-}
+
+    return newState;
+};

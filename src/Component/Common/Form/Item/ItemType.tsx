@@ -17,7 +17,7 @@ const ItemType = (props: any) => {
                            }
                        ]}
             >
-                <Select value={select} onChange={handleChange}>
+                <Select value={select} onChange={handleChange} mode={props.mode}>
                     {props.options.map((option: { key: string, value: string }) => {
                         return (
                             <Select.Option key={option.key} value={option.key}>{option.value}</Select.Option>

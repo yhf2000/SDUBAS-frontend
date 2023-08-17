@@ -1,4 +1,4 @@
-import {Form, Input} from "antd";
+import {Form, Input, InputNumber} from "antd";
 import React from "react";
 import {withTranslation} from "react-i18next";
 import {Api} from "../../../../API/api";
@@ -21,7 +21,7 @@ const ItemNumber = (props: any) => {
                 {validator:validateNumber}
             ]}
             hasFeedback>
-            <Input
+            <InputNumber
                 disabled={props.editable === false}
                 bordered={props.editable}
             />

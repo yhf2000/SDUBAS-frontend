@@ -11,7 +11,7 @@ const CreditBank = () => {
         <div>
             <TableWithPagination
                 type={'0'}
-                API={"getProList"}
+                API={async (data:any)=>{return Api.getProList({data:{...data}})}}
                 columns={[
                     {
                         title: 'proImage',

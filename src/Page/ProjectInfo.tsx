@@ -9,11 +9,14 @@ import ReactMarkdown from "react-markdown";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch} from "../Redux/Store";
 import getData from "../API/getData";
-import {stringify} from "querystring";
 import {md_str} from "../Config/Project/data";
 import ModalContentSubmit from "../Component/Project/ModalContentSubmit";
 import {useSelector} from "react-redux";
 import {IState} from "../Type/base";
+import {ModalForm} from "@ant-design/pro-form";
+import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
+import AddSubmissionForm from "../Component/Project/Form/AddSubmissionForm";
+import {Api} from "../API/api";
 
 const {Sider, Content} = Layout;
 
@@ -33,13 +36,13 @@ const keyIdMap: keyIdMap = {}//key和id的字典
 
 const ProjectInfo: React.FC = () => {
     const [selectedMenuKey, setSelectedMenuKey] = useState<string | null>(null);
-    const [type, setType] = useState<IProjectContentType>("file-video")//原本的数据
+    const [type, setType] = useState<IProjectContentType>("file-office")//原本的数据
     const [treeData, setTreeData] = useState<DataNode[]>([]);//树形数据
     const [leafContent, setLeafContent] = useState();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {pId} = useParams();
-    const userinfo = useSelector((state:IState)=>state.UserReducer.userInfo);
+    const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
 
     const generateTreeData = (data: any, parentKey = '') => {//根据后端数据递归获得treeData
         return data.map((item: any, index: any) => {
@@ -67,7 +70,7 @@ const ProjectInfo: React.FC = () => {
     const getLeafContentBykey = () => {
         if (selectedMenuKey && keyIdMap[selectedMenuKey]
             && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0)) {
-            console.log('key:', selectedMenuKey);
+            // console.log('key:', selectedMenuKey);
             dispatch(getData(
                 'getProConInfo',
                 {pId: pId, cId: keyIdMap[selectedMenuKey].id},
@@ -134,11 +137,29 @@ const ProjectInfo: React.FC = () => {
                         {
                             selectedMenuKey && keyIdMap[selectedMenuKey]
                             && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0) && (
-                                <ModalContentSubmit
-                                    pId={pId}
-                                    cId={keyIdMap[selectedMenuKey].id}
-                                    username={userinfo?.username}
-                                />)
+                                <>
+                                    <ModalFormUseForm
+                                        title={'添加提交任务'}
+                                        btnName={'添加提交'}
+                                        btnType={'primary'}
+                                        subForm={[
+                                            {
+                                                component:AddSubmissionForm,
+                                                label:'',
+                                            }
+                                        ]}
+                                        dataSubmitter={async (data:any)=>{
+                                                console.log('data',data);
+                                                return Api.submitProContent({pId:pId,cId:keyIdMap[selectedMenuKey].id,data:data})
+                                        }}
+                                    />
+                                    <ModalContentSubmit
+                                        pId={pId}
+                                        cId={keyIdMap[selectedMenuKey].id}
+                                        username={userinfo?.username}//这里可能会替换成userid
+                                    />
+                                </>
+                            )
                         }
 
                         pid:{pId}
@@ -177,6 +198,14 @@ const ProjectInfo: React.FC = () => {
                                 height="720px"
                             />
                         )}
+                        {/*{pId=='1'&&(*/}
+                        {/*    <iframe*/}
+                        {/*        title="demo.docx"*/}
+                        {/*        src="https://view.officeapps.live.com/op/view.aspx?src=https://calibre-ebook.com/downloads/demos/demo.docx"*/}
+                        {/*        width="100%"*/}
+                        {/*        height="720px"*/}
+                        {/*    />*/}
+                        {/*)}*/}
                         {type === "file-pdf" && (
                             <iframe
                                 title="pdf.pdf"
@@ -185,11 +214,24 @@ const ProjectInfo: React.FC = () => {
                                 height="720px"
                             />
                         )}
+                        {/*{pId=='2'&& (*/}
+                        {/*    <iframe*/}
+                        {/*        title="pdf.pdf"*/}
+                        {/*        src="http://www.pdf995.com/samples/pdf.pdf"*/}
+                        {/*        width="100%"*/}
+                        {/*        height="720px"*/}
+                        {/*    />*/}
+                        {/*)}*/}
                         {type === "markdown" && (
                             <div style={{textAlign: "left"}}>
                                 <ReactMarkdown children={md_str}/>
                             </div>
                         )}
+                        {/*{pId=='3'&&(*/}
+                        {/*    <div style={{textAlign: "left"}}>*/}
+                        {/*        <ReactMarkdown children={md_str}/>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
 
                         {/*<iframe*/}
                         {/*    title="spurious.xls"*/}

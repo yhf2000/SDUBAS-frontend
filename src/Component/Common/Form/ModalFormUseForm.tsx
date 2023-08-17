@@ -49,7 +49,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
     }
 
     const addManageInitData = (key: string, data: any) => {
-        dispatch({type: "addManageInitData", key: key, data: data})
+        dispatch({type: "kvSetValue", key: key, data: data})
     }
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
@@ -186,7 +186,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     destroyOnClose={true}
                     title={props.title}
                     className={props.className}
-                    visible={formVis}
+                    open={formVis}
                     maskClosable={false}
                     onCancel={() => {
                         props.onClose && props.onClose()
@@ -225,7 +225,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                                 destroyOnClose={true}
                                 title={props.title}
                                 className={props.className}
-                                visible={formVis}
+                                open={formVis}
                                 maskClosable={false}
                                 width={props.width ?? 1200}
                                 style={{minWidth: props.width}}

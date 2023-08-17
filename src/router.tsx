@@ -42,9 +42,9 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 6, path: "/resources", component: <Resources/>},
     {id: 7, path: "/course", component: <Course/>},
     {id: 8, path: "/records", component: <Records/>},
-    {id: 9, path: "/fund-info", component: <FundInfo/>},
+    {id: 9, path: "/fund-info/:fId", component: <FundInfo/>},
     {id: 10, path: "/user", component: <UserInfo/>},
-    {id: 11, path: "/resource-info", component: <ResourceInfo/>},
+    {id: 11, path: "/resource-info/:rId", component: <ResourceInfo/>},
     {id: 12, path: "/tresource-info", component: <TResourceInfo/>},
     {id: 13, path: "/pro-complete", component: <ProComplete/>},
 ]
