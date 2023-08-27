@@ -1,90 +1,119 @@
-import {Button, Form, Space} from "antd";
-import React from "react";
-import {withTranslation} from "react-i18next";
-import {InboxOutlined} from "@ant-design/icons";
-import Dragger from "antd/lib/upload/Dragger";
+import {Button, Form, Input, message, Modal, Upload} from "antd";
+import {InboxOutlined, UploadOutlined} from "@ant-design/icons";
+import {calculateHash} from "../../../../Utils/fileUpload";
+import {useEffect, useState} from "react";
+import {Api} from "../../../../API/api";
+import {callbackify} from "util";
 import {isValueEmpty} from "../../../../Utils/isValueEmpty";
-import apiAddress from "../../../../API/apiAddress";
-import {fileUpload, fileUploadWithoutMD5} from "../../../../Utils/fileUpload";
 
-interface ItemUploadPropsType {
-    label: string       // Form 标签
-    name: string        // Form 字段
-    required: boolean   // Form 必要性校验
-    accept: string      // 可接受的文件类型
-    use: "user" | "admin"       // 上传文件着
-    downloadFilename?: string    // 下载时的文件名
-    downloadFileSuffix: string  // 下载的文件后缀
-}
-
-const ItemUpload = (props: ItemUploadPropsType & any) => {
-
-    return (
-        <>
-            <Form.Item label={props.label ?? "上传文件"} name={props.name} rules={[{required: props.required}]}>
-                <UploadFile {...props}/>
-            </Form.Item>
-        </>
-    )
-}
+const {Dragger} = Upload;
 
 
 const UploadFile = (props: any) => {
+    const [visible,setVisible] = useState(false);
+    const {value, onChange} = props;
+    const [fileName,setFileName] = useState(value?.name||'');
 
-    const {value, onChange} = props
+    useEffect(()=>{
+        if(value?.name)
+            onChange(value.file_id);
+    },[])
 
     let nameList: string[] = []
     for (let nm of props.accept.split(",")) {
         nameList.push("*" + nm)
     }
-
     const callback = (value: any) => {
-        onChange(value.id)
-    }
-    const upload = (file: any) => {
-        if (props.ues === "user")
-            fileUploadWithoutMD5(file, callback)
-        else fileUpload([file], callback)
+        onChange(value.file_id)
     }
 
-    const filename = (props.downloadFilename ?? value) + props.downloadFileSuffix;
+    const preUpload = async (file: any) => {
+        const MD5 = await calculateHash('md5', file);
+        const sha256Hash = await calculateHash('sha256', file);
+        console.log('md5', MD5, 'sha', sha256Hash);
+        const size = file.size;
+        return new Promise<void>((resolve, reject) => {
+            Api.checkFile({data: {size: size, hash_md5: MD5, hash_sha256: sha256Hash}})
+                .then((res: any) => {
+                    if (res.file_id !== null) {
+                        callback(res);
+                        setFileName(file.name);
+                        setVisible(false);
+                        return reject();
+                    } else {
+                        return resolve();
+                    }
+                })
+        })
+    }
 
+    const handleUpload = async (file: any) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        Api.uploadFile({data: formData})
+            .then((res: any) => {
+                message.success('上传成功')
+                setFileName(file.name);
+                setVisible(false);
+                callback(res);
+            })
+            .catch(() => {
+                message.error('上传失败，请重新上传')
+            })
+    }
     return (
         <>
-            {!isValueEmpty(value) && (
-                <div style={{marginBottom: 24}}>
-                    <div> 已有文件：</div>
-                    <Space>
-                        {filename}
-                        <Button size={"small"} onClick={() => {
-                            const path = apiAddress().CLIENT_SERVER + "/api/filesys/download/" + value + "/" + filename
-                            window.open(path)
-                        }}>下载</Button>
-                        <Button danger size={"small"} onClick={() => {
-                            onChange(null)
-                        }}>删除</Button>
-                    </Space>
-
+            {!isValueEmpty(value) ? (
+                <div>
+                    <Button type={'link'} onClick={()=>{
+                        Api.getDownLoadUrl({data:{id:value.file_id?value.file_id:value}}).then((data:any)=>{window.open(data.url);})
+                    }}>{fileName}</Button>
+                    <Button danger onClick={() => {setVisible(true);onChange(null);}}>重新上传</Button>
                 </div>
-            )}
-            <Dragger
-                multiple={false}
-                accept={props.accept}
-                action=""
-                listType="text"
-                beforeUpload={upload}
-                showUploadList={false}
+            ):(!visible&&<Button style={{width:'80px'}} onClick={()=>{setVisible(true)}} icon={<UploadOutlined />}/>) }
+            <Modal
+                open={visible}
+                onCancel={()=>setVisible(false)}
+                onOk={()=>{setVisible(false)}}
             >
-                <p className="ant-upload-drag-icon">
-                    <InboxOutlined/>
-                </p>
-                <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-                <p className="ant-upload-hint">
-                    请上传一个 {nameList} 文件
-                </p>
-            </Dragger>
+                <Dragger
+                    // fileList={fileList}
+                    maxCount={1}
+                    beforeUpload={preUpload}
+                    customRequest={({file}) => {
+                        handleUpload(file)
+                    }}
+                    action=''
+                    accept={props.accept}
+                    multiple={false}
+                    showUploadList={false}
+                >
+                    <p className="ant-upload-drag-icon">
+                        <InboxOutlined/>
+                    </p>
+                    <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+                    <p className="ant-upload-hint">
+                        请上传一个 {nameList} 文件
+                    </p>
+                </Dragger>
+            </Modal>
         </>
+
     )
+
+}
+const ItemUpload = (props: any) => {
+
+    return (
+        <Form.Item
+            name={props.name??'file_id'}
+            label={props.label??'上传文件'}
+            {...props}
+        >
+            <UploadFile {...props} />
+        </Form.Item>
+    );
 }
 
-export default withTranslation()(ItemUpload)
+export default ItemUpload;

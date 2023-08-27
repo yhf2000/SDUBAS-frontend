@@ -3,7 +3,7 @@ import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {useState} from "react";
 
 type SType = "0" | "1";
-const AddSubmissionForm = () => {
+const AddSubmissionForm = (props:any) => {
     const [type, setType] = useState<SType[]>([]);
     const handleSelect = (index: number, value: any) => {
         console.log('type', value);
@@ -18,11 +18,18 @@ const AddSubmissionForm = () => {
         setType((preVType) => ([...preVType, '0']))
     }
     return (
-        <Form.List name={'addSubmission'}>
+        <Form.List name={'addSubmissions'}>
             {(fields, {add, remove}) => (
                 <>
                     {fields.map((field) => (
                         <Space key={field.name} style={{marginBottom: 8}}>
+                            <Form.Item
+                                {...field}
+                                name={[field.name,'pro_content_id']}
+                                key={field.name+'pro_content_id'}
+                                initialValue={props.cId}
+                            >
+                            </Form.Item>
                             <Form.Item
                                 {...field}
                                 name={[field.name, 'name']}

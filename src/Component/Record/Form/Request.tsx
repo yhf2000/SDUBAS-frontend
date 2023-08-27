@@ -8,8 +8,11 @@ import {Api} from "../../../API/api";
 
 const RequestResource = (props: any) => {
 
-    const [active, setActive] = useState<string>("1")
+    // const [active, setActive] = useState<string>("1")
     const dispatch = useDispatch();
+    const AddTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name});
+    }
 
     return (
         <ModalForm<any>
@@ -39,6 +42,7 @@ const RequestResource = (props: any) => {
             onFinish={async (value:any)=>{
                 console.log('apply:',value);
                 return Api.applyResource({rId:props.rId,data:value}).then(()=>{
+                    AddTableVersion(props.TableName);
                     message.success('成功');
                     return true;
                 })

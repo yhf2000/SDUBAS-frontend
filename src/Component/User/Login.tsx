@@ -1,5 +1,5 @@
-import React, {Dispatch, useRef, useState} from "react";
-import {Button, Card, Space, Tabs} from "antd";
+import React, {Dispatch, useEffect, useRef, useState} from "react";
+import {Button, Card, message, Space, Tabs} from "antd";
 import {LoginForm, ProFormInstance, ProFormText} from "@ant-design/pro-form";
 import {LockOutlined, UserOutlined,} from '@ant-design/icons';
 import userLoginTodo from "./userLoginTodo";
@@ -11,6 +11,9 @@ import {loginInfo} from "../../Type/types";
 import getData from "../../API/getData";
 import UserLoginCheck from "./UserLoginCheck";
 import Register from "./Form/Register";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
+import {useLocation, useNavigate} from "react-router-dom";
 
 type LoginType = 'SDUCAS' | 'account';
 
@@ -20,16 +23,30 @@ const Login = (props: any) => {
     const formRef = useRef<ProFormInstance>()
     const [loginType, setLoginType] = useState<LoginType>("account")
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
     const login = (data: loginInfo) => {
         dispatch(getData(
             "login",
             {data: data},
             (r: any) => {
-                return <UserLoginCheck jump={false}/>
+                dispatch(getData(
+                    "getProfile",
+                    {},
+                    (res: any) => {
+                        dispatch({type: "setUserInfo", data: res});
+                        dispatch({type: "userLogin"});
+                        navigate("/c/home",{replace:true});
+                    },
+                    () => {
+                        dispatch({type: "userLogout"});
+                        props.jump && navigate("/login?to=" + location.pathname, {replace: true});
+                    }
+                ))
             },
-            (error: any) => {
+            (detail:any) => {
 
-            }
+        }
         ))
     }
     return (

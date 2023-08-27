@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Card, Col, Divider, message, Row} from "antd";
+import {Button, Card, Col, Divider, message, Modal, Row} from "antd";
 import Meta from "antd/es/card/Meta";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
 import ItemName from "../Common/Form/Item/ItemName";
@@ -11,8 +11,10 @@ import ProjectForm1 from "./Form/ProjectForm1";
 import {useTranslation} from "react-i18next";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import {useDispatch} from "../../Redux/Store";
-import RoleManageForm from "../Common/RoleManageForm";
+import RoleManageForm from "../Permission/Form/RoleManageForm";
 import modalContentSubmit from "./ModalContentSubmit";
+import ProjectForm2 from "./Form/ProjectForm2";
+import AssignRole from "../Permission/AssignRole";
 // import ProjectForm2 from "./Form/ProjectForm2";
 
 
@@ -30,7 +32,7 @@ const initialValues = {
 };
 
 
-export default function ProCard({item, onClick}: any) {
+export default function ProCard({item, onClick,TableName}: any) {
     const [t] = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
     const dispatch = useDispatch();
@@ -78,28 +80,11 @@ export default function ProCard({item, onClick}: any) {
                         个人进度: {item.progress} / {item.totalProjects}
                     </div>)}
                 </Col>
-                <Col>
-                    <ModalFormUseForm
-                        title={'角色管理'}
-                        btnName={'角色管理'}
-                        TableName={'ExperimentMainTable'}
-                        btnType={'link'}
-                        width={700}
-                        initData={initialValues}
-                        subForm={[
-                            {
-                                component: <RoleManageForm/>,
-                                label: ""
-                            }
-                        ]}
-                        dataSubmitter={() => {
-                            return Promise.resolve('xxx')
-                        }}//角色管理的API
-                    />
+                <Col style={{display:'flex'}}>
                     <ModalFormUseForm
                         title={t('updateProject')}
-                        type={'update'}
-                        TableName={'ExperimentMainTable'}
+                        btnType={'link'}
+                        TableName={TableName}
                         btnName={'编辑'}
                         width={1000}
                         subForm={[
@@ -107,10 +92,10 @@ export default function ProCard({item, onClick}: any) {
                                 component: ProjectForm1,
                                 label: '',
                             },
-                            // {
-                            //     component: ProjectForm2,
-                            //     label:'',
-                            // }
+                            {
+                                component: ProjectForm2,
+                                label:'',
+                            }
                         ]}
                         dataLoader={async () => {
                             return Api.getProInfo({pId:item.id}).then((res:any)=>{
@@ -123,13 +108,14 @@ export default function ProCard({item, onClick}: any) {
                             return Api.updatePro({pId: item.id, data: value});
                         }}
                     />
+                    <AssignRole />
                     <DeleteConfirm
                         onConfirm={() => {
                             dispatch(getData(
                                 'deletePro',
                                 {pId: item.id},
                                 (res: any) => {
-                                    AddTableVersion('ExperimentMainTable')
+                                    AddTableVersion(TableName)
                                     message.success('删除成功')
                                     return Promise.resolve(res);
                                 },

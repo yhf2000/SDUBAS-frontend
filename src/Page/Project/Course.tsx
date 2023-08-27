@@ -1,14 +1,13 @@
 import {Card, Form, Input, List, message, Space, Tag, Typography} from "antd";
-import TableWithPagination from "../Component/Common/Table/TableWithPagination";
+import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {useTranslation} from "react-i18next";
-import ProCard from "../Component/Project/ProCard";
-import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
-import JoinProjectBtn from "../Component/Project/JoinProjectBtn";
+import ProCard from "../../Component/Project/ProCard";
+import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {Link, useNavigate} from "react-router-dom";
-import ProjectForm1 from "../Component/Project/Form/ProjectForm1";
-import getData from "../API/getData";
-import {useDispatch} from "../Redux/Store";
-import {Api} from "../API/api";
+import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
+import {useDispatch} from "../../Redux/Store";
+import {Api} from "../../API/api";
+import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 
 //
 // const initData=[
@@ -38,11 +37,17 @@ const Course = () => {
                     <ModalFormUseForm
                         titile={'新建课程'}
                         type={'create'}
+                        btnName={'新建课程'}
+                        TableName={'CourseTable'}
                         subForm={[
                             {
                                 component: ProjectForm1,
                                 label: "",
                             },
+                            {
+                                component:ProjectForm2,
+                                label:""
+                            }
                         ]}
                         dataSubmitter={(value:any)=>{
                             return Api.newPro({data:value});
@@ -50,7 +55,7 @@ const Course = () => {
                     />}
             >
                 <TableWithPagination
-                    name={'Course'}
+                    name={'CourseTable'}
                     useList={true}
                     API={async (data:any)=>{return Api.getProList({data:{...data}})}}
                     // initData={initData}
@@ -70,7 +75,7 @@ const Course = () => {
                     renderItem={(item: any) => {
                         return (
                             <List.Item key={item.name}>
-                                <ProCard item={item} onClick={() => handleClick(item)}/>
+                                <ProCard item={item} onClick={() => handleClick(item)} TableName={'CourseTable'}/>
                             </List.Item>
                         )
                     }}

@@ -11,6 +11,9 @@ export enum Sex {
 export interface IUserInfo {
     email: string
     username: string
+    is_bind: any
+    status: any
+    card_id:string
     roles: Role
 }
 

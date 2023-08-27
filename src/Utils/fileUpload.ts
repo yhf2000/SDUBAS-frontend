@@ -1,51 +1,21 @@
 import {Api} from "../API/api";
 import md5 from "js-md5";
+import CryptoJS from "crypto-js";
+import {RcFile} from "antd/es/upload";
+import {UploadFile} from "antd/lib";
 
-export const fileUpload = (files: File[], callback: any) => {
-    let formData = new FormData();
-    let num = 0
-    let pros: Promise<any>[] = []
-    let md5Set: Promise<any>[] = []
-    files.forEach((file) => {
-        md5Set.push(
-            file.arrayBuffer().then(((value) => {
-                let code = md5(value)
-                pros.push(
-                    Api.getFileByMD5({md5: code}).then((value: any) => {
-                        if (value !== null) {
-                            callback(value)
-                            return Promise.resolve()
-                        } else {
-                            formData.append("files", file);
-                            num += 1;
-                            return Promise.resolve()
-                        }
-                    })
-                )
-                return Promise.resolve()
-            }))
-        )
-    });
-
-    Promise.all(md5Set).then(() => {
-        Promise.all(pros).then(() => {
-            if (num !== 0) {
-                Api.uploadFile(formData).then((data: any) => {
-                    data.map((value: any) => {
-                        callback(value)
-                        return undefined
-                    })
-                })
-            }
-        })
+export const calculateHash =async (algorithm: string, file: File) => {
+    return new Promise((resolve,reject)=>{
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+            var arrayBuffer = reader.result as ArrayBuffer;
+            var byteArray = new Uint8Array(arrayBuffer);
+            var wordArray = CryptoJS.lib.WordArray.create(Array.from(byteArray));
+            if(algorithm==='md5')
+                var hash = CryptoJS.MD5(wordArray).toString();
+            else var hash = CryptoJS.SHA256(wordArray).toString();
+            resolve(hash);
+        }
     })
-}
-
-export const fileUploadWithoutMD5 = (file: File, callback: any) => {
-    let formData = new FormData();
-    formData.append("file", file);
-    Api.uploadSingleFile(formData).then((data: any) => {
-        callback(data)
-        return undefined
-    })
-}
+};

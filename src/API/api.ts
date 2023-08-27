@@ -1,34 +1,127 @@
 import request from "./request";
-import {loginInfo, forgetInfo, verificationEmail} from "../Type/types";
-import {parentPort} from "worker_threads";
-import getData from "./getData";
-import itemPassword from "../Component/User/Form/Item/ItemPassword";
 
 export const Api: { [key: string]: any } = {
+    //file文件
+    checkFile: async (data: any) => {
+        return request.post('/files/upload/valid', data.data);
+    },
+    uploadFile: async (data: any) => {
+        return request.post('/files/upload', data.data,
+            {headers: {"Content-Type": "multipart/form-data"}});
+    },
+    getDownLoadUrl:async (data:any)=>{
+        return request.get('/files/download',data.data);
+    },
+
+
+    //user自己注册部分
     /*******************user************************/
     register: async (data: any) => {
         return request.post('/users/register', data?.data);//用户注册
     },
     login: async (data: any) => {
-        return request.get('/users/login', data?.data);//用户登录
+        console.log(data.data);
+        return request.post('/users/login', data?.data);//用户登录
     },
     logout: async () => {
-        return request.get('/users/logout');//登出
+        return request.put('/users/logout');//登出
+    },
+    forgetPassword: async (data: any) => {
+        return request.post('/users/get_back_password', data.data);//忘记密码
+    },
+    setPass: async (data: any) => {
+        return request.get(`/users/set_password/${data.token}`, data.data);//设置新密码
     },
     isExist: async (data: any) => {
-        return request.get("/users/isExist", data?.data);//检查字段是否存在
+        return request.post("/users/unique_verify", data?.data);//检查字段是否存在
     },
-    checkPwd: async (data: { password: string }) => {
-        return request.get("/users/checkPwd", data);//检查密码是否正确
+    getCaptcha: async () => {
+        return request.get("/users/get_captcha")//获得验证码
     },
-    getCaptcha:async ()=>{
-        return request.get("/users/getCaptcha")//获得验证码
-    },
-    sendVerificationEmail:async (data:any) =>{
-        return request.post('/users/sendVerificationEmail', data)//向用户发送验证码
+    sendVerificationEmail: async (data: any) => {
+        console.log('send', data.data);
+        return request.post('/users/send_captcha', data.data)//向用户发送验证码
     },
     getProfile: async (data: any) => {
         return request.get('/users/getProfile');//获得用户信息
+    },
+    updateUsername: async (data: any) => {
+        return request.put('/users/username_update', data.data);
+    },
+    updateEmail: async (data: any) => {
+        return request.post('/users/email_update', data.data);
+    },
+    bind: async (data: any) => {
+        return request.post('/users/user_bind_information', data.data);
+    },
+    updatePwd: async (data: any) => {
+        return request.put('/users/password_update', data.data);
+    },
+
+
+    //管理院添加用户部分
+    newUser:async (data:any)=>{
+        return request.post('/users/',data.data);
+    },
+    updateUser:async (data:any)=>{
+        return request.put('/users/',data.data);
+    },
+    deleteUser:async (data:any)=>{
+        return request.delete('/users/',data.data);
+    },
+    getUsers:async (data:any)=>{
+        return request.get('/users/',data.data);//获得已有用户列表
+    },
+
+    //school
+    newSchool: async (data: any) => {
+        return request.post('/users/school_add', data.data);
+    },
+    getSchool: async (data: any) => {
+        return request.get('/users/school_view', data.data);//查看学校列表
+    },
+    updateSchool: async (data: any) => {
+        return request.put(`/users/school_update/${data.sId}`, data.data);//编辑学校信息
+    },
+    deleteSchool: async (data: any) => {
+        return request.delete(`/users/school_delete/${data.sId}`, data.data);//删除学校
+    },
+
+    //college
+    newCollege: async (data: any) => {
+        return request.post('/users/college_add', data.data);
+    },
+    getCollege: async (data: any) => {
+        return request.get('/users/college_view', data.data);
+    },
+    updateCollege: async (data: any) => {
+        return request.put(`/users/college_update/${data.cId}`, data.data);
+    },
+    deleteCollege: async (data: any) => {
+        return request.delete(`/users/college_delete/${data.cId}`, data.data);//删除某一学院
+    },
+
+    //class
+    newClass: async (data: any) => {
+        return request.post('/users/class_add', data.data);
+    },
+    updateClass: async (data: any) => {
+        return request.put(`/users/class_update/${data.cId}`, data.data);
+    },
+    getClass: async (data: any) => {
+        return request.get('/users/class_view', data.data);//获得班级列表
+    },
+    deleteClass: async (data: any) => {
+        return request.delete(`/users/class_delete/${data.cId}`);//删除班级
+    },
+    newMajor: async (data: any) => {
+        return request.post('/users/major_add', data.data);
+    },
+    getMajor: async (data: any) => {
+        return request.get('/users/major_view', data.data);
+    },
+    updateMajor: async (data: any) => {
+        return request.put(`/users/major_update/${data.mId}`, data.data);
     },
 
 
@@ -80,17 +173,17 @@ export const Api: { [key: string]: any } = {
     getFund: async (data: any) => {
         return request.get('/resources/financial', data?.data);//获得资金列表
     },
-    updateNote:async (data:any)=>{
+    updateNote: async (data: any) => {
         return Promise.resolve(true);//需要重写
     },
-    deleteAccount:async (data:any)=>{
-        return request.delete(`/resources/financial/${data.fId}/${data.aId}`,data?.data);
+    deleteAccount: async (data: any) => {
+        return request.delete(`/resources/financial/${data.fId}/${data.aId}`, data?.data);
     },
 
 
     //Project
-    newPro:async (data:any)=>{
-        return request.post('/projects',data.data);//创建项目
+    newPro: async (data: any) => {
+        return request.post('/projects', data.data);//创建项目
     },
     updatePro: async (data: any) => {
         return request.put(`/projects/${data.pId}`, data?.data);//编辑项目
@@ -99,7 +192,7 @@ export const Api: { [key: string]: any } = {
         return request.delete(`/projects/${data.pId}`, data?.data);//删除项目
     },
     getProList: async (data: any) => {
-        return request.get('/projects',data.data);//查询项目列表
+        return request.get('/projects', data.data);//查询项目列表
     },
     getProInfo: async (data: any) => {
         return request.get(`/projects/${data.pId}`, data?.data);//查询项目详情
@@ -128,7 +221,16 @@ export const Api: { [key: string]: any } = {
     listProMember: async (data: any) => {
         return request.get(`/projects/${data.pId}/members`);//查看参加的项目成员
     },
-    getPCSubmission:async (data:any)=>{
-        return request.get('/projects/Content/submission',data.data);//查询一个项目内容的提交项
-    }
+    getPCSubmission: async (data: any) => {
+        return request.get('/projects/Content/submission', data.data);//查询一个项目内容的提交项
+    },
+
+
+    //permission权限
+    getAssignment: async (data: any) => {
+        return request.get('/permission/', data.data);//获得莫角色分配的list
+    },
+    deleteAssignment: async (data: any) => {
+        return request.delete('/permission/', data.data);//删除一个角色对某人的分配
+    },
 }

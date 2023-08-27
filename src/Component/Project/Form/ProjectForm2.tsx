@@ -1,11 +1,17 @@
-import ItemTreeData from "./ItemTreeData";
+import ItemTreeData from "./Item/ItemTreeData";
 import {Form, Input} from "antd";
-import {options} from "./ProjectForm1";
+import ItemContent from "./Item/ItemContent";
+import {CntOptions} from "../../../Config/Project/data";
+import ItemPermission from "../../Permission/Form/Item/ItemPermission";
+import RoleManageForm from "../../Permission/Form/RoleManageForm";
 
 const ProjectForm2 =(
     //添加内容
       <>
-          <Form.Item name={'tag'} label={'添加标签'}>
+          <ItemContent options={CntOptions}/>
+          <ItemPermission />
+          <RoleManageForm />
+          <Form.Item name={'img_id'} initialValue={"1"}>
           </Form.Item>
       </>
     );

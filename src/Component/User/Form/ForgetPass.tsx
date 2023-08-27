@@ -1,5 +1,5 @@
 import {ModalForm} from "@ant-design/pro-form";
-import {message, Tabs} from "antd";
+import {Form, message, Tabs} from "antd";
 import ItemCaptcha from "./Item/ItemCaptcha";
 import React, {useState} from "react";
 import {withTranslation} from "react-i18next";
@@ -31,23 +31,17 @@ const ForgetPass = (props: any) => {
                     captchaId: imgId,
                     captcha: values.captcha
                 }
-                if (active === "1") data.username = values.username
-                if (active === "2") data.email = values.email
-                return Api.forgetPassword(data).then(() => {
-                    message.success('修改密码的链接已发送至您的邮箱');
+                data.username=values.username;
+                data.email = values.email;
+                data.type = 2;
+                return Api.forgetPassword({data:data}).then(() => {
+                    message.success('验证成功');
                     return true
-                })
+                }).catch(()=>{console.log('data',data);})
             }}
         >
-            <Tabs
-                onChange={setActive}
-                activeKey={active}
-                items={[
-                    {label: '用戶名', key: '1', children: <ItemUsername notRequired={active !== '1'}/>},
-                    {label: '邮箱', key: '2', children: <ItemEmail needVerify={false} notCheck={active !== '2'}/>}
-                ]}
-            >
-            </Tabs>
+            <ItemUsername/>
+            <ItemEmail needVerify={false} notCheck={active !== '2'} type={2}/>
             <ItemCaptcha setImgId={setImgId}/>
         </ModalForm>
     )

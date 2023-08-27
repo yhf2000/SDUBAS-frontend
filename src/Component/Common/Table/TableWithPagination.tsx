@@ -1,4 +1,4 @@
-import {Button, Card, Form, List, Space, Table} from "antd";
+import {Button, Card, Form, List, message, Space, Table} from "antd";
 import React, {Dispatch, useEffect, useState} from "react";
 import {defaultPageSize} from "../../../Config/constValue";
 import {IState} from "../../../Type/base";
@@ -12,7 +12,7 @@ import {ITablePageInfo} from "../../../Type/table";
 import {Simulate} from "react-dom/test-utils";
 import getData from "../../../API/getData";
 import {useDispatch} from "../../../Redux/Store";
-import projectInfo from "../../../Page/ProjectInfo";
+import projectInfo from "../../../Page/Project/ProjectInfo";
 
 
 export interface TableWithPaginationProps {
@@ -31,7 +31,7 @@ export interface TableWithPaginationProps {
 }
 
 const TableWithPagination = (props: any) => {
-    const roles = useSelector((state: IState) => state.UserReducer.userInfo?.roles);
+    // const roles = useSelector((state: IState) => state.UserReducer.userInfo?.roles);
     const tbData = useSelector((state: IState) => {
         return {...state.TableReducer.tableData}
     });
@@ -111,7 +111,7 @@ const TableWithPagination = (props: any) => {
                 })
             }
             setLoading(false)
-        })
+        }).catch((error:any)=>{})
     }
 
     useEffect(() => {

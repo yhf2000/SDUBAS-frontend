@@ -1,7 +1,7 @@
 import {Button, Form, Input, message, Select, Space, Upload} from "antd";
 import {useEffect, useState} from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import EditableCell from "./EditableCellProps";
+import EditableCell from "../EditableCellProps";
 interface DataNode {
     id: number;
     name: string;

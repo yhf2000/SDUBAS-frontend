@@ -1,0 +1,35 @@
+.user-info-container {
+    padding: 20px;
+}
+
+.user-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-info-title {
+    font-size: 24px;
+}
+
+.user-info-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.user-info-form .ant-form-item-label {
+    text-align: left;
+}
+
+.user-info-form .ant-form-item-control {
+    text-align: left;
+}
+
+.user-info-form .ant-form-item-explain {
+    margin-top: 4px;
+}
+
+.user-info-form .ant-space {
+    margin-top: 20px;
+}

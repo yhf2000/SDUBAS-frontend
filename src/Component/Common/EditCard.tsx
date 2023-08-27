@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {Button, Card, message} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {notEqual} from "assert";
 
 const EditCard = (props:any)=>{
     const [editing, setEditing] = useState(false);

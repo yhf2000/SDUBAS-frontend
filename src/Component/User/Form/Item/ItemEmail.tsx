@@ -51,15 +51,21 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                         maskClosable={false}
                         destroyOnClose={true}
                         onOk={() => {
-                            Api.sendVerificationEmail({//这里需要注意怎么写的
-                                email: email,
-                                captcha: captcha,
-                                captchaId: imgId
+                            Api.sendVerificationEmail({
+                                data: {
+                                    username:props.username || undefined,
+                                    password:props.pwd || undefined,
+                                    email: email,
+                                    captcha: captcha,
+                                    captchaId: imgId.toString(),
+                                    type: props.type
+                                }
                             }).then((res: any) => {
                                 message.success("验证码已发送至您的邮箱")
                                 setCanSend(60);
                                 setModalVis(false)
-                            }).catch(()=>{})
+                            }).catch(() => {
+                            })
                         }}
                         onCancel={() => {
                             setModalVis(false)
@@ -76,9 +82,9 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                    {required: true},
                                    ({getFieldValue}) => ({
                                        validator(_, value) {
-                                           return Api.isExist({email: value}).then((data: any) => {
-                                               if (data === false) return Promise.resolve()
-                                               else if (data === true) return Promise.reject("邮箱已存在")
+                                           return Api.isExist({data: {email: value}}).then((data: any) => {
+                                               if (data === true) return Promise.resolve()
+                                               else if (data === false) return Promise.reject("邮箱已存在")
                                                return Promise.reject("检验失败")
                                            }).catch((e: any) => {
                                            })
@@ -104,7 +110,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                 </Button>
                             }/>
                     </Form.Item>
-                    <Form.Item name="emailCode" label={props.t("emailCode")}
+                    <Form.Item name={props.name?props.name:"captcha"} label={props.t("emailCode")}
                                rules={[{required: true}]}>
                         <Input/>
                     </Form.Item>

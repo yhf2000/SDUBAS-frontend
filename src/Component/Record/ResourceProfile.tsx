@@ -13,13 +13,14 @@ import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
 
+export const ResourceForm = (
+    <>
+        <ItemName label={'资源名称'} name={'name'} required={true}/>
+        <ItemNumber label={'资源总数'} name={'count'} required={true} />
+    </>
+)
 const ResourceProfile = () => {
-    const ResourceForm = (
-        <>
-            <ItemName label={'资源名称'} name={'name'} required={true}/>
-            <ItemNumber label={'资源总数'} name={'count'} required={true} />
-        </>
-    )
+
     const navigate = useNavigate();
     const userInfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const ResourceProfile = () => {
                         render: (title: string,rows:any) => {
                             return (
                                 <Button type={'link'} onClick={() => {
-                                    navigate(`/c/resource-info/${rows.Id}`)
+                                    navigate(`/c/resource-info/${rows.Id}`,{state:{row:rows}})
                                 }}>{title}</Button>
                             )
                         }
@@ -80,27 +81,7 @@ const ResourceProfile = () => {
                         render:(_:any,rows:any)=>{
                             return(
                                 <>
-                                    <ModalFormUseForm
-                                        title={'编辑资金'}
-                                        type={'update'}
-                                        TableName={'ResourceTable'}
-                                        btnName={'编辑'}
-                                        width={1000}
-                                        subForm={[
-                                            {
-                                                component: ResourceForm,
-                                                label: '',
-                                            },
-                                            // {
-                                            //     component: ProjectForm2,
-                                            //     label:'',
-                                            // }
-                                        ]}
-                                        // dataLoader={}
-                                        dataSubmitter={(value: any) => {
-                                            console.log('data:',value);
-                                        }}
-                                    />
+
                                     <DeleteConfirm
                                         onConfirm={() => {
                                             dispatch(getData(

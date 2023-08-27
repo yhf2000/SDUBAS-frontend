@@ -1,4 +1,4 @@
-import TableWithPagination from "../Component/Common/Table/TableWithPagination";
+import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {useTranslation} from "react-i18next";
 import {
     Card,
@@ -8,13 +8,13 @@ import {
     message,
     Space,
 } from "antd";
-import ProCard from "../Component/Project/ProCard";
+import ProCard from "../../Component/Project/ProCard";
 import {useNavigate} from "react-router-dom";
-import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
-import ProjectForm1 from "../Component/Project/Form/ProjectForm1";
-import {Api} from "../API/api";
+import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
+import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
+import {Api} from "../../API/api";
 import {useMemo} from "react";
-import ProjectForm2 from "../Component/Project/Form/ProjectForm2";
+import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 // import ProjectForm2 from "../Component/Project/Form/ProjectForm2";
 
 
@@ -35,7 +35,7 @@ const Experiment = () => {
     function handleClick(item: any) {
         navigate(`/c/project-info/${item.id}`);
     }
-    console.log('there is ')
+    // console.log('there is ')
     return (
         <Card
             title={'Experiment'}
@@ -44,16 +44,16 @@ const Experiment = () => {
                     titile={'新建实验'}
                     type={'create'}
                     btnName={'新建项目'}
-                    width={1000}
+                    TableName={'ExperimentMainTable'}
                     subForm={[
                         {
                             component: ProjectForm1,
                             label: "",
                         },
-                        // {
-                        //     component:ProjectForm2,
-                        //     label:""
-                        // }
+                        {
+                            component:ProjectForm2,
+                            label:""
+                        }
                     ]}
                     dataSubmitter={(value: any) => {
                         console.log('value:', value);
@@ -85,7 +85,7 @@ const Experiment = () => {
                 renderItem={(item: any) => {
                     return (
                         <List.Item key={item.name}>
-                            <ProCard item={item} onClick={() => handleClick(item)}/>
+                            <ProCard item={item} onClick={() => handleClick(item)} TableName={'ExperimentMainTable'}/>
                         </List.Item>
                     )
                 }}

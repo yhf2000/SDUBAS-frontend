@@ -4,7 +4,7 @@ import {IState} from "../../Type/base";
 import {Api} from "../../API/api";
 import {Avatar, Card, List} from "antd";
 import UserAvatarByEmail from "../User/UserAvatarByEmail";
-import "./PersonalProfile.css"; // 引入 CSS 样式文件
+import "../../Config/CSS/PersonalProfile.css"; // 引入 CSS 样式文件
 
 
 const iactivities = [

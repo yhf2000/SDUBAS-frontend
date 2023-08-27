@@ -7,16 +7,18 @@ import Link from "antd/es/typography/Link";
 import ReactPlayer from "react-player";
 import ReactMarkdown from "react-markdown";
 import {useNavigate, useParams} from "react-router-dom";
-import {useDispatch} from "../Redux/Store";
-import getData from "../API/getData";
-import {md_str} from "../Config/Project/data";
-import ModalContentSubmit from "../Component/Project/ModalContentSubmit";
+import {useDispatch} from "../../Redux/Store";
+import getData from "../../API/getData";
+import {md_str} from "../../Config/Project/data";
+import ModalContentSubmit from "../../Component/Project/ModalContentSubmit";
 import {useSelector} from "react-redux";
-import {IState} from "../Type/base";
+import {IState} from "../../Type/base";
 import {ModalForm} from "@ant-design/pro-form";
-import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
-import AddSubmissionForm from "../Component/Project/Form/AddSubmissionForm";
-import {Api} from "../API/api";
+import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
+import AddSubmissionForm from "../../Component/Project/Form/AddSubmissionForm";
+import {Api} from "../../API/api";
+import Score from "../../Component/Project/Score";
+import {buildTree} from "../../Utils/buildTree";
 
 const {Sider, Content} = Layout;
 
@@ -33,7 +35,6 @@ interface keyIdMap {
 }
 
 const keyIdMap: keyIdMap = {}//key和id的字典
-
 const ProjectInfo: React.FC = () => {
     const [selectedMenuKey, setSelectedMenuKey] = useState<string | null>(null);
     const [type, setType] = useState<IProjectContentType>("file-office")//原本的数据
@@ -44,29 +45,21 @@ const ProjectInfo: React.FC = () => {
     const {pId} = useParams();
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
 
-    const generateTreeData = (data: any, parentKey = '') => {//根据后端数据递归获得treeData
-        return data.map((item: any, index: any) => {
-            const {name, children} = item;
-            const key = parentKey ? `${parentKey}-${index}` : `${index}`;
-
+    const generateTreeData = (data: any) => {//根据后端数据递归获得treeData
+        return data.map((item: any) => {
+            const {key,children,isLeaf} = item;
             keyIdMap[key] = item;
-            const treeNode: DataNode = {
-                key: key,
-                title: name,
-            };
 
             //如果存在孩子则递归
-            if (children && children.length > 0) {
-                treeNode.children = generateTreeData(children, key);
+            if (!isLeaf) {
+                generateTreeData(children);
             }
-
-            return treeNode;
         });
     };
     const handleMenuSelect = (selectedKeys: React.Key[], {node}: any) => {
         setSelectedMenuKey(String(node.key));
     };
-
+    // console.log('tree',tree);
     const getLeafContentBykey = () => {
         if (selectedMenuKey && keyIdMap[selectedMenuKey]
             && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0)) {
@@ -91,7 +84,8 @@ const ProjectInfo: React.FC = () => {
             'getProContent',
             {pId: pId},
             (data: any) => {
-                setTreeData(generateTreeData(data));
+                setTreeData(buildTree(data));
+                console.log(treeData);
                 Promise.resolve();
             },
             () => {
@@ -101,7 +95,7 @@ const ProjectInfo: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        getLeafContentBykey();
+        generateTreeData(treeData);//获得映射
     }, [selectedMenuKey]);
 
     return (
@@ -135,8 +129,7 @@ const ProjectInfo: React.FC = () => {
                     <Space size={12}>
                         {/*还有一些待传的参数*/}
                         {
-                            selectedMenuKey && keyIdMap[selectedMenuKey]
-                            && (!keyIdMap[selectedMenuKey].children || keyIdMap[selectedMenuKey].children.length === 0) && (
+                            selectedMenuKey&&keyIdMap[selectedMenuKey]&&keyIdMap[selectedMenuKey].isLeaf && (
                                 <>
                                     <ModalFormUseForm
                                         title={'添加提交任务'}
@@ -144,25 +137,24 @@ const ProjectInfo: React.FC = () => {
                                         btnType={'primary'}
                                         subForm={[
                                             {
-                                                component:AddSubmissionForm,
+                                                component:()=>AddSubmissionForm({cId:keyIdMap[selectedMenuKey].key}),
                                                 label:'',
                                             }
                                         ]}
                                         dataSubmitter={async (data:any)=>{
                                                 console.log('data',data);
-                                                return Api.submitProContent({pId:pId,cId:keyIdMap[selectedMenuKey].id,data:data})
+                                                return Api.submitProContent({pId:pId,cId:keyIdMap[selectedMenuKey].key,data:data})
                                         }}
                                     />
                                     <ModalContentSubmit
                                         pId={pId}
-                                        cId={keyIdMap[selectedMenuKey].id}
+                                        cId={keyIdMap[selectedMenuKey].key}
                                         username={userinfo?.username}//这里可能会替换成userid
                                     />
+                                    <Score cId = {keyIdMap[selectedMenuKey].key}/>
                                 </>
                             )
                         }
-
-                        pid:{pId}
                     </Space>
                 </div>
             </div>
@@ -209,7 +201,7 @@ const ProjectInfo: React.FC = () => {
                         {type === "file-pdf" && (
                             <iframe
                                 title="pdf.pdf"
-                                src="http://www.pdf995.com/samples/pdf.pdf"
+                                src="http://127.0.0.1:8000/files/download/4bf639681fe1488abf42b53617188605"
                                 width="100%"
                                 height="720px"
                             />

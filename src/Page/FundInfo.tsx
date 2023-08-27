@@ -1,7 +1,7 @@
 import {Button, Card, message} from "antd";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import AddBill from "../Component/Record/Form/AddBill";
-import './FundInfo.css'
+import '../Config/CSS/FundInfo.css'
 import {Api} from "../API/api";
 import {useLocation, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
@@ -9,6 +9,8 @@ import getData from "../API/getData";
 import EditCard from "../Component/Common/EditCard";
 import DeleteConfirm from "../Component/Common/DeleteConfirm";
 import {useDispatch} from "../Redux/Store";
+import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
+import {FundForm} from "../Component/Record/FundProfile";
 
 const {Meta} = Card;
 const FundInfo = () => {
@@ -22,23 +24,47 @@ const FundInfo = () => {
     }
     return (
         <>
-            <Card title={'账目详情'}>
-                <div className={'fcard-container'}>
-                    <EditCard
-                        title={'资金备注'}
-                        API={async (data: any) => {
-                            return Api.updateNote({fId: fId, data: data})
-                        }}
-                        content={row.note}
-                    />
-                    <Card key={'1'} className={'card'}>
-                        <Meta title="Value"
-                            // description={saveInfo.value}
-                        />
-                    </Card>
+            <Card
+                title={row.name}
+                headStyle={{textAlign:'left'}}
+                extra={
+                    (
+                        <>
+                            <AddBill fId={fId}
+                                     button={<Button type={"primary"} size={'small'} style={{marginLeft: '1000px'}}>记账</Button>}/>
+                            <ModalFormUseForm
+                                title={'编辑资金'}
+                                type={'update'}
+                                btnName={'编辑'}
+                                subForm={[
+                                    {
+                                        component: FundForm,
+                                        label: '',
+                                    },
+                                    // {
+                                    //     component: ProjectForm2,
+                                    //     label:'',
+                                    // }
+                                ]}
+                                initData={row}
+                                dataSubmitter={(value: any) => {
+                                    console.log('data:',value);
+                                }}
+                            />
+                        </>
+                    )
+                }
+            >
+                <div className="fund-info-card">
+                    <Meta title={'备注'} description={row.note}/>
+                    {/*<EditCard*/}
+                    {/*    title={'资金备注'}*/}
+                    {/*    API={async (data: any) => {*/}
+                    {/*        return Api.updateNote({fId: fId, data: data})*/}
+                    {/*    }}*/}
+                    {/*    content={row.note}*/}
+                    {/*/>*/}
                 </div>
-                <AddBill fId={fId}
-                         button={<Button type={"link"} size={'small'} style={{marginLeft: '1000px'}}>记账</Button>}/>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <div style={{width: '1000px'}}>
                         <TableWithPagination

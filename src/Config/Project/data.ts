@@ -61,3 +61,60 @@ export const md_str: string =
     "```python\n" +
     "print(\"Hello, world!\")\n" +
     "```\n";
+
+export const ProOptions=[
+    {
+        key: '实验',
+        value: '实验'
+    },
+    {
+        key: '活动',
+        value: '活动'
+    },
+    {
+        key: '竞赛',
+        value: '竞赛'
+    },
+    {
+        key: '课程',
+        value: '课程'
+    }
+]
+
+export const CntOptions = [
+    {
+        key:0,
+        value:'通知/规则'
+    },
+    {
+        key:1,
+        value:'学习资料'
+    },
+    {
+        key:2,
+        value: '作业/实验/考试'
+    }
+]
+
+export const tagOptions = [
+    {
+        key:'1',
+        value:'国家精品',
+    }
+]
+
+
+export const activeType = [
+    {
+        key: 0,
+        value: '未开始'
+    },
+    {
+        key: 1,
+        value: '进行中',
+    },
+    {
+        key: 2,
+        value: '归档'
+    }
+]

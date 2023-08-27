@@ -1,8 +1,8 @@
-import TableWithPagination from "../Component/Common/Table/TableWithPagination";
-import {Api} from "../API/api";
+import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
+import {Api} from "../../API/api";
 import {Button, Card, Upload} from "antd";
-import '../Config/CSS/ResourceInfo.css'
-import FileUpload from "../Component/Common/FileUpload";
+import '../../Config/CSS/ResourceInfo.css'
+import FileUpload from "../../Component/Common/FileUpload";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 

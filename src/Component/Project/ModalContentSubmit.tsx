@@ -1,7 +1,7 @@
 import {Button, Form, Input, Modal} from "antd";
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {useEffect, useState} from "react";
-import projectInfo from "../../Page/ProjectInfo";
+import projectInfo from "../../Page/Project/ProjectInfo";
 import {Api} from "../../API/api";
 import ItemUpload from "../Common/Form/Item/ItemUpload";
 import SubmissionSForm from "./Form/SubmissionSForm";

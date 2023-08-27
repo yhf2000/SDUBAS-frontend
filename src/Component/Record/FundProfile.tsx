@@ -10,7 +10,7 @@ import getData from "../../API/getData";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
 
-const FundForm = (
+export const FundForm = (
     <>
         <ItemName label={'资金名称'} name={'name'} required={true}/>
         <ItemText label={'备注'} name={'note'}/>
@@ -42,7 +42,7 @@ const FundProfile = () => {
                         }
                     ]}
                     dataSubmitter={async (value:any)=>{
-                        console.log('fundData:',value);
+                        // console.log('fundData:',value);
                         return Api.newFund({data:value});
                     }}
                 />
@@ -67,26 +67,6 @@ const FundProfile = () => {
                         render:(_:any,rows:any)=>{
                             return(
                                 <>
-                                    <ModalFormUseForm
-                                        title={'编辑资金'}
-                                        type={'update'}
-                                        btnName={'编辑'}
-                                        width={1000}
-                                        subForm={[
-                                            {
-                                                component: FundForm,
-                                                label: '',
-                                            },
-                                            // {
-                                            //     component: ProjectForm2,
-                                            //     label:'',
-                                            // }
-                                        ]}
-                                        // dataLoader={}
-                                        dataSubmitter={(value: any) => {
-                                            console.log('data:',value);
-                                        }}
-                                    />
                                     <DeleteConfirm
                                         onConfirm={() => {
                                             dispatch(getData(
