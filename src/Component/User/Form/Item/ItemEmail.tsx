@@ -4,7 +4,7 @@ import {withTranslation} from "react-i18next";
 import {Api} from "../../../../API/api";
 import ItemCaptcha from "./ItemCaptcha";
 
-export interface ItemEmailProps{
+export interface ItemEmailProps {
     needVerify: boolean
     editable: boolean
     getEmail: any
@@ -47,18 +47,24 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                 <>
                     <Modal
                         title={"人机身份认证"}
-                        visible={modalVis}
+                        open={modalVis}
                         maskClosable={false}
                         destroyOnClose={true}
                         onOk={() => {
                             Api.sendVerificationEmail({
-                                email: email,
-                                captcha: captcha,
-                                captchaId: imgId
-                            }).then((res:any) => {
+                                data: {
+                                    username:props.username || undefined,
+                                    password:props.pwd || undefined,
+                                    email: email,
+                                    captcha: captcha,
+                                    captchaId: imgId.toString(),
+                                    type: props.type
+                                }
+                            }).then((res: any) => {
                                 message.success("验证码已发送至您的邮箱")
                                 setCanSend(60);
                                 setModalVis(false)
+                            }).catch(() => {
                             })
                         }}
                         onCancel={() => {
@@ -76,12 +82,11 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                    {required: true},
                                    ({getFieldValue}) => ({
                                        validator(_, value) {
-                                           return Api.isExist({email: value}).then((data: any) => {
-                                               if (data === false) return Promise.resolve()
-                                               else if (data === true) return Promise.reject("邮箱已存在")
+                                           return Api.isExist({data: {email: value}}).then((data: any) => {
+                                               if (data === true) return Promise.resolve()
+                                               else if (data === false) return Promise.reject("邮箱已存在")
                                                return Promise.reject("检验失败")
                                            }).catch((e: any) => {
-                                               return Promise.reject(e)
                                            })
                                        },
                                    }),
@@ -98,7 +103,6 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                             setEmail(data)
                                             setModalVis(true)
                                         }).catch(() => {
-                                            message.error("邮箱不合法")
                                         })
                                     }}
                                 >
@@ -106,7 +110,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                 </Button>
                             }/>
                     </Form.Item>
-                    <Form.Item name="emailCode" label={props.t("emailCode")}
+                    <Form.Item name={props.name?props.name:"captcha"} label={props.t("emailCode")}
                                rules={[{required: true}]}>
                         <Input/>
                     </Form.Item>

@@ -11,7 +11,7 @@ const ItemGender = (props: any) => {
         {label: <QuestionOutlined/>, value: Sex.Unknown},
     ];
     return (
-        <Form.Item name="gender" label={props.t("sex")}>
+        <Form.Item name="gender" label={'性别'}>
             <Radio.Group
                 options={options}
                 optionType="button"

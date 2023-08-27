@@ -1,11 +1,19 @@
-import React, {Dispatch, useRef, useState} from "react";
-import {Button, Card, Space, Tabs} from "antd";
+import React, {Dispatch, useEffect, useRef, useState} from "react";
+import {Button, Card, message, Space, Tabs} from "antd";
 import {LoginForm, ProFormInstance, ProFormText} from "@ant-design/pro-form";
 import {LockOutlined, UserOutlined,} from '@ant-design/icons';
 import userLoginTodo from "./userLoginTodo";
 import Logo from "../../Assert/img/blocklogo.png"
 import ForgetPass from "./Form/ForgetPass";
 import {useDispatch} from "../../Redux/Store";
+import UserLoginTodo from "./userLoginTodo";
+import {loginInfo} from "../../Type/types";
+import getData from "../../API/getData";
+import UserLoginCheck from "./UserLoginCheck";
+import Register from "./Form/Register";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
+import {useLocation, useNavigate} from "react-router-dom";
 
 type LoginType = 'SDUCAS' | 'account';
 
@@ -15,15 +23,37 @@ const Login = (props: any) => {
     const formRef = useRef<ProFormInstance>()
     const [loginType, setLoginType] = useState<LoginType>("account")
     const dispatch = useDispatch();
-    const login=(data:any)=>{
-        dispatch(userLoginTodo(data));
+    const navigate = useNavigate();
+    const location = useLocation();
+    const login = (data: loginInfo) => {
+        dispatch(getData(
+            "login",
+            {data: data},
+            (r: any) => {
+                dispatch(getData(
+                    "getProfile",
+                    {},
+                    (res: any) => {
+                        dispatch({type: "setUserInfo", data: res});
+                        dispatch({type: "userLogin"});
+                        navigate("/c/home",{replace:true});
+                    },
+                    () => {
+                        dispatch({type: "userLogout"});
+                        props.jump && navigate("/login?to=" + location.pathname, {replace: true});
+                    }
+                ))
+            },
+            (detail:any) => {
+
+        }
+        ))
     }
     return (
         <Card
-            style={{width: "400px", textAlign: "center", margin: "0 auto"}}>
+            style={{width: "450px", textAlign: "center", margin: "0 auto"}}>
             <LoginForm
                 formRef={formRef}
-                logo={Logo}
                 title="用户登录"
                 subTitle="山东大学区块链学习系统"
                 actions={
@@ -31,11 +61,27 @@ const Login = (props: any) => {
                 }
                 submitter={{
                     resetButtonProps: false,
-                    render: (prop:any, def:any) => {
+                    render: (prop: any, def: any) => {
                         if (loginType !== 'SDUCAS')
                             return <Button type={"primary"} block onClick={() => {
-                                formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
-                                    login(value);
+                                formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                    if (value.username && value.password)
+                                        login(value);
+                                }).catch((value) => {
+                                    let sf = []
+                                    value.username && sf.push(
+                                        {
+                                            name: 'username',
+                                            errors: ['用户名不能为空'],
+                                        },
+                                    )
+                                    value.password && sf.push(
+                                        {
+                                            name: 'password',
+                                            errors: ['密码不能为空'],
+                                        },
+                                    )
+                                    formRef.current?.setFields(sf);
                                 })
                             }
                             }> Login </Button>
@@ -43,10 +89,9 @@ const Login = (props: any) => {
                 }}
             >
                 <Tabs activeKey={loginType} onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-                    items={[
-                        {label:'账号密码登录',key:'account'},
-                        {label:'统一身份认证登录',key:'SDUCAS'}
-                    ]}
+                      items={[
+                          {label: '账号密码登录', key: 'account'},
+                      ]}
                 >
                 </Tabs>
                 {loginType === 'account' && (
@@ -57,8 +102,18 @@ const Login = (props: any) => {
                                 size: 'large',
                                 prefix: <UserOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
-                                        login(value);
+                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
+                                        if (value)
+                                            login(value);
+                                    }).catch(() => {
+                                        formRef.current?.setFields(
+                                            [
+                                                {
+                                                    name: 'username',
+                                                    errors: ['用户名不能为空'],
+                                                },
+                                            ]
+                                        )
                                     })
                                 }
                             }}
@@ -69,7 +124,6 @@ const Login = (props: any) => {
                                     message: '请输入用户名!',
                                 },
                             ]}
-
                         />
                         <ProFormText.Password
                             name="password"
@@ -77,8 +131,17 @@ const Login = (props: any) => {
                                 size: 'large',
                                 prefix: <LockOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
-                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value:any) => {
+                                    formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
                                         login(value);
+                                    }).catch(() => {
+                                        formRef.current?.setFields(
+                                            [
+                                                {
+                                                    name: 'password',
+                                                    errors: ['密码不能为空'],
+                                                },
+                                            ]
+                                        )
                                     })
                                 }
                             }}
@@ -98,7 +161,7 @@ const Login = (props: any) => {
                             textAlign: "right", marginBottom: 10
                         }}>
                             <Space size={3}>
-                                {/*<Register button={<Button type={"link"} size={"small"}>注册</Button>}/>*/}
+                                <Register button={<Button type={"link"} size={"small"}>注册</Button>}/>
                                 <ForgetPass button={<Button type={"link"} size={"small"}>忘记密码</Button>}/>
                             </Space>
                         </div>

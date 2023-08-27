@@ -1,39 +1,58 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { IState } from "../../Type/base";
-import { Api } from "../../API/api";
-import { Avatar, Card, List } from "antd";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
+import {Api} from "../../API/api";
+import {Avatar, Card, List} from "antd";
 import UserAvatarByEmail from "../User/UserAvatarByEmail";
-import "./PersonalProfile.css"; // 引入 CSS 样式文件
+import "../../Config/CSS/PersonalProfile.css"; // 引入 CSS 样式文件
 
+
+const iactivities = [
+    "参加学校科技创新大赛",
+    "担任志愿者协助社区活动",
+    "参加国际交流会议并发表演讲",
+    "组织校内文化节活动",
+    "参加户外拓展训练",
+];
+
+const iawards = [
+    "优秀学生奖",
+    "科学创新奖",
+    "志愿者先锋奖",
+    "学术研究奖",
+    "领导力奖",
+];
 const PersonalProfile = () => {
     const userInfo = useSelector((state: IState) => state.UserReducer.userInfo);
-    const [activities, setActivities] = useState([]);
-    const [awards, setAwards] = useState([]);
+    const [activities, setActivities] = useState(iactivities);
+    const [awards, setAwards] = useState(iawards);
 
-    const getPro = () => {
-        Api.getPersonalProfile().then((data:any) => {
-            setActivities(data.activities);
-            setAwards(data.awards);
-        });
-    };
-
-    useEffect(() => {
-        getPro();
-    }, []);
+    // const getPro = () => {
+    //     Api.getPersonalProfile().then((data: any) => {
+    //         setActivities(data.activities);
+    //         setAwards(data.awards);
+    //     }).catch((error: any) => console.log('error:', error));
+    // };
+    //
+    // useEffect(() => {
+    //     getPro();
+    // }, []);
 
     return (
         <div className="profile">
             <Card className="profile-card">
                 <div className="profile-header">
                     <div className="profile-avatar">
-                        <UserAvatarByEmail email={userInfo?.email} size={64} />
+                        {/*{userInfo?.email}*/}
+                        <UserAvatarByEmail email={"1494106501@qq.com"} size={64}/>
                     </div>
-                    <div className="profile-username">{userInfo?.username}</div>
+                    {/*{userInfo?.username}*/}
+                    <div className="profile-username">{"yd3826"}</div>
                 </div>
                 <div className="profile-body">
                     <div className="profile-contact">
-                        <div className="profile-email">{userInfo?.email}</div>
+                        {/*{userInfo?.email}*/}
+                        <div className="profile-email">{"1494106501@qq.com"}</div>
                     </div>
                     <div className="profile-activities">
                         <h3>活动经历</h3>

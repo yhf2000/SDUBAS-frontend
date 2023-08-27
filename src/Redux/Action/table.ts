@@ -28,7 +28,7 @@ export interface setDataSource {
     add: boolean
 }
 
-export interface setTablePageInfo{
+export interface setTablePageInfo {
     type: "setTablePageInfo"
     name: string
     data: ITablePageInfo

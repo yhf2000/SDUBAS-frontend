@@ -7,7 +7,7 @@ const ItemUsername = (props: any) => {
     return (
         <Form.Item
             name="username"
-            label={props.t("username")}
+            label={'用户名'}
             rules={
                 [
                     {
@@ -18,9 +18,10 @@ const ItemUsername = (props: any) => {
                     ({getFieldValue}) => ({
                         validator(_, value) {
                             if (props.ExistCheck === true) {
-                                return Api.isExist({username: value}).then((data: any) => {
-                                    if (data === false) return Promise.resolve()
-                                    else if (data === true) return Promise.reject("用户名已存在")
+                                return Api.isExist({data: {username: value}}).then((data: any) => {
+                                    console.log('data', data);
+                                    if (data === true) return Promise.resolve()
+                                    else if (data === false) return Promise.reject("用户名已存在")
                                     return Promise.reject("检验失败")
                                 }).catch((e: any) => {
                                     return Promise.reject(e)
@@ -35,6 +36,11 @@ const ItemUsername = (props: any) => {
             <Input
                 disabled={props.editable === false}
                 bordered={props.editable}
+                onChange={(e) => {
+                    if(props.onChange)
+                        props.onChange(e.target.value)
+                    else return
+                }}
             />
         </Form.Item>
     )

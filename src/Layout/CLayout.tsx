@@ -19,7 +19,7 @@ const CLayout = () => {
             navigator("/c/home");
         }
     }, [location.pathname, navigator])
-
+    console.log('sx')
     return (
         <>
             <UserLoginCheck jump={false}/>

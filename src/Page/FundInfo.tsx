@@ -1,51 +1,127 @@
-import {Button, Card} from "antd";
+import {Button, Card, message} from "antd";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
-import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import AddBill from "../Component/Record/Form/AddBill";
-import Text from "antd/es/typography/Text";
-import Title from "antd/es/typography/Title";
-import './FundInfo.css'
+import '../Config/CSS/FundInfo.css'
 import {Api} from "../API/api";
+import {useLocation, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import getData from "../API/getData";
+import EditCard from "../Component/Common/EditCard";
+import DeleteConfirm from "../Component/Common/DeleteConfirm";
+import {useDispatch} from "../Redux/Store";
+import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
+import {FundForm} from "../Component/Record/FundProfile";
+
 const {Meta} = Card;
 const FundInfo = () => {
+
+    const {fId} = useParams();
+    const location = useLocation();
+    const {row} = location.state;
+    const dispatch = useDispatch();
+    const addTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name})
+    }
     return (
         <>
-            <Card title={'账目详情'}>
-                <div className={'card-container'}>
-                    <Card className={'card'}>
-                        <Meta title="Note" description="This is the content of Card 1." />
-                    </Card>
-                    <Card className={'card'}>
-                        <Meta title="Value" description="This is the content of Card 2." />
-                    </Card>
+            <Card
+                title={row.name}
+                headStyle={{textAlign:'left'}}
+                extra={
+                    (
+                        <>
+                            <AddBill fId={fId}
+                                     button={<Button type={"primary"} size={'small'} style={{marginLeft: '1000px'}}>记账</Button>}/>
+                            <ModalFormUseForm
+                                title={'编辑资金'}
+                                type={'update'}
+                                btnName={'编辑'}
+                                subForm={[
+                                    {
+                                        component: FundForm,
+                                        label: '',
+                                    },
+                                    // {
+                                    //     component: ProjectForm2,
+                                    //     label:'',
+                                    // }
+                                ]}
+                                initData={row}
+                                dataSubmitter={(value: any) => {
+                                    console.log('data:',value);
+                                }}
+                            />
+                        </>
+                    )
+                }
+            >
+                <div className="fund-info-card">
+                    <Meta title={'备注'} description={row.note}/>
+                    {/*<EditCard*/}
+                    {/*    title={'资金备注'}*/}
+                    {/*    API={async (data: any) => {*/}
+                    {/*        return Api.updateNote({fId: fId, data: data})*/}
+                    {/*    }}*/}
+                    {/*    content={row.note}*/}
+                    {/*/>*/}
                 </div>
-                <AddBill button={<Button type={"link"} size={'small'} style={{marginLeft:'1000px'}}>记账</Button>}/>
-                <TableWithPagination
-                    API={Api.getProfile}
-                    columns={[
-                        {
-                            title:'收支',
-                            dataIndex:'value',
-                            key:'value'
-                        },
-                        {
-                            title:'描述',
-                            dataIndex: 'description',
-                            key:'description'
-                        },
-                        {
-                            title:'操作人',
-                            dataIndex:'operator',
-                            key:'operator'
-                        },
-                        {
-                            title:'记录日期',
-                            dataIndex: 'date',
-                            key:'date'
-                        },
-
-                    ]}
-                />
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <div style={{width: '1000px'}}>
+                        <TableWithPagination
+                            name={'AccountTable'}
+                            API={async (data: any) => {
+                                return Api.getFundInfo({fId: fId, data: data})
+                            }}
+                            columns={[
+                                {
+                                    title: '数额',
+                                    dataIndex: 'amount',
+                                    key: 'amount',
+                                    render: (amount: number, row: any) => {
+                                        const color = row.state === 0 ? "green" : "red";
+                                        return (
+                                            <span style={{color}}>
+                                                {row.state === 0 ? "+" : "-"}{amount}
+                                            </span>
+                                        )
+                                    }
+                                },
+                                {
+                                    title: '日志记录',
+                                    dataIndex: 'log_content',
+                                    key: 'log_content'
+                                },
+                                {
+                                    title: '操作',
+                                    key: 'operator',
+                                    render: (_: any, row: any) => {
+                                        return (
+                                            <DeleteConfirm
+                                                onConfirm={() => {
+                                                    dispatch(getData(
+                                                        'deleteAccount',
+                                                        {fId:row.finance_id,aId:row.Id},
+                                                        (res: any) => {
+                                                            addTableVersion('AccountTable');
+                                                            message.success('删除成功')
+                                                            return Promise.resolve(res);
+                                                        },
+                                                        (error: any) => {
+                                                            message.error('删除失败');
+                                                        }
+                                                    ));
+                                                }}//删除的Api
+                                                content={
+                                                    <Button type={'link'} danger={true}>删除</Button>
+                                                }
+                                            />
+                                        )
+                                    }
+                                },
+                            ]}
+                        />
+                    </div>
+                </div>
             </Card>
         </>
     )

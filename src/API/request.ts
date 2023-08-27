@@ -2,7 +2,7 @@ import axios, {AxiosRequestConfig} from "axios";
 import {message} from "antd";
 import {getAddress} from "../config";
 
-const baseUrl = getAddress().SERVER + '/api'
+const baseUrl = getAddress().SERVER
 const service = axios.create({
     baseURL: baseUrl,
     timeout: 5000,
@@ -77,9 +77,23 @@ const post = async (url: string, data: object, config?: AxiosRequestConfig) => {
     }), url);
 }
 
+const put = async (url: string, data?: object, config?: AxiosRequestConfig) => {
+    return await dealResponse(service.put(url, data, {
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}, ...config}
+    }), url);
+}
+const Delete = async (url: string, config?: AxiosRequestConfig) => {
+    return await dealResponse(service.delete(url, {
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}},
+        ...config
+    }), url);
+}
+
 const request = {
     get,
     post,
-    getZipFile
+    put,
+    getZipFile,
+    delete: Delete
 }
 export default request;

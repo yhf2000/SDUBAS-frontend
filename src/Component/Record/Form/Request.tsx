@@ -1,17 +1,18 @@
 import {ModalForm} from "@ant-design/pro-form";
-import {Form, Input, message, Tabs} from "antd";
-import ItemCaptcha from "../../User/Form/Item/ItemCaptcha";
+import {DatePicker, Form, Input, message, Tabs} from "antd";
 import React, {useState} from "react";
-import {withTranslation} from "react-i18next";
-import ItemUsername from "../../User/Form/Item/ItemUsername";
-import ItemEmail from "../../User/Form/Item/ItemEmail";
-import {Api} from "../../../API/api";
-import TabPane from "antd/es/tabs/TabPane";
+import {useDispatch} from "../../../Redux/Store";
+import getData from "../../../API/getData";
 import ItemNumber from "./Item/ItemNumber";
+import {Api} from "../../../API/api";
 
 const RequestResource = (props: any) => {
 
-    const [active, setActive] = useState<string>("1")
+    // const [active, setActive] = useState<string>("1")
+    const dispatch = useDispatch();
+    const AddTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name});
+    }
 
     return (
         <ModalForm<any>
@@ -38,38 +39,21 @@ const RequestResource = (props: any) => {
             //         return true
             //     })
             // }}
+            onFinish={async (value:any)=>{
+                console.log('apply:',value);
+                return Api.applyResource({rId:props.rId,data:value}).then(()=>{
+                    AddTableVersion(props.TableName);
+                    message.success('成功');
+                    return true;
+                })
+            }}
         >
-            {/*<Tabs*/}
-            {/*    onChange={setActive}*/}
-            {/*    activeKey={active}*/}
-            {/*    items={[*/}
-            {/*        {label: '收入', key: '1',children:active==='1'&&<ItemNumber notRequired={active !== '1'} />},*/}
-            {/*    ]}*/}
-            {/*>*/}
-            {/*</Tabs>*/}
-            <Form.Item
-                label="姓名"
-                name="name"
-                rules={[{ required: true, message: "请输入您的姓名" }]}
-            >
-                <Input placeholder="请输入您的姓名" />
+            <ItemNumber label={'申请数量'} name={'count'}/>
+            <Form.Item name={'begintime'} label={'起始日期'}>
+                <DatePicker />
             </Form.Item>
-            <Form.Item
-                label="电子邮件"
-                name="email"
-                rules={[
-                    { required: true, message: "请输入您的电子邮件" },
-                    { type: "email", message: "请输入有效的电子邮件地址" },
-                ]}
-            >
-                <Input placeholder="请输入您的电子邮件" />
-            </Form.Item>
-            <Form.Item
-                label="简介"
-                name="description"
-                rules={[{ required: true, message: "请输入简介" }]}
-            >
-                <Input.TextArea placeholder="请输入简介" />
+            <Form.Item name={'endtime'} label={'结束日期'}>
+                <DatePicker />
             </Form.Item>
         </ModalForm>
     )

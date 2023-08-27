@@ -8,6 +8,7 @@ import {IState} from "../Type/base";
 import {browserTest} from "../Utils/browserTest";
 import UserAvatarByEmail from "../Component/User/UserAvatarByEmail";
 import sdu_logo from "../Assert/img/logo.jpg"
+import {Api} from "../API/api";
 
 const {Header} = Layout;
 
@@ -76,7 +77,11 @@ const CHeader = () => {
                             <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
                                 用户概况
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<LogoutOutlined/>} onClick={() => dispatch({type: "userLogout"})}>
+                            <Menu.Item key="2" icon={<LogoutOutlined/>}
+                                       onClick={() => Api.logout()
+                                           .then(() => dispatch({type: "userLogout"}))
+                                           .catch(()=>{})
+                            }>
                                 登出
                             </Menu.Item>
                         </Menu>

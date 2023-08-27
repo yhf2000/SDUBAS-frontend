@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, Form, message, Modal} from "antd";
 import {EditOutlined, PlusOutlined} from "@ant-design/icons";
-import {ck,isValueEmpty} from "../../../Utils/isValueEmpty";
+import {ck, isValueEmpty} from "../../../Utils/isValueEmpty";
 import {useForm} from "antd/es/form/Form";
 import {ProFormInstance, StepsForm} from "@ant-design/pro-form";
 import {ButtonType} from "antd/es/button";
@@ -48,11 +48,11 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
         batchUpdate: "primary"
     }
 
-    const addManageInitData=(key:string,data:any)=>{
-        dispatch({type:"addManageInitData",key:key,data:data})
+    const addManageInitData = (key: string, data: any) => {
+        dispatch({type: "kvSetValue", key: key, data: data})
     }
-    const addTableVersion=(name:string)=>{
-        dispatch({type:'addTableVersion',name:name})
+    const addTableVersion = (name: string) => {
+        dispatch({type: 'addTableVersion', name: name})
     }
     const loadData = () => {
         if (props.type === "update" || props.type === "fork") {
@@ -68,7 +68,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     return
                 }
                 props.dataLoader && props.dataLoader().then((data: any) => {
-                    // console.log("dataLoaderData", data)
+                    console.log("dataLoaderData", data)
                     setSaveInitData(data)
                     // if (props.subForm.length !== 1) {
                     // } else form.setFieldsValue(data)
@@ -130,6 +130,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                 props.onClose && props.onClose()
                 setFormVis(false)
                 message.success("成功")
+            }).catch((error:any)=>{
             })
         }
 
@@ -185,7 +186,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     destroyOnClose={true}
                     title={props.title}
                     className={props.className}
-                    visible={formVis}
+                    open={formVis}
                     maskClosable={false}
                     onCancel={() => {
                         props.onClose && props.onClose()
@@ -215,16 +216,16 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                         setCurrent(currentPage)
                     }}
                     formMapRef={formMapRef}
-                    onFinish={async (values:any) => {
+                    onFinish={async (values: any) => {
                         submitData(values)
                     }}
-                    stepsFormRender={(dom:any, submitter:any) => {
+                    stepsFormRender={(dom: any, submitter: any) => {
                         return (
                             <Modal
                                 destroyOnClose={true}
                                 title={props.title}
                                 className={props.className}
-                                visible={formVis}
+                                open={formVis}
                                 maskClosable={false}
                                 width={props.width ?? 1200}
                                 style={{minWidth: props.width}}

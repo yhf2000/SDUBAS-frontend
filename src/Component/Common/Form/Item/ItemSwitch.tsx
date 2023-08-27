@@ -1,25 +1,31 @@
-import {Form, Switch} from "antd";
-import React from "react";
-import {withTranslation} from "react-i18next";
-import {CheckOutlined, CloseOutlined} from "@ant-design/icons";
+import {useState} from "react";
+import {Form, Space, Switch} from "antd";
 
 const ItemSwitch = (props: any) => {
+    const [checked, setChecked] = useState(false);
+    const handleChange = (checked: boolean) => {
+        setChecked(checked);
+    }
     return (
         <>
-            <Form.Item
+            <div>是否需要打分</div>
+            <Form.List
                 name={props.name}
-                label={props.label}
-                valuePropName="checked"
-                initialValue={props.InitValue ?? false}
-                rules={[{required: props.required ?? true}]}
             >
-                <Switch
-                    checkedChildren={props.ck ?? <CheckOutlined/>}
-                    unCheckedChildren={props.unck ?? <CloseOutlined/>}
-                />
-            </Form.Item>
+                {() => (
+                    <>
+                        <Form.Item>
+                            <Switch
+                                checked={checked}
+                                onChange={handleChange}
+                            />
+                        </Form.Item>
+                        {checked && props.children}
+                    </>
+                )}
+
+            </Form.List>
         </>
     )
 }
-
-export default withTranslation()(ItemSwitch)
+export default ItemSwitch;

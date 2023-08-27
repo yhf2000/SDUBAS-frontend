@@ -1,4 +1,4 @@
-import {Button, Card, Form, List, Space, Table} from "antd";
+import {Button, Card, Form, List, message, Space, Table} from "antd";
 import React, {Dispatch, useEffect, useState} from "react";
 import {defaultPageSize} from "../../../Config/constValue";
 import {IState} from "../../../Type/base";
@@ -7,11 +7,12 @@ import {ck} from "../../../Utils/isValueEmpty";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {ColumnsType} from "antd/lib/table/interface";
 import {useForm} from "antd/es/form/Form";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {ITablePageInfo} from "../../../Type/table";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
-import resourceProfile from "../../Record/ResourceProfile";
+import getData from "../../../API/getData";
+import {useDispatch} from "../../../Redux/Store";
+import projectInfo from "../../../Page/Project/ProjectInfo";
 
 
 export interface TableWithPaginationProps {
@@ -30,11 +31,9 @@ export interface TableWithPaginationProps {
 }
 
 const TableWithPagination = (props: any) => {
-    const roles = useSelector((state:IState)=>state.UserReducer.userInfo?.roles);
-    const tbData=useSelector((state:IState)=>{
-        return(
-            {...state.TableReducer.tableData}
-        );
+    // const roles = useSelector((state: IState) => state.UserReducer.userInfo?.roles);
+    const tbData = useSelector((state: IState) => {
+        return {...state.TableReducer.tableData}
     });
     const dispatch = useDispatch();
     const [total, setTotal] = useState<number>(0)                   // 项的总数
@@ -51,21 +50,21 @@ const TableWithPagination = (props: any) => {
         if (setDataSource !== undefined && props.name !== undefined)
             setDataSource(data, props.name)
     }
-    const setTableInfo = (name:string,data:ITablePageInfo) =>{
+    const setTableInfo = (name: string, data: ITablePageInfo) => {
         dispatch({
             type: "setTablePageInfo",
             name: name,
             data: data
         })
     }
-    const setDataSource = (data:any,name:string) =>{
+    const setDataSource = (data: any, name: string) => {
         dispatch({type: "setDataSource", data: data, name: name, add: false})
     }
     // 这里的所有的参数都只能增量的修改，不能删除，删除需要手动更新 redux
     const getInfo = (pageNow?: number, pageSize?: number, searchKey?: string, moreProps?: any) => {
         const propsTableInfo = tbData[props.name]?.tablePageInfo
         if (propsTableInfo !== undefined) {
-            if (moreProps === undefined && propsTableInfo.moreProps !== undefined){
+            if (moreProps === undefined && propsTableInfo.moreProps !== undefined) {
                 form.setFieldsValue(propsTableInfo.moreProps)
             }
             pageNow = pageNow ?? propsTableInfo.pageNow
@@ -87,7 +86,7 @@ const TableWithPagination = (props: any) => {
             searchKey: sk,
             ...fmp
         }).then((data: any) => {
-            console.log("data", data)
+            // console.log('data',data)
             if (data.rows === null) data.rows = []
             if (props.APIRowsTransForm !== undefined) {
                 setTableData(props.APIRowsTransForm(data.rows))
@@ -112,7 +111,7 @@ const TableWithPagination = (props: any) => {
                 })
             }
             setLoading(false)
-        })
+        }).catch((error:any)=>{})
     }
 
     useEffect(() => {
@@ -125,7 +124,7 @@ const TableWithPagination = (props: any) => {
     const onFinish = () => {
         const values = form.getFieldsValue()
         if (JSON.stringify(values) !== "{}")
-            getInfo(1, PageSize, undefined, values)
+            getInfo(PageNow, PageSize, undefined, values)
     };
     const onReset = () => {
         const values = form.getFieldsValue()
@@ -133,9 +132,9 @@ const TableWithPagination = (props: any) => {
         const tf = tbData[props.name]?.tablePageInfo;
         props.name && setTableInfo(props.name, {
             total: tf?.total || 0,
-            pageNow: tf?.pageNow||0,
-            pageSize: tf?.pageSize||0,
-            searchKey: tf?.searchKey||"",
+            pageNow: tf?.pageNow || 0,
+            pageSize: tf?.pageSize || 0,
+            searchKey: tf?.searchKey || "",
             moreProps: undefined
         })
         const valuesAfter = form.getFieldsValue()
@@ -213,6 +212,7 @@ const TableWithPagination = (props: any) => {
                         loading={loading}
                         size={props.size}
                         dataSource={tableData}
+                        // dataSource={props.initData}
                         renderItem={props.renderItem}
                         pagination={{
                             onChange: (page, pageSize) => {
@@ -275,6 +275,7 @@ const TableWithPagination = (props: any) => {
                         columns={props.columns}
                         rowSelection={props.rowSelection}
                         dataSource={tableData}
+                        // dataSource={props.initData}
                         pagination={{
                             onChange: (page, pageSize) => {
                                 getInfo(page, pageSize)

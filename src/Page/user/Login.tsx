@@ -1,9 +1,9 @@
 import React, {Component, Dispatch, useEffect} from "react";
 import {message} from "antd";
 import {connect} from "react-redux";
-import {IState} from "../Type/base";
-import Login from "../Component/User/Login";
-import {getUrlParams} from "../Utils/getUrlParams";
+import {IState} from "../../Type/base";
+import Login from "../../Component/User/Login";
+import {getUrlParams} from "../../Utils/getUrlParams";
 import {useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
 

@@ -1,0 +1,13 @@
+.fund-info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.fund-info-card-title {
+    text-align: left;
+}
+
+.fcard-container {
+    margin-top: 20px;
+}

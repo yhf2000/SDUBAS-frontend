@@ -3,12 +3,16 @@ import {Avatar, Card, List} from "antd";
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 
-const Information = ()=>{
-    return(
-        <div>
+const Information = () => {
+    return (
+        <div style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}>
             <TableWithPagination
-                API={Api.getNotification}
-                columns={[{title:'题目',dataIndex:'title',key:'title'},{title:'内容',dataIndex: 'content',key:'content'},{title:'日期',dataIndex: 'date',key:'date'}]}
+                API={async (data:any)=>{return Api.getProList({data:{...data}})}}
+                columns={[{title: '标题', dataIndex: 'title', key: 'title'}, {
+                    title: '内容',
+                    dataIndex: 'content',
+                    key: 'content'
+                }, {title: '日期', dataIndex: 'date', key: 'date'}]}
             />
         </div>
     );
