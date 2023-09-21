@@ -35,8 +35,14 @@ const StudentScore = (props: any) => {
             <Form.Item name={'honesty'} label={'诚信度'}>
                 <Input/>
             </Form.Item>
+            <Form.Item name={'honesty_weight'} label={'诚实度占比'}>
+                <Input />
+            </Form.Item>
+            <Form.Item name={'user_id'} initialValue={props.uId} style={{display:'none'}}>
+            </Form.Item>
             <ItemNumber name={'score'} label={'成绩'}/>
-            <ItemType name={'pass'} label={'通过'} options={[
+
+            <ItemType name={'is_pass'} label={'通过'} options={[
                 {
                     key:0,
                     value:"通过"
@@ -48,12 +54,12 @@ const StudentScore = (props: any) => {
             ]}/>
             <ItemText name={'comment'} label={'评论'} />
             <TableWithPagination
-                name={'StudentSubmissionTable'}
+                name={`StudentSubmissionTable`}
                 API={async (data: any) => {
                     return Api.getPCSubmission({
+                        pId: props.pId,
                         data: {
-                            userId: props.userId ?? "1",
-                            contentId: props.cId,
+                            contentId:props.cId,
                             ...data
                         }
                     })
@@ -68,12 +74,17 @@ const StudentScore = (props: any) => {
                 title={'学生评分'}
                 btnName={'评分'}
                 btnType={'link'}
+                TableName={`Student${props.cId}ScoreTable`}
                 subForm={[
                     {
                         component: scoreForm,
                         label: '',
                     }
                 ]}
+                dataSubmitter = {async (data:any)=>{
+                    console.log('sub',data);
+                    return Api.scoreProCon({cId:props.cId,pId:props.pId,data:data});
+                }}
             />
         </>
     );

@@ -9,100 +9,40 @@ interface OpType {
     label: string;
 }
 
-export const BindForm2 = (
-    <>
-        <Form.Item
-            name={'card_id'}
-            label={'学号'}
-            rules={[{required: true}]}
-        >
-            <Input/>
-        </Form.Item>
-        <Form.Item
-            name={'realname'}
-            label={'姓名'}
-            rules={[{required: true}]}
-        >
-            <Input/>
-        </Form.Item>
-        <ItemGender/>
-        <Form.Item
-            label="入学时间"
-            name="enrollment_dt"
-            rules={[{required: true}]}
-        >
-            <DatePicker style={{width: "100%"}}/>
-        </Form.Item>
-        <Form.Item
-            label="毕业时间"
-            name="graduation_dt"
-            rules={[{required: true}]}
-        >
-            <DatePicker style={{width: "100%"}}/>
-        </Form.Item>
-    </>
-)
-
-
-export function BindForm3() {
-    const [schoolOp, setSchoolOp] = useState<OpType[]>([]);
-    const [collegeOp, setCollegeOp] = useState<OpType[]>([]);
-    const [classOp, setClassOp] = useState<OpType[]>([{value: '1', label: '数据班'}]);
-    const [majorOp, setMajorOp] = useState<OpType[]>([{value: '1', label: '计算机'}]);
+export const BindForm2 = (props: any) => {
     return (
         <>
             <Form.Item
-                name={'school_id'}
-                label={'学校'}
+                name={'card_id'}
+                label={'学号'}
                 rules={[{required: true}]}
             >
-                <Select>
-                    {schoolOp.map((option: OpType) => {
-                        return (
-                            <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
-                        )
-                    })}
-                </Select>
+                <Input/>
+            </Form.Item>
+            <Form.Item name={'role_id'} initialValue={props.role_id} style={{display:'none'}}>
             </Form.Item>
             <Form.Item
-                name={'college_id'}
-                label={'学院'}
+                name={'realname'}
+                label={'姓名'}
                 rules={[{required: true}]}
             >
-                <Select>
-                    {collegeOp.map((option: OpType) => {
-                        return (
-                            <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
-                        )
-                    })}
-                </Select>
+                <Input/>
+            </Form.Item>
+            <ItemGender/>
+            <Form.Item
+                label="入学时间"
+                name="enrollment_dt"
+                rules={[{required: true}]}
+            >
+                <DatePicker style={{width: "100%"}} format="YYYY-MM-DD"/>
             </Form.Item>
             <Form.Item
-                name={'major_id'}
-                label={'专业'}
+                label="毕业时间"
+                name="graduation_dt"
                 rules={[{required: true}]}
             >
-                <Select>
-                    {majorOp.map((option: OpType) => {
-                        return (
-                            <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
-                        )
-                    })}
-                </Select>
-            </Form.Item>
-            <Form.Item
-                name={'class_id'}
-                label={'班级'}
-                rules={[{required: true}]}
-            >
-                <Select>
-                    {classOp.map((option: OpType) => {
-                        return (
-                            <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
-                        )
-                    })}
-                </Select>
+                <DatePicker style={{width: "100%"}} mode={'date'}/>
             </Form.Item>
         </>
-    )
+    );
 }

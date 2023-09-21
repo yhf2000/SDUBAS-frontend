@@ -1,14 +1,17 @@
 import Title from "antd/es/typography/Title";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Card, Col, Divider, Image, List, message, Modal, Row} from "antd";
+import {Button, Card, Col, Divider, Image, List, message, Modal, Row, Space, Table} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import getData from "../../API/getData";
 import DeleteConfirm from "../../Component/Common/DeleteConfirm";
-import React from "react";
+import React, {useState} from "react";
 import {useDispatch} from "../../Redux/Store";
 import {CollegeForm} from "../../Component/User/Form/SchoolForms";
+import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
+import Assignment, {AssignmentForm} from "../../Component/Permission/Form/Assignment";
+import ModalRoleManage from "./Component/ModalRoleManage";
 
 const College = () => {
     const location = useLocation();
@@ -25,30 +28,32 @@ const College = () => {
             <Card
                 extra={
                     (
-                        <ModalFormUseForm
-                            title={'添加学院'}
-                            TableName={row.id + 'CollegeTable'}
-                            type={'create'}
-                            btnName={'添加学院'}
-                            subForm={[
-                                {
-                                    component: () => CollegeForm({school_id: row.id}),
-                                    label: '',
-                                }
-                            ]}
-                            dataSubmitter={async (data: any) => {
-                                console.log(data);
-                                return Api.newCollege({data: data})
-                            }}
-                        />
-
+                        <Space>
+                            <ModalRoleManage newRole={true} TableName={'SchoolRolesTable'+row.school_id}/>
+                            <ModalFormUseForm
+                                title={'添加学院'}
+                                TableName={row.id + 'CollegeTable'}
+                                type={'create'}
+                                btnName={'添加学院'}
+                                subForm={[
+                                    {
+                                        component: () => CollegeForm({school_id: row.id}),
+                                        label: '',
+                                    }
+                                ]}
+                                dataSubmitter={async (data: any) => {
+                                    console.log(data);
+                                    return Api.newCollege({data: data})
+                                }}
+                            />
+                        </Space>
                     )
                 }
             >
                 <TableWithPagination
                     name={row.id + 'CollegeTable'}
                     API={async (data: any) => {
-                        return Api.getCollege({data:{school_id:row.id,...data}})
+                        return Api.getCollege({data: {school_id: row.id, ...data}})
                     }}
                     useList={true}
                     renderItem={(item: any) => {
@@ -60,7 +65,7 @@ const College = () => {
                                     </Col>
                                     <Col flex={'auto'}>
                                         <Button type={'link'}
-                                                onClick={() => navigate(`/c/${row.id}/${item.id}/MajorClass`, {
+                                                onClick={() => navigate(`/c/school/${row.id}/college/${item.id}/MajorClass`, {
                                                     state: {
                                                         school: row,
                                                         college: item

@@ -1,37 +1,32 @@
 import {useState} from "react";
-import {Button, Form, Input, Modal} from "antd";
+import {Button, Form, Input, message, Modal} from "antd";
 import ItemUpload from "../../Common/Form/Item/ItemUpload";
 import {ModalForm} from "@ant-design/pro-form";
+import {Api} from "../../../API/api";
+import {useDispatch} from "../../../Redux/Store";
 
 
-const form = (
-    <>
-    </>
-)
-const SubmissionSForm=(props:any)=>{
-    const [visible, setVisible] = useState(false);
+const SubmissionSForm = (props: any) => {
     const [inputValue, setInputValue] = useState('');
-    const [fileList, setFileList] = useState([]);
-
-
-    const handleInputChange = (e:any) => {
+    const dispatch = useDispatch();
+    const addTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name})
+    }
+    const handleInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
 
-    const handleFileChange = (info:any) => {
-        setFileList(info.fileList);
-    };
 
-    const button=(props.rows.type === 0 ? (
-        <Button type="link" >
-            提交文本
-        </Button>
-    )
-    : (
-        <Button type="link">
-            提交文件
-        </Button>
-    ))
+    const button = (props.rows.type === 0 ? (
+            <Button type="link">
+                提交文本
+            </Button>
+        )
+        : (
+            <Button type="link">
+                提交文件
+            </Button>
+        ))
     return (
         <>
             <ModalForm
@@ -43,17 +38,20 @@ const SubmissionSForm=(props:any)=>{
                     width: 500,
                     okText: "提交"
                 }}
-                onFinish={(values:any)=>{console.log(values);return Promise.resolve(true)}}//需要添加addTableVersion
+                onFinish={(values: any) => {
+                    console.log(values);
+                        return Api.submit({pId: props.pId, cId: props.cId, data: values}).then(() => {
+                            message.success('提交成功');
+                            addTableVersion(`SubmitContentTable-${props.cId}`);
+                            return Promise.resolve(true);
+                        }).catch(()=>{message.error('错误')})
+                    }
+                }//需要添加addTableVersion
             >
-                <Form.Item name={'pId'} initialValue={props.rows.id}>
-                    <Input type={'hidden'}/>
-                </Form.Item>
-                <Form.Item name={'uId'} initialValue={'001'}>
-                </Form.Item>
                 {props.rows.type === 0 && (
                     <>
                         <span>字数限制:{props.rows.count_limit}</span>
-                        <Form.Item name={'text'} label={'请输入文本'}
+                        <Form.Item name={'content'} label={'请输入文本'}
                                    rules={[
                                        {required: true, message: '请输入文本'},
                                        {
@@ -74,10 +72,13 @@ const SubmissionSForm=(props:any)=>{
                 {props.rows.type === 1 && (
                     <ItemUpload
                         label={'上传文件'}
-                        name={'file'}
-                        accept={props.rows.type_limit}
+                        name={'file_id'}
+                        accept={"."+props.rows.type_limit}
                     />
                 )}
+                <Form.Item name={'pc_submit_id'} initialValue={props.rows.id} style={{display: 'none'}}>
+                    <Input type={'hidden'} />
+                </Form.Item>
             </ModalForm>
         </>
     )

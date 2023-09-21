@@ -1,17 +1,18 @@
-import {Button, Card, message} from "antd";
+import {Button, Card, Form, Input, message, Select} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
-import {BindForm2, BindForm3} from "../../Component/User/Form/BindForm";
-import {BindForm1} from "../../Component/User/Form/BindForm1";
 import {Api} from "../../API/api";
-import {SchoolForm} from "../../Component/User/Form/SchoolForms";
 import React from "react";
 import getData from "../../API/getData";
 import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import {useDispatch} from "../../Redux/Store";
+import {useNavigate} from "react-router-dom";
+import ItemPermission from "../../Component/Permission/Form/Item/ItemPermission";
+import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
 
 const ManageUsers = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
@@ -22,45 +23,42 @@ const ManageUsers = () => {
                 headStyle={{fontSize: 28}}
                 extra={(
                     <ModalFormUseForm
-                        title={'添加用户'}
+                        title={'添加角色'}
                         type={'create'}
-                        btnName={'添加用户'}
-                        TableName={'UsersMainTable'}
+                        btnName={'添加角色'}
+                        TableName={'RolesMainTable'}
                         subForm={[
                             {
-                                component: BindForm2,
-                                label: '用户信息(1)'
+                                component: RoleManageForm({service_type: 0}),
+                                label: ''
                             },
-                            {
-                                component: BindForm3(),
-                                label: '用户信息(2)'
-                            },
-                            {
-                                component: BindForm1,
-                                label: '登录信息'
-                            }
                         ]}
-                        dataSubmisster={async (data:any)=>{
-                            return Api.newUser({data:data});
+                        dataSubmitter={async (data: any) => {
+                            console.log('sub', data);
+                            return Api.addDefaultRole({data: data});
                         }}
                     />
                 )}
             >
                 <TableWithPagination
-                    name={'UsersMainTable'}
+                    name={'RolesMainTable'}
                     API={async (data: any) => {
-                        return Api.getUsers({data: data})
+                        return Api.getRoles({data: data})
                     }}
                     columns={[
                         {
-                            title: '用户名',
-                            key: 'username',
-                            dataIndex: 'username'
-                        },
-                        {
-                            title: '姓名',
-                            key: 'realName',
-                            dataIndex: 'realName'
+                            title: '角色名',
+                            key: 'role_name',
+                            dataIndex: 'role_name',
+                            render: (name: any, row: any) => {
+                                return (
+                                    <Button type={'link'} onClick={() => {
+                                        navigate(`/c/addUsers/${row.role_id}`, {state: {row: row}})
+                                    }}>
+                                        {name}
+                                    </Button>
+                                )
+                            }
                         },
                         {
                             title: '操作',
@@ -69,47 +67,31 @@ const ManageUsers = () => {
                                 return (
                                     <>
                                         <ModalFormUseForm
-                                            title={'编辑用户'}
-                                            TableName={'UsersMainTable'}
+                                            title={'编辑角色'}
+                                            TableName={'RolesMainTable'}
                                             btnName={'编辑'}
                                             type={'update'}
                                             subForm={[
                                                 {
-                                                    component: BindForm2,
-                                                    label: '用户信息(1)'
+                                                    component: (
+                                                        <>
+                                                            <Form.Item name={'role_id'} style={{display:'none'}}>
+                                                            </Form.Item>
+                                                            <Form.Item name={'role_name'}>
+                                                                <Input/>
+                                                            </Form.Item>
+                                                            <Form.Item name={'privilege'}>
+                                                                <ItemPermission service_type = {0}/>
+                                                            </Form.Item>
+                                                        </>
+                                                    ),
+                                                    label: ''
                                                 },
-                                                {
-                                                    component: BindForm3(),
-                                                    label: '用户信息(2)'
-                                                },
-                                                {
-                                                    component: BindForm1,
-                                                    label: '登录信息'
-                                                }
                                             ]}
                                             // dataSubmitter={async (values: any) => {
                                             //     return Api.updateUser({: row.id, data: values})
                                             // }}
                                             initData={row}//还需要有权限,或者使用dataLoader
-                                        />
-                                        <DeleteConfirm
-                                            onConfirm={() => {
-                                                dispatch(getData(
-                                                    'deleteUser',
-                                                    {sId: row.id},
-                                                    (res: any) => {
-                                                        AddTableVersion('UsersMainTable')
-                                                        message.success('删除成功')
-                                                        return Promise.resolve(res);
-                                                    },
-                                                    (error: any) => {
-                                                        message.error('删除失败');
-                                                    }
-                                                ));
-                                            }}//删除的Api
-                                            content={
-                                                <Button type={'link'} danger={true}>删除</Button>
-                                            }
                                         />
                                     </>
                                 )

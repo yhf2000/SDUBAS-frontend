@@ -9,7 +9,6 @@ import Course from "./Page/Project/Course";
 import FundInfo from "./Page/FundInfo";
 import UserInfo from "./Page/user/UserInfo";
 import ResourceInfo from "./Page/ResourceInfo";
-import TResourceInfo from "./Page/Project/TResourceInfo";
 import FundProfile from "./Component/Record/FundProfile";
 import ResourceProfile from "./Component/Record/ResourceProfile";
 import CreditBank from "./Component/Record/CreditBank";
@@ -19,6 +18,7 @@ import School from "./Page/School/School";
 import College from "./Page/School/College";
 import MajorClass from "./Page/School/MajorClass";
 import ManageUsers from "./Page/ManageUser/ManageUsers";
+import AddUsersByRole from "./Page/ManageUser/AddUsersByRole";
 
 export interface IBaseRouter {
     id: number
@@ -51,16 +51,16 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 9, path: "/fund-info/:fId", component: <FundInfo/>},
     {id: 10, path: "/user", component: <UserInfo/>},
     {id: 11, path: "/resource-info/:rId", component: <ResourceInfo/>},
-    {id: 12, path: "/tresource-info", component: <TResourceInfo/>},
     {id: 13, path: "/record_fund", component: <FundProfile/>},
     {id: 14, path: "/record_resource", component: <ResourceProfile/>},
     {id: 15, path: "/creditBank", component: <CreditBank/>},
     {id: 16, path: '/record_personal', component: <PersonalProfile/>},
     {id: 17, path: '/set_password/:token', component: <NewPwd/>},
     {id: 18, path: '/school', component: <School/>},
-    {id: 19, path: '/:id/college', component: <College/>},
-    {id: 20, path: '/:id/:id/MajorClass', component: <MajorClass/>},
+    {id: 19, path: 'school/:school_id/college', component: <College/>},
+    {id: 20, path: 'school/:school_id/college/:college_id/MajorClass', component: <MajorClass/>},
     {id: 21, path: '/users', component: <ManageUsers/>},//用户管理的页面
+    {id: 22, path: '/addUsers/:role_id', component: <AddUsersByRole/>}
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},

@@ -1,13 +1,7 @@
 import ItemName from "../../Common/Form/Item/ItemName";
 import ItemType from "../../Common/Form/Item/ItemType";
 import ItemUpload from "../../Common/Form/Item/ItemUpload";
-import ItemSwitch from "../../Common/Form/Item/ItemSwitch";
-import {Form, Input} from "antd";
-import ItemTreeData from "./Item/ItemTreeData";
-import {activeType, CntOptions, ProOptions, tagOptions} from "../../../Config/Project/data";
-import ItemContent from "./Item/ItemContent";
-import ItemPermission from "../../Permission/Form/Item/ItemPermission";
-
+import {activeType, ProOptions, tagOptions} from "../../../Config/Project/data";
 const roles = ['student', 'teacher']
 
 const ProjectForm1 = (
@@ -16,7 +10,7 @@ const ProjectForm1 = (
         <ItemName label={'项目名称'} name={'name'} required={true}/>
         <ItemType label={'项目类型'} name={'type'} options={ProOptions} default={'1'} required={true}/>
         <ItemType label={'项目状态'} name={'active'} options={activeType} default={'0'} required={true}/>
-        <ItemType label={'项目标签'} name={'tag'} options={tagOptions} default={'0'} required={false}/>
+        <ItemType label={'项目标签'} name={'tag'} options={tagOptions} default={'0'} mode={'multiple'} required={false}/>
         {/*<ItemUpload*/}
         {/*    label={'上传文件'}*/}
         {/*    name={'file'}*/}

@@ -68,6 +68,10 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     return
                 }
                 props.dataLoader && props.dataLoader().then((data: any) => {
+                    if(data.tag !== undefined)
+                    {
+                        data.tag = data.tag.split(',');
+                    }
                     console.log("dataLoaderData", data)
                     setSaveInitData(data)
                     // if (props.subForm.length !== 1) {

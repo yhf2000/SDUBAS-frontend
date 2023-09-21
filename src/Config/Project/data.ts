@@ -100,6 +100,10 @@ export const tagOptions = [
     {
         key:'1',
         value:'国家精品',
+    },
+    {
+        key:'2',
+        value:"省级优秀"
     }
 ]
 

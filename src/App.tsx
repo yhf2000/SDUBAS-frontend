@@ -2,10 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {mainRouter} from "./router";
 
-var c=0;
 const App = () => {
-    c++;
-    console.log('1',c)
     return (
         <>
             <Router>

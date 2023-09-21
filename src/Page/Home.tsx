@@ -3,14 +3,19 @@ import BC from "../Assert/img/bolckchain.jpg"
 import CB from "../Assert/img/creditbank.jpg"
 import PP from "../Assert/img/personalprofile.jpg"
 import {Button, Col, Form, Image, Row} from "antd";
-import React from "react";
+import React, {useEffect} from "react";
 import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
 import Information from "../Component/Record/Information";
+import {Api} from "../API/api";
+import BatchImport from "../Component/Common/BatchImport";
+import {CheckCircleOutlined, CloseCircleFilled, CloseCircleOutlined, CloseOutlined} from "@ant-design/icons";
+import ItemUpload from "../Component/Common/Form/Item/ItemUpload";
 
 const Home = () => {
     return (
         <>
+            <ItemUpload accept={'.mp4'}/>
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>

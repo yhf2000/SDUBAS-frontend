@@ -10,7 +10,8 @@ import FileUpload from "../../Component/Common/FileUpload";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProCard from "../../Component/Project/ProCard";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
-import ProjectForm2 from "../../Component/Project/Form/ProjectForm2"; // 导入自定义样式
+import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
+import {arraytostr} from "../../Utils/arraytostr"; // 导入自定义样式
 
 // const initData=[
 //     {
@@ -38,6 +39,7 @@ const Resources = () => {
     return (
         <div>
             <Card
+                title={'教学资源'}
                 extra={(
                     <ModalFormUseForm
                         titile={'新建资源'}
@@ -55,7 +57,7 @@ const Resources = () => {
                             }
                         ]}
                         dataSubmitter={(value: any) => {
-                            // console.log('value:', value);
+                            value.tag = arraytostr(value.tag);
                             return Api.newPro({
                                 data: value
                             });
@@ -66,8 +68,7 @@ const Resources = () => {
                     <TableWithPagination
                         name={'ResourcesTable'}
                         useList={true}
-                        className="resources-table" // 使用自定义样式类
-                        API={async (data:any)=>{return Api.getProList({data:data})}}
+                        API={async (data:any)=>{return Api.getProListByType({data:{...data,projectType:"资源"}})}}
                         // initData={initData}
                         renderItem={(item: any) => {
                             return (

@@ -14,7 +14,7 @@ const AssignRole = (props: any) => {
     // },[])需要API
     return (
         <>
-            <Button type={'link'} onClick={()=>(setVisible(true))}>分配</Button>
+            <Button type={props.btnType||'link'} onClick={()=>(setVisible(true))}>分配</Button>
             <Modal
                 open={visible}
                 onCancel={()=>{setVisible(false)}}
