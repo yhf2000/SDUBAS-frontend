@@ -8,6 +8,7 @@ import {useDispatch} from "../../Redux/Store";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {Link, useNavigate} from "react-router-dom";
 import {SchoolForm} from "../../Component/User/Form/SchoolForms";
+import AssignRole from "../../Component/Permission/AssignRole";
 
 const School = () => {
     const dispatch = useDispatch();
@@ -20,21 +21,23 @@ const School = () => {
             <Card
                 extra={
                     (
-                        <ModalFormUseForm
-                            title={'添加学校'}
-                            type={'create'}
-                            btnName={'添加学校'}
-                            TableName={'SchoolTable'}
-                            subForm={[
-                                {
-                                    component: SchoolForm,
-                                    label: ""
-                                }
-                            ]}
-                            dataSubmitter={async (data: any) => {
-                                return Api.newSchool({data: data})
-                            }}
-                        />
+                        <>
+                            <ModalFormUseForm
+                                title={'添加学校'}
+                                type={'create'}
+                                btnName={'添加学校'}
+                                TableName={'SchoolTable'}
+                                subForm={[
+                                    {
+                                        component: SchoolForm,
+                                        label: ""
+                                    }
+                                ]}
+                                dataSubmitter={async (data: any) => {
+                                    return Api.newSchool({data: data})
+                                }}
+                            />
+                        </>
                     )
                 }
             >
@@ -55,7 +58,7 @@ const School = () => {
                                             </Col>
                                             <Col flex={'auto'}>
                                                 <Button type={'link'} onClick={() => {
-                                                    navigate(`/c/${row.id}/college`, {state: {row: row}})
+                                                    navigate(`/c/school/${row.id}/college`, {state: {row: row}})
                                                 }}>{row.name}</Button>
                                             </Col>
                                             <Col>

@@ -12,11 +12,17 @@ import ItemNumber from "./Form/Item/ItemNumber";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
+import ItemRoles from "../User/Form/Item/ItemRoles";
+import RoleManageForm from "../Permission/Form/RoleManageForm";
+import AssignRole from "../Permission/AssignRole";
+import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+
 
 export const ResourceForm = (
     <>
         <ItemName label={'资源名称'} name={'name'} required={true}/>
-        <ItemNumber label={'资源总数'} name={'count'} required={true} />
+        <ItemNumber label={'资源总数'} name={'count'} required={true}/>
+        <RoleManageForm/>
     </>
 )
 const ResourceProfile = () => {
@@ -24,8 +30,8 @@ const ResourceProfile = () => {
     const navigate = useNavigate();
     const userInfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const dispatch = useDispatch();
-    const addTableVersion = (name:string)=>{
-        dispatch({type:'addTableVersion',name:name})
+    const addTableVersion = (name: string) => {
+        dispatch({type: 'addTableVersion', name: name})
     }
     return (
         <>
@@ -46,23 +52,26 @@ const ResourceProfile = () => {
                             label: "",
                         }
                     ]}
-                    dataSubmitter={async (value:any)=>{
-                        return Api.newResource({data:value});
+                    dataSubmitter={async (value: any) => {
+                        console.log(value);
+                        return Api.newResource({data: value});
                     }}
                 />
             </div>
             <TableWithPagination
                 name={'ResourceTable'}
-                API={async (data:any)=>{return Api.getResource({data:data})}}
+                API={async (data: any) => {
+                    return Api.getResource({data: data})
+                }}
                 columns={[
                     {
                         title: '名称',
                         dataIndex: 'name',
                         key: 'name',
-                        render: (title: string,rows:any) => {
+                        render: (title: string, rows: any) => {
                             return (
                                 <Button type={'link'} onClick={() => {
-                                    navigate(`/c/resource-info/${rows.Id}`,{state:{row:rows}})
+                                    navigate(`/c/resource-info/${rows.Id}`, {state: {row: rows}})
                                 }}>{title}</Button>
                             )
                         }
@@ -71,22 +80,23 @@ const ResourceProfile = () => {
                         title: '状态',
                         dataIndex: 'state',
                         key: 'state',
-                        render:(state:any)=>{
-                            return (state===1?<span>可用</span>:<span>不可用</span>)
+                        render: (state: any) => {
+                            return (state === 1 ? <span>可用</span> : <span>不可用</span>)
                         }
                     },
                     {
                         title: '操作',
-                        key:'operator',
-                        render:(_:any,rows:any)=>{
-                            return(
+                        key: 'operator',
+                        render: (_: any, rows: any) => {
+                            return (
                                 <>
-
+                                    <ModalRoleManage editable={false} newRole={false} newUser={false} btnType={'link'}
+                                                     TableName={`Resource${rows.id}Roles`}/>
                                     <DeleteConfirm
                                         onConfirm={() => {
                                             dispatch(getData(
                                                 'deleteResource',
-                                                {rId:rows.Id},
+                                                {rId: rows.Id},
                                                 (res: any) => {
                                                     addTableVersion('ResourceTable')
                                                     message.success('删除成功')

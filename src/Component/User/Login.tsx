@@ -2,17 +2,11 @@ import React, {Dispatch, useEffect, useRef, useState} from "react";
 import {Button, Card, message, Space, Tabs} from "antd";
 import {LoginForm, ProFormInstance, ProFormText} from "@ant-design/pro-form";
 import {LockOutlined, UserOutlined,} from '@ant-design/icons';
-import userLoginTodo from "./userLoginTodo";
-import Logo from "../../Assert/img/blocklogo.png"
 import ForgetPass from "./Form/ForgetPass";
 import {useDispatch} from "../../Redux/Store";
-import UserLoginTodo from "./userLoginTodo";
 import {loginInfo} from "../../Type/types";
 import getData from "../../API/getData";
-import UserLoginCheck from "./UserLoginCheck";
 import Register from "./Form/Register";
-import {useSelector} from "react-redux";
-import {IState} from "../../Type/base";
 import {useLocation, useNavigate} from "react-router-dom";
 
 type LoginType = 'SDUCAS' | 'account';

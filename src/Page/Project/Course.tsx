@@ -1,4 +1,4 @@
-import {Card, Form, Input, List, message, Space, Tag, Typography} from "antd";
+import {Card, Form, Input, List, message, Select, Space, Tag, Typography} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {useTranslation} from "react-i18next";
 import ProCard from "../../Component/Project/ProCard";
@@ -8,6 +8,7 @@ import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {useDispatch} from "../../Redux/Store";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
+import {arraytostr} from "../../Utils/arraytostr";
 
 //
 // const initData=[
@@ -23,8 +24,6 @@ import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 //     }
 // ]
 const Course = () => {
-    const [t] = useTranslation();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleClick = (item:any)=>{
         navigate(`/c/project-info/${item.id}`)
@@ -32,7 +31,6 @@ const Course = () => {
     return (
         <>
             <Card
-                title={t('Course')}
                 extra={
                     <ModalFormUseForm
                         titile={'新建课程'}
@@ -45,11 +43,13 @@ const Course = () => {
                                 label: "",
                             },
                             {
-                                component:ProjectForm2,
+                                component:ProjectForm2({service_type:7}),
                                 label:""
                             }
                         ]}
                         dataSubmitter={(value:any)=>{
+                            value.tag = arraytostr(value.tag);
+                            console.log(value)
                             return Api.newPro({data:value});
                         }}
                     />}
@@ -57,12 +57,23 @@ const Course = () => {
                 <TableWithPagination
                     name={'CourseTable'}
                     useList={true}
-                    API={async (data:any)=>{return Api.getProList({data:{...data}})}}
+                    API={async (data:any)=>{
+                        if(data.tag)
+                            data.tag = arraytostr(data.tag);
+                        else data.tag = ''
+                        return Api.getProListByType({data:{projectType:'课程',...data}})}}
                     // initData={initData}
                     getForm={(onFinish: any) => {
                         return (
                             <Space size={30}>
-                                <Form.Item label={t("Search")} name={"title"}>
+                                <Form.Item label={'标签'} name={'tag'} >
+                                    <Select onChange={onFinish} mode={'multiple'} style={{width:120}}>
+                                        <Select.Option value={'1'}>国家</Select.Option>
+                                        <Select.Option value={'2'}>省级</Select.Option>
+                                        <Select.Option value={'3'}>校级</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item label={"搜索"} name={"title"}>
                                     <Input onPressEnter={() => {
                                         onFinish()
                                     }}/>

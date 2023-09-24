@@ -1,0 +1,114 @@
+import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
+import {Api} from "../../API/api";
+import {Button, Card, DatePicker, message, Modal} from "antd";
+import {useLocation} from "react-router-dom";
+import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
+import {BindForm1, EditUserForm} from "../../Component/User/Form/BindForm1";
+import {BindForm2} from "../../Component/User/Form/BindForm";
+import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
+import DeleteConfirm from "../../Component/Common/DeleteConfirm";
+import getData from "../../API/getData";
+import React from "react";
+import {useDispatch} from "../../Redux/Store";
+
+const AddUsersByRole = ()=>{
+    const location = useLocation();
+    const row = location.state.row;
+    const dispatch = useDispatch();
+    const AddTableVersion = (name: string) => {
+        dispatch({type: 'addTableVersion', name: name})
+    }
+    // const {row} = location.state;
+    return (
+        <Card
+            // title={row.name}
+            extra={(
+                <ModalFormUseForm
+                    type={'create'}
+                    btnName={'添加用户'}
+                    TableName={'UsersMainTable'}
+                    subForm={[
+                        {
+                            component:BindForm2({role_id:row.role_id}),
+                            label: '用户信息'
+                        },
+                        {
+                            component:BindForm1,
+                            label:'登录信息'
+                        }
+                    ]}
+                    dataSubmitter={async (data:any)=>{
+                        data.enrollment_dt = data.enrollment_dt.split(' ')[0]
+                        data.graduation_dt = data.graduation_dt.split(' ')[0]
+                        return Api.newUser({data:data});}}
+                />
+            )}
+        >
+            <TableWithPagination
+                API={async (data:any)=>{
+                    return Api.getUsers({data:{...data,role_id:row.role_id}});
+                }}
+                name={'UsersMainTable'}
+                columns={[
+                    {
+                        title:'学/工号',
+                        dataIndex:'cardId',
+                        key:'cardId'
+                    },
+                    {
+                        title:'用户名',
+                        dataIndex:'user_name',
+                        key:'username'
+                    },
+                    {
+                        title:'操作',
+                        key:'operator',
+                        render:(_:any,row:any)=>{
+                            return(
+                                <>
+                                    <ModalFormUseForm
+                                        title={'编辑用户'}
+                                        TableName={'UsersMainTable'}
+                                        btnName={'编辑'}
+                                        type={'update'}
+                                        subForm={[
+                                            {
+                                                component:EditUserForm,
+                                                label: '用户信息'
+                                            },
+                                        ]}
+                                        // dataSubmitter={async (values: any) => {
+                                        //     return Api.updateUser({: row.id, data: values})
+                                        // }}
+                                        initData={row}//还需要有权限,或者使用dataLoader
+                                    />
+                                    {/*<DeleteConfirm*/}
+                                    {/*    onConfirm={() => {*/}
+                                    {/*        dispatch(getData(*/}
+                                    {/*            'deleteUser',*/}
+                                    {/*            {sId: row.id},*/}
+                                    {/*            (res: any) => {*/}
+                                    {/*                AddTableVersion('UsersMainTable')*/}
+                                    {/*                message.success('删除成功')*/}
+                                    {/*                return Promise.resolve(res);*/}
+                                    {/*            },*/}
+                                    {/*            (error: any) => {*/}
+                                    {/*                message.error('删除失败');*/}
+                                    {/*            }*/}
+                                    {/*        ));*/}
+                                    {/*    }}//删除的Api*/}
+                                    {/*    content={*/}
+                                    {/*        <Button type={'link'} danger={true}>删除</Button>*/}
+                                    {/*    }*/}
+                                    {/*/>*/}
+                                </>
+                            )
+                        }
+                    }
+                ]}
+            />
+        </Card>
+    )
+}
+
+export default AddUsersByRole;

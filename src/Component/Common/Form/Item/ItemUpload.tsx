@@ -28,12 +28,21 @@ const UploadFile = (props: any) => {
     }
 
     const preUpload = async (file: any) => {
-        const MD5 = await calculateHash('md5', file);
-        const sha256Hash = await calculateHash('sha256', file);
-        console.log('md5', MD5, 'sha', sha256Hash);
+        const code =await calculateHash(file);
+        const fileType = file.type;
+        let duration: number|null = null;
+        if(fileType.startsWith("video/"))
+        {
+            const url = window.URL.createObjectURL(file);
+            const audioElement = new Audio(url);
+            audioElement.addEventListener("loadedmetadata", function (_event) {
+                duration = audioElement.duration;
+            });
+        }
+        console.log({time:duration})
         const size = file.size;
         return new Promise<void>((resolve, reject) => {
-            Api.checkFile({data: {size: size, hash_md5: MD5, hash_sha256: sha256Hash}})
+            Api.checkFile({data: {size: size, ...code}})
                 .then((res: any) => {
                     if (res.file_id !== null) {
                         callback(res);
@@ -104,11 +113,10 @@ const UploadFile = (props: any) => {
 
 }
 const ItemUpload = (props: any) => {
-
     return (
         <Form.Item
             name={props.name??'file_id'}
-            label={props.label??'上传文件'}
+            // label={props.label??'上传文件'}
             {...props}
         >
             <UploadFile {...props} />

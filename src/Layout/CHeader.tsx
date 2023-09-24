@@ -101,7 +101,7 @@ const CHeader = () => {
                     <Space>
                         <Button type={"text"} onClick={() => {
                             navigator("/c/login?to=" + location.pathname)
-                        }}>登录 / 注册</Button>
+                        }}>登录</Button>
                     </Space>
                 )}
             </div>

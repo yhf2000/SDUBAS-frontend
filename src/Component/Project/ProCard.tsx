@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Button, Card, Col, Divider, message, Modal, Row} from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, Card, Col, Divider, Image, message, Modal, Row} from "antd";
 import Meta from "antd/es/card/Meta";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
 import ItemName from "../Common/Form/Item/ItemName";
@@ -11,10 +11,10 @@ import ProjectForm1 from "./Form/ProjectForm1";
 import {useTranslation} from "react-i18next";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import {useDispatch} from "../../Redux/Store";
-import RoleManageForm from "../Permission/Form/RoleManageForm";
-import modalContentSubmit from "./ModalContentSubmit";
 import ProjectForm2 from "./Form/ProjectForm2";
-import AssignRole from "../Permission/AssignRole";
+import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {arraytostr} from "../../Utils/arraytostr";
+import {useNavigate} from "react-router-dom";
 // import ProjectForm2 from "./Form/ProjectForm2";
 
 
@@ -32,15 +32,15 @@ const initialValues = {
 };
 
 
-export default function ProCard({item, onClick,TableName}: any) {
+export default function ProCard({item,TableName}: any) {
     const [t] = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
+    const [url,setUrl] = useState('')
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const AddTableVersion = (name:string)=>{
         dispatch({type:'addTableVersion',name:name});
     }
-
-
     return (
         <Card
             style={{
@@ -50,12 +50,14 @@ export default function ProCard({item, onClick,TableName}: any) {
         >
             <Row gutter={16}>
                 <Col span={4}>
-                    <img src={item.proImage} alt="Item Image" style={{width: '100%', height: 'auto'}}/>
+                    <Image src={url} alt="Item Image" style={{width: '100%', height: 'auto'}}/>
                 </Col>
                 <Col span={16}
                      onMouseEnter={() => setIsHovered(true)}
                      onMouseLeave={() => setIsHovered(false)}
-                     onClick={onClick}
+                     onClick={()=>{
+                         navigate(`/c/project-info/${item.id}`,{state:{url:url,item:item}});
+                     }}
                 >
                     <Meta
                         title={<div
@@ -83,7 +85,7 @@ export default function ProCard({item, onClick,TableName}: any) {
                 <Col style={{display:'flex'}}>
                     <ModalFormUseForm
                         title={t('updateProject')}
-                        btnType={'link'}
+                        type={'update'}
                         TableName={TableName}
                         btnName={'编辑'}
                         width={1000}
@@ -93,22 +95,20 @@ export default function ProCard({item, onClick,TableName}: any) {
                                 label: '',
                             },
                             {
-                                component: ProjectForm2,
+                                component: ProjectForm2({service_type:7}),
                                 label:'',
                             }
                         ]}
                         dataLoader={async () => {
-                            return Api.getProInfo({pId:item.id}).then((res:any)=>{
-
-                                return Promise.resolve(res);
-                            }).catch(()=>{})
+                            return Api.getProInfo({pId:item.id})
                         }}
                         dataSubmitter={(value: any) => {
-                            console.log('data:',value);
+                            value.tag = arraytostr(value.tag);
                             return Api.updatePro({pId: item.id, data: value});
                         }}
                     />
-                    <AssignRole />
+                    <ModalRoleManage editable={false} newRole={false} newUser={false} btnType={'link'}
+                                     TableName={`Project${item.id}Roles`} service_type={7} service_id={item.id}/>
                     <DeleteConfirm
                         onConfirm={() => {
                             dispatch(getData(

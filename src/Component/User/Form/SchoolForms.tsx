@@ -1,14 +1,17 @@
 import {Button, Form, Input} from "antd";
 import ItemName from "../../Common/Form/Item/ItemName";
 import ItemPermission from "../../Permission/Form/Item/ItemPermission";
+import ItemUpload from "../../Common/Form/Item/ItemUpload";
+import BatchImport from "../../Common/BatchImport";
 
 export const SchoolForm = () => {
     return (
         <>
             <ItemName label={'学校全称'} name={'name'} required={true}/>
             <ItemName label={'学校简称'} name={'school_abbreviation'} required={true}/>
+            <ItemUpload name={'school_logo'} accept={".png,.jpg"}/>
             {/*type表示查询的对象（项目、学校等）*/}
-            {/*<ItemPermission type={'0'}/>*/}
+            {/*<ItemPermission service_type={'0'}/>*/}
         </>
     )
 }

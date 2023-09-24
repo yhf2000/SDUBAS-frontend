@@ -12,7 +12,7 @@ const EditCard = (props:any)=>{
 
     const handleSave = ()=>{
         props.API({note:content}).then(()=>{
-            console.log('note',content);
+            // console.log('note',content);
             message.success('保存成功')
         }).catch(()=>{})
         setEditing(false);

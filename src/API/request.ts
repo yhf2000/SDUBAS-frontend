@@ -38,6 +38,7 @@ const messageDisabledList = [
 const dealResponse = async (resp: any, url: string) => {
     try {
         const response = await resp;
+        // console.log('response',response);
         localStorage.setItem('server-time', response.data.timestamp)
         if (Math.abs(response.data.timestamp - Date.now()) > 60000) {
             message.error("本地时间异常")

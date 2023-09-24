@@ -1,5 +1,6 @@
 import {Button, Form, Input, Select, Space} from "antd";
 import ItemUpload from "../../../Common/Form/Item/ItemUpload";
+import ItemText from "./ItemText";
 
 const ItemContent = (props: any) => {
     return (
@@ -61,7 +62,8 @@ const ItemContent = (props: any) => {
                                     })}
                                 </Select>
                             </Form.Item>
-                            <ItemUpload {...field} key={field.name+'file'} name={[field.name,'file']} accept={'.docx,.zip,.doc,.pdf,.ppt'}/>
+                            <ItemUpload {...field} key={field.name+'file_id'} name={[field.name,'file_id']} accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'}/>
+                            <ItemText {...field} key={field.name+'content'} name={[field.name,'content']}/>
                             <Button
                                 type={'link'}
                                 style={{width: 50}}

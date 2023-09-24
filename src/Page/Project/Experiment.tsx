@@ -1,11 +1,9 @@
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
-import {useTranslation} from "react-i18next";
 import {
     Card,
     Form,
     Input,
-    List,
-    message,
+    List, Select,
     Space,
 } from "antd";
 import ProCard from "../../Component/Project/ProCard";
@@ -13,32 +11,21 @@ import {useNavigate} from "react-router-dom";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
-import {useMemo} from "react";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
-// import ProjectForm2 from "../Component/Project/Form/ProjectForm2";
+import {arraytostr} from "../../Utils/arraytostr";
 
-
-// const initData=[{
-//     'id':'1',
-//     'name':'区块链实验',
-//     'credit':'4',
-//     'progress':'3',
-//     'totalProjects':'5',
-//     'date':'2023-8-11',
-//     'proImage':'https://seopic.699pic.com/photo/40171/9735.jpg_wh1200.jpg',
-//     'score':'95'
-// }]
 
 const Experiment = () => {
     const navigate = useNavigate();
+
     // useMemo
     function handleClick(item: any) {
-        navigate(`/c/project-info/${item.id}`);
+
     }
+
     // console.log('there is ')
     return (
         <Card
-            title={'Experiment'}
             extra={
                 <ModalFormUseForm
                     titile={'新建实验'}
@@ -51,11 +38,13 @@ const Experiment = () => {
                             label: "",
                         },
                         {
-                            component:ProjectForm2,
-                            label:""
+                            component: ProjectForm2({service_type:7}),
+                            label: ""
                         }
                     ]}
                     dataSubmitter={(value: any) => {
+                        console.log('up',value);
+                        value.tag = arraytostr(value.tag);
                         console.log('value:', value);
                         return Api.newPro({
                             data: value
@@ -66,15 +55,21 @@ const Experiment = () => {
             <TableWithPagination
                 name={'ExperimentMainTable'}
                 useList={true}
-                API={async (data:any)=>{return Api.getProList({data:{...data}})}}
+                API={async (data:any)=>{return Api.getProListByType({data:{projectType:'实验',tag:'',...data}})}}
                 // initData={initData}
                 size={'small'}
                 getForm={(onFinish: any) => {
                     return (
                         <Space size={30}>
-                            <Form.Item label={"Search"} name={"title"}>
+                            <Form.Item label={'标签'}>
+                                <Select onChange={onFinish} mode={'multiple'} style={{width:120}}>
+                                    <Select.Option value={'国家'}>国家</Select.Option>
+                                    <Select.Option value={'省级'}>省级</Select.Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label={"名称"} name={"title"}>
                                 <Input onPressEnter={() => {
-                                    onFinish()
+                                    onFinish();
                                 }}/>
                             </Form.Item>
                         </Space>

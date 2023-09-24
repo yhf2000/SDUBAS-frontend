@@ -62,7 +62,7 @@ const ResourceInfo = () => {
                             ]}
                             initData={row}
                             dataSubmitter={(value: any) => {
-                                console.log('data:',value);
+                                // console.log('data:',value);
                             }}
                         />
                     </>
@@ -81,6 +81,7 @@ const ResourceInfo = () => {
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <div style={{width: '1000px'}}>
                         <TableWithPagination
+                            title={'申请记录'}
                             name={'ApplicationTable'}
                             API={async (data: any) => {
                                 return Api.getResourceInfo({rId: rId, data: data})
