@@ -51,6 +51,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                         maskClosable={false}
                         destroyOnClose={true}
                         onOk={() => {
+                            console.log(email)
                             Api.sendVerificationEmail({
                                 data: {
                                     username:props.username || undefined,
@@ -80,7 +81,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                rules={[
                                    {type: 'email', message: props.t('emailError'),},
                                    {required: true},
-                                   ({getFieldValue}) => ({
+                                   ({getFieldValue}) => (props.exist&&{
                                        validator(_, value) {
                                            return Api.isExist({data: {email: value}}).then((data: any) => {
                                                if (data === true) return Promise.resolve()

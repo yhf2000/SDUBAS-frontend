@@ -17,13 +17,20 @@ const Assignment = (props: any) => {
     return (
         <>
             <Form
-                onFinish={() => {
-                    //添加用户的Api
-                    //tableVersion的变化
+                onFinish={(value: any) => {
+                    value.username = value.username.split(/,|\n|\s+/).filter((str: any) => str.trim() !== '');
+                    Api.addUserByRole({rId: props.service_id, data: {...value}})
+                        .then(() => {
+                            message.success('添加成功');
+                            addTableVersion('Role' + props.roleId + 'Users');
+                        }).catch(() => {
+                    })
                 }}
             >
+                <Form.Item name={'role_id'} initialValue={props.roleId} style={{display: 'none'}}>
+                </Form.Item>
                 <Form.Item
-                    name={'assign'}
+                    name={'username'}
                     label={'分配'}
                 >
                     <TextArea placeholder={'格式为\'张三,李四\''}/>
@@ -35,13 +42,13 @@ const Assignment = (props: any) => {
             <TableWithPagination
                 name={'Role' + props.roleId + 'Users'}
                 API={async (data: any) => {
-                    return Api.getUsers({data: {...data,role_id:props.roleId}})
+                    return Api.getUsers({data: {...data, role_id: props.roleId}})
                 }}
                 columns={[
                     {
                         title: '用户名',
                         key: 'user_name',
-                        dataIndex: 'username'
+                        dataIndex: 'user_name'
                     },
                     {
                         title: '操作',
@@ -68,17 +75,24 @@ const Assignment = (props: any) => {
                                         />
                                     )
                                     }
-                                    {/*<DeleteConfirm*/}
-                                    {/*    onConfirm={async () => {*/}
-                                    {/*        Api.deleteAssignment({data: row})*/}
-                                    {/*            .then(() => {*/}
-                                    {/*                addTableVersion('Role' + props.roleId + 'Users');*/}
-                                    {/*                message.success('删除成功')*/}
-                                    {/*            })*/}
-                                    {/*            .catch(() => {*/}
-                                    {/*            })*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
+                                    <DeleteConfirm
+                                        onConfirm={async () => {
+                                            Api.deleteAssignment({
+                                                uId: row.user_id,
+                                                roleId: props.roleId
+                                                , rId: props.service_id
+                                            })
+                                                .then(() => {
+                                                    addTableVersion('Role' + props.roleId + 'Users');
+                                                    message.success('删除成功')
+                                                })
+                                                .catch(() => {
+                                                })
+                                        }}
+                                        content={
+                                            <Button type={'link'} danger={true}>移除</Button>
+                                        }
+                                    />
                                 </>
                             )
                         }

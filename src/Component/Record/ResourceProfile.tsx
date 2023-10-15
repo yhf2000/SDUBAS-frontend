@@ -22,7 +22,7 @@ export const ResourceForm = (
     <>
         <ItemName label={'资源名称'} name={'name'} required={true}/>
         <ItemNumber label={'资源总数'} name={'count'} required={true}/>
-        <RoleManageForm/>
+        <RoleManageForm service_type={5}/>
     </>
 )
 const ResourceProfile = () => {
@@ -91,7 +91,8 @@ const ResourceProfile = () => {
                             return (
                                 <>
                                     <ModalRoleManage editable={false} newRole={false} newUser={false} btnType={'link'}
-                                                     TableName={`Resource${rows.id}Roles`}/>
+                                                     TableName={`Resource${rows.Id}Roles`} service_type={5}
+                                                     service_id={rows.Id}/>
                                     <DeleteConfirm
                                         onConfirm={() => {
                                             dispatch(getData(

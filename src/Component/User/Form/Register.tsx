@@ -27,7 +27,6 @@ const Register = (props: any) => {
     const handlePChange = (password: string) => {
         setPwd(password);
     }
-    // console.log('unm',username,'pwd',pwd);
     return (
         <ModalForm<any>
             title={"用户注册"}

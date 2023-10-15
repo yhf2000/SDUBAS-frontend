@@ -19,6 +19,7 @@ import College from "./Page/School/College";
 import MajorClass from "./Page/School/MajorClass";
 import ManageUsers from "./Page/ManageUser/ManageUsers";
 import AddUsersByRole from "./Page/ManageUser/AddUsersByRole";
+import OperationRecords from "./Page/OperationRecords";
 
 export interface IBaseRouter {
     id: number
@@ -60,7 +61,8 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 19, path: 'school/:school_id/college', component: <College/>},
     {id: 20, path: 'school/:school_id/college/:college_id/MajorClass', component: <MajorClass/>},
     {id: 21, path: '/users', component: <ManageUsers/>},//用户管理的页面
-    {id: 22, path: '/addUsers/:role_id', component: <AddUsersByRole/>}
+    {id: 22, path: '/addUsers/:role_id', component: <AddUsersByRole/>},
+    {id: 23, path: '/log', component: <OperationRecords/>}
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},
@@ -74,4 +76,5 @@ export const headerMenu: IRouter[] = [
     {id: 9, title: "个人档案", path: "/c/record_personal"},
     {id: 10, title: '学校管理', path: "/c/school"},
     {id: 11, title: '用户管理', path: "/c/users"},
+    {id: 12, title: '日志', path: '/c/log'}
 ]

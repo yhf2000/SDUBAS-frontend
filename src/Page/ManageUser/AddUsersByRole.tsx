@@ -1,6 +1,6 @@
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button, Card, DatePicker, message, Modal} from "antd";
+import {Button, Card, DatePicker, message, Modal, Space} from "antd";
 import {useLocation} from "react-router-dom";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {BindForm1, EditUserForm} from "../../Component/User/Form/BindForm1";
@@ -10,61 +10,72 @@ import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import getData from "../../API/getData";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
+import BatchImport from "../../Component/Common/BatchImport";
 
-const AddUsersByRole = ()=>{
+const AddUsersByRole = () => {
     const location = useLocation();
     const row = location.state.row;
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
-    // const {row} = location.state;
     return (
         <Card
             // title={row.name}
             extra={(
-                <ModalFormUseForm
-                    type={'create'}
-                    btnName={'添加用户'}
-                    TableName={'UsersMainTable'}
-                    subForm={[
-                        {
-                            component:BindForm2({role_id:row.role_id}),
-                            label: '用户信息'
-                        },
-                        {
-                            component:BindForm1,
-                            label:'登录信息'
-                        }
-                    ]}
-                    dataSubmitter={async (data:any)=>{
-                        data.enrollment_dt = data.enrollment_dt.split(' ')[0]
-                        data.graduation_dt = data.graduation_dt.split(' ')[0]
-                        return Api.newUser({data:data});}}
-                />
+                <Space>
+                    <BatchImport
+                        item={false}
+                        API={async (data: any) => {
+                            return Api.batchImport({data: {information_list:data,role_id:row.role_id}})
+                        }}
+                        TableName={`UsersMainTable${row.role_id}`}
+                        btnName={'批量导入用户'}
+                    />
+                    <ModalFormUseForm
+                        type={'create'}
+                        btnName={'添加用户'}
+                        TableName={`UsersMainTable${row.role_id}`}
+                        subForm={[
+                            {
+                                component: BindForm2({role_id: row.role_id}),
+                                label: '用户信息'
+                            },
+                            {
+                                component: BindForm1,
+                                label: '登录信息'
+                            }
+                        ]}
+                        dataSubmitter={async (data: any) => {
+                            data.enrollment_dt = data.enrollment_dt.split(' ')[0]
+                            data.graduation_dt = data.graduation_dt.split(' ')[0]
+                            return Api.newUser({data: data});
+                        }}
+                    />
+                </Space>
             )}
         >
             <TableWithPagination
-                API={async (data:any)=>{
-                    return Api.getUsers({data:{...data,role_id:row.role_id}});
+                API={async (data: any) => {
+                    return Api.getUsers({data: {...data, role_id: row.role_id}});
                 }}
                 name={'UsersMainTable'}
                 columns={[
                     {
-                        title:'学/工号',
-                        dataIndex:'cardId',
-                        key:'cardId'
+                        title: '学/工号',
+                        dataIndex: 'cardId',
+                        key: 'cardId'
                     },
                     {
-                        title:'用户名',
-                        dataIndex:'user_name',
-                        key:'username'
+                        title: '用户名',
+                        dataIndex: 'user_name',
+                        key: 'username'
                     },
                     {
-                        title:'操作',
-                        key:'operator',
-                        render:(_:any,row:any)=>{
-                            return(
+                        title: '操作',
+                        key: 'operator',
+                        render: (_: any, row: any) => {
+                            return (
                                 <>
                                     <ModalFormUseForm
                                         title={'编辑用户'}
@@ -73,7 +84,7 @@ const AddUsersByRole = ()=>{
                                         type={'update'}
                                         subForm={[
                                             {
-                                                component:EditUserForm,
+                                                component: EditUserForm,
                                                 label: '用户信息'
                                             },
                                         ]}

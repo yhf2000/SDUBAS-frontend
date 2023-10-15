@@ -13,19 +13,6 @@ import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr"; // 导入自定义样式
 
-// const initData=[
-//     {
-//         'id':'2',
-//         'name':'操作系统教案',
-//         'credit':undefined,
-//         'progress':undefined,
-//         'totalProjects':undefined,
-//         'date':'2023-8-11',
-//         'proImage':'https://www.neea.edu.cn/res/Home/1711/171116582.jpg',
-//         'score':undefined
-//     }
-// ]
-
 const Resources = () => {
     const newItem = (
         <>

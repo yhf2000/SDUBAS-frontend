@@ -24,7 +24,7 @@ const ModalContentSubmit = (props: any) => {
             key: "submit",
             render: (_: any, rows: any) => {
                 return (rows.commit===0?<SubmissionSForm pId={props.pId} cId={props.cId} rows={rows} />
-                        :<span>已提交</span>
+                        :<span>已提交</span> //如果需要
                 )
             }
         },
