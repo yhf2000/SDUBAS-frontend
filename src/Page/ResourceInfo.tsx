@@ -1,49 +1,41 @@
-import {Button, Card} from "antd";
+import {Button, Card, Space} from "antd";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
-import '../Config/CSS/FundInfo.css'
+import '../Config/CSS/ResourceInfo.css'
 import {Api} from "../API/api";
 import RequestResource from "../Component/Record/Form/Request";
 import React, {useEffect, useState} from "react";
-import {useDispatch} from "../Redux/Store";
-import getData from "../API/getData";
 import {useLocation, useParams} from "react-router-dom";
-import EditCard from "../Component/Common/EditCard";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {ResourceForm} from "../Component/Record/ResourceProfile";
+import Approval from "../Component/Common/Approval";
+import {ApprovalColumns} from "../Config/Resource/columns";
 
 const {Meta} = Card;
 
 
 const ResourceInfo = () => {
-
-    const [fundInfo, setFundInfo] = useState<any>();
     const {rId} = useParams();
     const location = useLocation();
     const {row} = location.state;
 
-    useEffect(() => {
-        Api.getResourceInfo({rId: rId})
-            .then((res: any) => {
-                setFundInfo(res);
-            }).catch(() => {
-        })
-    }, [setFundInfo])
-
-    const handleChange = (note: any) => {
-        let newInfo = fundInfo.slice();
-        newInfo.note = note;
-        setFundInfo(newInfo);
-    }
     return (
         <>
             <Card
                 title={row.name}
                 headStyle={{textAlign: 'left'}}
                 extra={(
-                    <>
+                    <Space>
+                        <Approval
+                            API={async (data: any) => {
+                                return Api.getApplyInfo()
+                            }}
+                            columns={ApprovalColumns({API: 'null'})}
+                            TableName={'Resource' + rId + 'ApplyTable'}
+                        />
                         <RequestResource rId={rId}
                                          button={<Button type={'primary'} size={'small'}
-                                                         style={{marginTop: '20px'}}>申请</Button>} TableName={'ApplicationTable'}/>
+                                                         style={{marginTop: '20px'}}>申请</Button>}
+                                         TableName={'ApplicationTable'}/>
                         <ModalFormUseForm
                             title={'编辑资源'}
                             type={'update'}
@@ -65,47 +57,41 @@ const ResourceInfo = () => {
                                 // console.log('data:',value);
                             }}
                         />
-                    </>
+                    </Space>
                 )}
             >
                 <div className={'fund-info-card'}>
-                    <Meta description={'资源数目:'+row.count}/>
-                    {/*<EditCard*/}
-                    {/*    title={'备注'}*/}
-                    {/*    API={async (data:any)=>{return Api.updateNote({rId:rId,data:data})}}*/}
-                    {/*    content={fundInfo?.note}*/}
-                    {/*    setFundInfo={handleChange}*/}
-                    {/*    className={'card'}*/}
-                    {/*/>*/}
+                    <Meta description={'资源数目:' + row.count}/>
                 </div>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <div style={{width: '1000px'}}>
                         <TableWithPagination
-                            title={'申请记录'}
                             name={'ApplicationTable'}
                             API={async (data: any) => {
-                                return Api.getResourceInfo({rId: rId, data: data})
+                                return Api.getApplyInfo({rId: rId, data: data})
                             }}
+                            defaultPageSize = {2}
                             columns={[
                                 {
-                                    title: '描述',
-                                    dataIndex: 'description',
-                                    key: 'description'
-                                },
-                                {
-                                    title: '操作人',
-                                    dataIndex: 'operator',
+                                    title: '申请人',
+                                    dataIndex: 'user_name',
                                     key: 'operator'
                                 },
                                 {
-                                    title: '状态',
-                                    dataIndex: 'state',
-                                    key: 'state',
+                                    title: '申请时间',
+                                    dataIndex: 'time',
+                                    key: 'date'
                                 },
                                 {
-                                    title: '记录日期',
-                                    dataIndex: 'date',
-                                    key: 'date'
+                                    title: '时间段',
+                                    key: 'range',
+                                    render: (_: any, record: any) => {
+                                        const hour = [Math.floor(record.start_time / 1), Math.floor(record.end_time / 1)]
+                                        const minute = [(record.start_time % 1) * 60, (record.end_time % 1) * 60]
+                                        return (
+                                            <>{hour[0].toString().padStart(2, '0')}:{minute[0].toString().padStart(2, '0')} - {hour[1].toString().padStart(2, '0')}:{minute[1].toString().padStart(2, '0')}</>
+                                        )
+                                    }
                                 },
                             ]}
                         />

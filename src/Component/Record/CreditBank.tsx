@@ -1,10 +1,10 @@
-import TableWithPagination, {TableWithPaginationProps} from "../Common/Table/TableWithPagination";
+import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button, Card, Image, message, Modal} from "antd";
-import {Link} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import {Button, Card, Form, Input, message, Modal, Select, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {useDispatch} from "../../Redux/Store";
+import {CreditBankChildColumns, CreditBankColumns} from "../../Config/Resource/columns";
+import records from "../../Page/Records";
 
 const CreditBank = () => {
     const [credits, setCredits] = useState<any>();
@@ -15,7 +15,7 @@ const CreditBank = () => {
     }
     //自动得到学生的总学分
     useEffect(() => {
-        Api.getUserCredits().then((res: any) => {
+        Api.getUserCredits({data: {username: username}}).then((res: any) => {
             setCredits(res.credit);
         }).catch(() => {
             message.error('刷新重试')
@@ -39,47 +39,17 @@ const CreditBank = () => {
                 </>
             }>
                 <TableWithPagination
-                    type={'0'}
                     API={async (data: any) => {
-                        return Api.getCredits({data: data})
+                        return Api.getRequirements({data: data})
                     }}
-                    name={'StudentCreditTable'}
-                    columns={[
-                        {
-                            title: '图片',
-                            dataIndex: 'proImage',
-                            key: 'proImage',
-                            render: (imgUrl: string, row: any) => {
-                                return (
-                                    <Link to={`/c/project-info/${row.pId}`}>
-                                        <Image src={imgUrl} alt={'img'} width={150} height='auto'/>
-                                    </Link>
-                                );
-                            }
-                        },
-                        {
-                            title: '科目',
-                            dataIndex: 'project_name',
-                            key: 'title',
-                            render: (title: string, row: any) => {
-                                return (
-                                    <Link to={`/c/project-info/${row.pId}`}>
-                                        {title}
-                                    </Link>
-                                )
-                            }
-                        },
-                        {
-                            title: '学分',
-                            dataIndex: 'credit',
-                            key: 'credit',
-                        },
-                        {
-                            title: '结果',
-                            dataIndex: 'is_pass',
-                            key: 'isPass'
-                        },
-                    ]}
+                    columns={CreditBankColumns}
+                    expandedRowRender={(record: any) => ChildTable(record)}
+                    APIRowsTransForm={(rows: any) => {
+                        for (let i = 0; i < rows.length; i++) {
+                            rows[i] = {key:`${i}`,...rows[i]}
+                        }
+                        return rows
+                    }}
                 />
             </Card>
         </>
@@ -101,9 +71,20 @@ export const SelectUser = (props: any) => {
             >
                 <TableWithPagination
                     API={async (data: any) => {
-                        return Api.getUsers({data: {...data, role_id: 1}})
-                    }}//需要role_id
-                    name={'StudentSelectTable'}
+                        return Api.getCreatedUsers({data: data})
+                    }}
+                    getForm={(onFinish: any) => {
+                        return (
+                            <Space size={30}>
+                                <Form.Item label={"用户名"} name={"user_name"}>
+                                    <Input onPressEnter={() => {
+                                        onFinish();
+                                    }}/>
+                                </Form.Item>
+                            </Space>
+                        );
+                    }}
+                    useFormBtn={false}
                     columns={[
                         {
                             title: '用户名',
@@ -113,17 +94,13 @@ export const SelectUser = (props: any) => {
                         {
                             title: '操作',
                             key: 'operator',
-                            render: (_: any, row: any) => {
+                            render: (_: any, record: any) => {
+                                // console.log(record);
                                 return (
-                                    <>
-                                        <Button
-                                            type={'default'}
-                                            onClick={() => {
-                                                props.setUsername(row.user_name);
-                                                setVisible(false);
-                                            }}
-                                        >选择</Button>
-                                    </>
+                                    <Button type={'default'} onClick={() => {
+                                        props.setRecord(record);
+                                        setVisible(false)
+                                    }}>选择</Button>
                                 )
                             }
                         }
@@ -136,3 +113,19 @@ export const SelectUser = (props: any) => {
 }
 
 export default CreditBank;
+
+
+const ChildTable = (record: any) => {
+    // console.log(record);
+    return (
+        // <Table
+        //     columns={CreditBankChildColumns}
+        // />
+        <TableWithPagination
+            API={async (data:any) => {
+                return Api.getCourseByCredit({type:record.type,data:data})
+            }}
+            columns={CreditBankChildColumns}
+        />
+    )
+}

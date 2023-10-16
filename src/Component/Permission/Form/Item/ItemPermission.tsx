@@ -8,7 +8,7 @@ const ItemPermission = (props: any) => {
         Api.getPermission({data:{service_type:props.service_type}})//请求type==x所有权限
             .then((res:any)=>{
                 setOptions(res);
-            })
+            }).catch(()=>{})
     }, [setOptions])
     return (
         <>

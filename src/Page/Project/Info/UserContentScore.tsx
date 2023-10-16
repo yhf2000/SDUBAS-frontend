@@ -10,7 +10,7 @@ const UserContentScore = (props:any)=>{
       Api.getProScore({pId:props.pId}).then((res:any)=>{
           setTotalScore(res);
       }).catch(()=>{})
-    },[])
+    },[visible])
     return(
         <>
             <Button onClick={()=>setVisible(true)} type={'text'}>成绩查询</Button>

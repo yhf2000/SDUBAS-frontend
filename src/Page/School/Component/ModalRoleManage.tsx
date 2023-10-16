@@ -52,8 +52,8 @@ const ModalRoleManage = (props: any) => {
                                     },
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    console.log(data);
-                                    return Api.newRole({data: data});
+                                    // console.log(data);
+                                    return Api.newDefaultRole({data: data});
                                 }}
                             />) : null
                         )
@@ -61,6 +61,7 @@ const ModalRoleManage = (props: any) => {
                 >
                     <TableWithPagination
                         API={async (data: any) => {
+                            console.log('id',props.service_id)
                             return Api.getWorkRole({data: {...data,service_type:props.service_type,service_id:props.service_id}})//可能需要请求对象的id,type;
                         }}
                         name={props.TableName}

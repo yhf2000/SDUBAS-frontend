@@ -4,6 +4,7 @@ import {UserOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
+import {TemplateColumns} from "../../Config/Resource/columns";
 
 
 //申请权限
@@ -20,12 +21,7 @@ const ApplyPermission = (props:any)=>{
                     <TableWithPagination
                         name={'TemplateRolesTable'}
                         API={async (data:any)=>{return Api.getTemplates({data:data})}}
-                        useList={true}
-                        renderItem={(
-                            <>
-
-                            </>
-                        )}
+                        columns={TemplateColumns}
                     />
                 </Modal>
             </>

@@ -45,7 +45,6 @@ const Experiment = () => {
                     dataSubmitter={(value: any) => {
                         console.log('up',value);
                         value.tag = arraytostr(value.tag);
-                        console.log('value:', value);
                         return Api.newPro({
                             data: value
                         });

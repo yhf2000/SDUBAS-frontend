@@ -47,12 +47,13 @@ const MajorClass = () => {
                                     btnName={'添加专业'}
                                     subForm={[
                                         {
-                                            component: () => MajorForm({college_id: college.id}),
+                                            component: () => MajorForm({college_id: college.id, create: 1}),
                                             label: '',
                                         }
                                     ]}
                                     initData={{school_id: school.id, college_id: college.id}}
                                     dataSubmitter={async (data: any) => {
+                                        console.log(data)
                                         return Api.newMajor({data: data})
                                     }}
                                 />
@@ -96,11 +97,17 @@ const MajorClass = () => {
                                             />
                                         </Col>
                                         <Col>
-                                            <ModalRoleManage newRole={true} btnType={'link'}
-                                                             TableName={'MajorRolesTable' + college.college_id}/>
+                                            <ModalRoleManage
+                                                newRole={true} btnType={'link'}
+                                                TableName={'MajorRolesTable' + college.college_id}
+                                                service_type={3} service_id={item.id}
+                                            />
                                         </Col>
                                         <Col>
-                                            <BatchImport btnName={'上传方案'} btnType={'link'} API={async (data:any)=>{return Api.newLine({data:data})}}/>
+                                            <BatchImport item={false} btnName={'上传方案'} btnType={'link'}
+                                                         API={async (data: any) => {
+                                                             return Api.newLine({data: data})
+                                                         }}/>
                                             {/*<DeleteConfirm*/}
                                             {/*    onConfirm={() => {*/}
                                             {/*        dispatch(getData(*/}

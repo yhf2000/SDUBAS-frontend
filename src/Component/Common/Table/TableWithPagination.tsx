@@ -254,14 +254,16 @@ const TableWithPagination = (props: any) => {
                                 {props.getForm !== undefined && (
                                     <Form form={form}>
                                         {props.getForm(onFinish)}
-                                        <Space style={{marginLeft: "30px"}} size={20}>
-                                            <Button type="primary" onClick={onFinish}>
-                                                {"filtering"}
-                                            </Button>
-                                            <Button htmlType="button" onClick={onReset}>
-                                                {"Reset"}
-                                            </Button>
-                                        </Space>
+                                        {props.useFormBtn&&(
+                                            <Space style={{marginLeft: "30px"}} size={20}>
+                                                <Button type="primary" onClick={onFinish}>
+                                                    {"filtering"}
+                                                </Button>
+                                                <Button htmlType="button" onClick={onReset}>
+                                                    {"Reset"}
+                                                </Button>
+                                            </Space>
+                                        )}
                                     </Form>
                                 )}
                             </>
@@ -289,6 +291,7 @@ const TableWithPagination = (props: any) => {
                             showSizeChanger: ck(props.showSizeChanger, true),
                             pageSizeOptions: ["5", "15", "20", "50", "80"],
                         }}
+                        {...props}
                     />
                 </Card>
             )}

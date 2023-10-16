@@ -19,11 +19,12 @@ import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
 import internal from "stream";
+import CreateTemplate from "../../Component/Project/CreateTemplate";
 
 const {Sider, Content} = Layout;
 
 
-type IProjectContentType = "file-video" | "file-office" | "file-pdf" | "markdown"
+type IProjectContentType = "file-video" | "office"  | "markdown"
 
 
 interface keyIdMap {
@@ -34,12 +35,12 @@ const keyIdMap: keyIdMap = {}//key和id的字典
 const IdConMap: keyIdMap = {}
 const ProjectInfo: React.FC = () => {
     const [selectedMenuKey, setSelectedMenuKey] = useState<number | null>(null);
-    const [type, setType] = useState<IProjectContentType>("file-office")//原本的数据
+    const [type, setType] = useState<IProjectContentType>("office")//原本的数据
     const [treeData, setTreeData] = useState<DataNode[]>([]);//树形数据
     const {pId} = useParams();
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const location = useLocation();
-    // const {url,item} = location.state;
+    const {item} = location.state;
     const generateTreeData = (data: any) => {//根据后端数据递归获得treeData
         return data.map((item: any) => {
             let {key, children, isLeaf} = item;
@@ -80,7 +81,11 @@ const ProjectInfo: React.FC = () => {
             },
             {
                 key: 'apply',
-                title: <ApplyPermission/>,
+                title: <ApplyPermission />,
+            },
+            {
+                key:'createApply',
+                title:<CreateTemplate />
             }
         ]
         Api.getProContent({pId: pId})
@@ -89,7 +94,7 @@ const ProjectInfo: React.FC = () => {
                     const {id} = d;
                     IdConMap[id] = d;
                 })
-                // console.log(IdConMap);
+                console.log(IdConMap);
                 const Tree = buildTree(data);
                 await setTreeData(() => {
                     return [...Tree, ...newTree]
@@ -101,9 +106,6 @@ const ProjectInfo: React.FC = () => {
     useEffect(() => {
         generateTreeData(treeData);
     }, [treeData])
-    useEffect(() => {
-        console.log(IdConMap[selectedMenuKey ?? 1])
-    }, [selectedMenuKey])
     return (
         <div style={{minWidth: 800}}>
             <div style={{textAlign: "left", marginBottom: 12, marginLeft: 6}}>
@@ -112,12 +114,12 @@ const ProjectInfo: React.FC = () => {
                         preview={false}
                         width={80}
                         height={45}
-                        // src = {url}
+                        src = {item.url}
                         alt="数据结构"
                     />
                     <Space direction="vertical" size={0}>
                         <Space>
-                            {/*<Title level={4} style={{margin: 0}}>{item.name}</Title>*/}
+                            <Title level={4} style={{margin: 0}}>{item.name}</Title>
                             <Tag color="#CBA265">国家精品</Tag>
                         </Space>
                     </Space>
@@ -177,7 +179,7 @@ const ProjectInfo: React.FC = () => {
                         <div>当前选中的菜单ID: {selectedMenuKey}</div>
                         {
                             selectedMenuKey ? selectedMenuKey in IdConMap &&
-                                <ContentPlay url={IdConMap[selectedMenuKey].url} type={"file-video"} pId={pId}
+                                <ContentPlay url={IdConMap[selectedMenuKey].url} type={IdConMap[selectedMenuKey].file_type} pId={pId}
                                              cId={selectedMenuKey}/>
                                 : (
                                     <>
@@ -193,6 +195,7 @@ const ProjectInfo: React.FC = () => {
 };
 
 const ContentPlay = (props: any) => {
+    // console.log(props.type)
     return (
         <>
             {
@@ -205,20 +208,10 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                props.type === "file-office" && (
+                props.type === "office" && (
                     <iframe
                         title="demo.docx"
-                        src={props.url}
-                        width="100%"
-                        height="720px"
-                    />
-                )
-            }
-            {
-                props.type === "file-pdf" && (
-                    <iframe
-                        title="pdf.pdf"
-                        src={props.url}
+                        src={"https://view.officeapps.live.com/op/view.aspx?src="+props.url}
                         width="100%"
                         height="720px"
                     />

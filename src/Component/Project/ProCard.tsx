@@ -35,9 +35,10 @@ const initialValues = {
 export default function ProCard({item,TableName}: any) {
     const [t] = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
-    const [url,setUrl] = useState('')
+    // const [url,setUrl] = useState('')
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    console.log(item.url);
     const AddTableVersion = (name:string)=>{
         dispatch({type:'addTableVersion',name:name});
     }
@@ -50,13 +51,13 @@ export default function ProCard({item,TableName}: any) {
         >
             <Row gutter={16}>
                 <Col span={4}>
-                    <Image src={url} alt="Item Image" style={{width: '100%', height: 'auto'}}/>
+                    <Image src={item.url} alt="Item Image" style={{width: '100%', height: 'auto'}}/>
                 </Col>
                 <Col span={16}
                      onMouseEnter={() => setIsHovered(true)}
                      onMouseLeave={() => setIsHovered(false)}
                      onClick={()=>{
-                         navigate(`/c/project-info/${item.id}`,{state:{url:url,item:item}});
+                         navigate(`/c/project-info/${item.id}`,{state:{url:item.url,item:item}});
                      }}
                 >
                     <Meta
@@ -70,7 +71,7 @@ export default function ProCard({item,TableName}: any) {
                                 marginTop: '50px'
                             }}>
                                 {item.credit && <div>学分:{item.credit}</div>}
-                                <div>日期:{item.date}</div>
+                                {/*<div>日期:{item.date}</div>*/}
                             </div>
                         }
                     />

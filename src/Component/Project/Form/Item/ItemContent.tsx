@@ -1,14 +1,24 @@
-import {Button, Form, Input, Select, Space} from "antd";
+import {Button, Form, Input, Select, Space, Switch} from "antd";
 import ItemUpload from "../../../Common/Form/Item/ItemUpload";
 import ItemText from "./ItemText";
+import {useState} from "react";
+import ConditionLimitItem from "../../../Common/Form/ConditionLimit";
 
 const ItemContent = (props: any) => {
+    const [checked, setChecked] = useState<boolean>(false)
+    const [conList, setConList] = useState<any>([]);
+    const addRow = () => {
+        setConList([...conList, {projects: [], lower_bound: ''}]);
+    };
+    const onChange = () => {
+        setChecked(!checked);
+    }
     return (
         <Form.List name={'contents'}>
             {(fields, {add, remove}) => (
                 <>
                     {fields.map((field) => (
-                        <Space key={field.name} style={{marginBottom: 8}}>
+                        <Space key={field.name} style={{marginBottom: 8}} wrap>
                             <Form.Item
                                 {...field}
                                 name={[field.name, "prefix"]}
@@ -62,8 +72,14 @@ const ItemContent = (props: any) => {
                                     })}
                                 </Select>
                             </Form.Item>
-                            <ItemUpload {...field} key={field.name+'file_id'} name={[field.name,'file_id']} accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'}/>
-                            <ItemText {...field} key={field.name+'content'} name={[field.name,'content']}/>
+                            <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
+                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'}/>
+                            <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
+                            <Switch defaultChecked={false} checkedChildren={'可置换'} onChange={onChange}
+                                    unCheckedChildren={'不可置换'}/>
+                            {checked&&<Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'set_list']}>
+                                <ConditionLimitItem/>
+                            </Form.Item>}
                             <Button
                                 type={'link'}
                                 style={{width: 50}}

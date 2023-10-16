@@ -3,21 +3,28 @@ import {InboxOutlined, UploadOutlined} from "@ant-design/icons";
 import {calculateHash} from "../../../../Utils/fileUpload";
 import {useEffect, useState} from "react";
 import {Api} from "../../../../API/api";
-import {callbackify} from "util";
 import {isValueEmpty} from "../../../../Utils/isValueEmpty";
 
 const {Dragger} = Upload;
 
-
+const test_key =
+    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+UmBVe1vLKB+mNWU2dG" +
+    "WP3TsBKLfDnK7hAPz2RhHy0HsKgI2VGgdU/BW7kS0ckuMwUgs8hmZNZ8T1Oq3tJ0" +
+    "ua1cQUacfhIoVqj1GV07wiDjDainsWSKCfjpk3JBFjFQVt+LhdcV0a4COaRUwYIM" +
+    "XGjExJNjNLBLAl/yRxD7v/A1NKYSO/aIl6tCHM47/7kJiD+2pvCEejae2/PePn" +
+    "XVFUqMhGBC6rRwjr0RPwOHr58RplvPJH8FG13n+aldUwduSSAke5s/UvnLICFGcu" +
+    "xYp6bEkUR9phyoLLffAKXnAci1EEojRDlqopfZ+NgfWvgKgNvUpqXyjlFq7O+Eyg" +
+    "mwIDAQAB"
 const UploadFile = (props: any) => {
-    const [visible,setVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
     const {value, onChange} = props;
-    const [fileName,setFileName] = useState(value?.name||'');
+    const [fileName, setFileName] = useState(value?.name || '');
+    const [publicKey, setPublicKey] = useState<string>(test_key)
 
-    useEffect(()=>{
-        if(value?.name)
+    useEffect(() => {
+        if (value?.name)
             onChange(value.file_id);
-    },[])
+    }, [])
 
     let nameList: string[] = []
     for (let nm of props.accept.split(",")) {
@@ -28,21 +35,25 @@ const UploadFile = (props: any) => {
     }
 
     const preUpload = async (file: any) => {
-        const code =await calculateHash(file);
+        const code = await calculateHash(file);
         const fileType = file.type;
-        let duration: number|null = null;
-        if(fileType.startsWith("video/"))
-        {
+        let duration: number | null = null;
+        if (fileType.startsWith("video/")) {
             const url = window.URL.createObjectURL(file);
             const audioElement = new Audio(url);
             audioElement.addEventListener("loadedmetadata", function (_event) {
                 duration = audioElement.duration;
             });
         }
-        console.log({time:duration})
+        // console.log({time:duration})
         const size = file.size;
         return new Promise<void>((resolve, reject) => {
-            Api.checkFile({data: {size: size, ...code}})
+            let data;
+            if(duration)
+                data = {size: size, ...code,time:duration}
+            else
+                data = {size: size, ...code}
+            Api.checkFile({data: data})
                 .then((res: any) => {
                     if (res.file_id !== null) {
                         callback(res);
@@ -50,6 +61,7 @@ const UploadFile = (props: any) => {
                         setVisible(false);
                         return reject();
                     } else {
+                        // setPublicKey(publicKey);
                         return resolve();
                     }
                 })
@@ -59,7 +71,6 @@ const UploadFile = (props: any) => {
     const handleUpload = async (file: any) => {
         const formData = new FormData();
         formData.append('file', file);
-
         Api.uploadFile({data: formData})
             .then((res: any) => {
                 message.success('上传成功')
@@ -75,16 +86,25 @@ const UploadFile = (props: any) => {
         <>
             {!isValueEmpty(value) ? (
                 <div>
-                    <Button type={'link'} onClick={()=>{
-                        Api.getDownLoadUrl({data:{id:value.file_id?value.file_id:value}}).then((data:any)=>{window.open(data.url);})
+                    <Button type={'link'} onClick={() => {
+                        Api.getDownLoadUrl({data: {id: value.file_id ? value.file_id : value}}).then((data: any) => {
+                            window.open(data.url);
+                        })
                     }}>{fileName}</Button>
-                    <Button danger onClick={() => {setVisible(true);onChange(null);}}>重新上传</Button>
+                    <Button danger onClick={() => {
+                        setVisible(true);
+                        onChange(null);
+                    }}>重新上传</Button>
                 </div>
-            ):(!visible&&<Button style={{width:'80px'}} onClick={()=>{setVisible(true)}} icon={<UploadOutlined />}/>) }
+            ) : (!visible && <Button style={{width: '80px'}} onClick={() => {
+                setVisible(true)
+            }} icon={<UploadOutlined/>}/>)}
             <Modal
                 open={visible}
-                onCancel={()=>setVisible(false)}
-                onOk={()=>{setVisible(false)}}
+                onCancel={() => setVisible(false)}
+                onOk={() => {
+                    setVisible(false)
+                }}
             >
                 <Dragger
                     // fileList={fileList}
@@ -115,8 +135,8 @@ const UploadFile = (props: any) => {
 const ItemUpload = (props: any) => {
     return (
         <Form.Item
-            name={props.name??'file_id'}
-            // label={props.label??'上传文件'}
+            name={props.name ?? 'file_id'}
+            label={props.label??'上传文件'}
             {...props}
         >
             <UploadFile {...props} />

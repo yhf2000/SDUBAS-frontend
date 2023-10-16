@@ -5,7 +5,7 @@ import {withTranslation} from "react-i18next";
 const DeleteConfirm = (props: any) => {
     return (
         <Popconfirm
-            title={props.t("deleteConfirm")}
+            title={"确认删除"}
             onConfirm={props.onConfirm}
             okText={props.t("yes")}
             cancelText={props.t("no")}
@@ -16,3 +16,17 @@ const DeleteConfirm = (props: any) => {
 }
 
 export default withTranslation()(DeleteConfirm)
+
+
+export const Confirm = (props:any)=>{
+    return(
+        <Popconfirm
+            title={props.title}
+            onConfirm={props.onConfirm}
+            okText={'确认'}
+            cancelText={'取消'}
+        >
+            {props.content}
+        </Popconfirm>
+    )
+}

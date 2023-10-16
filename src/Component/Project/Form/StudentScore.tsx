@@ -1,4 +1,4 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, Modal} from "antd";
 import ModalFormUseForm from "../../Common/Form/ModalFormUseForm";
 import ItemNumber from "../../Record/Form/Item/ItemNumber";
 import TableWithPagination from "../../Common/Table/TableWithPagination";
@@ -6,8 +6,32 @@ import {Api} from "../../../API/api";
 import SubmissionSForm from "./SubmissionSForm";
 import ItemType from "../../Common/Form/Item/ItemType";
 import ItemText from "../../Common/Form/Item/ItemText";
+import TextArea from "antd/es/input/TextArea";
+import {useState} from "react";
 
 
+const MyRender = (props:any)=>{
+    const [visible,setVisible] = useState(false);
+    const {rows} = props;
+    if(rows.type === 0)//如果是文本的话
+    {
+        return (
+            <>
+                <Modal
+                    open={visible}
+                    onCancel={()=>{setVisible(false)}}
+                >
+                    <TextArea
+                        disabled={true}
+                        value={"别看了没有传"}
+                    />
+                </Modal>
+                <Button type={'link'} onClick={()=>{setVisible(true)}}>查看</Button>
+            </>
+        )
+    }
+    return <Button type={'link'}>查看</Button>
+}
 const columns = [
     {
         title: "名称",
@@ -23,9 +47,7 @@ const columns = [
     {
         title: "查看提交",
         key: "view",
-        render: (_: any, rows: any) => {
-            return <Button type={'link'} >查看</Button>
-        }
+        render: (_: any, rows: any) => <MyRender rows={rows} />
     },
 ];
 
@@ -44,18 +66,18 @@ const StudentScore = (props: any) => {
 
             <ItemType name={'is_pass'} label={'通过'} options={[
                 {
-                    key:0,
+                    key:1,
                     value:"通过"
                 },
                 {
-                    key:1,
+                    key:0,
                     value: '不通过'
                 }
             ]}/>
             <ItemText name={'comment'} label={'评论'} />
             <TableWithPagination
                 name={`StudentSubmissionTable`}
-                API={async (data: any) => {
+                API={async (data: any) => {//该API获得学生在该内容的所有提交包括url
                     return Api.getPCSubmission({
                         pId: props.pId,
                         data: {
