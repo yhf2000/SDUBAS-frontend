@@ -2,7 +2,7 @@ import Course from "./Course";
 import {Button, Card, Form, Input, List, Tabs} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import "../../Config/CSS/Resources.css";
 import React, {useState} from "react";
 import ItemTitle from "../../Component/Common/Form/Item/ItemTitle";
@@ -14,15 +14,12 @@ import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr"; // 导入自定义样式
 
 const Resources = () => {
-    const newItem = (
-        <>
-            <ItemTitle/>
-        </>
-    )
+    const location = useLocation();
     const navigate = useNavigate();
     function handleClick(item: any) {
         navigate(`/c/project-info/${item.id}`);
     }
+
     return (
         <div>
             <Card
@@ -39,8 +36,8 @@ const Resources = () => {
                                 label: "",
                             },
                             {
-                                component:ProjectForm2,
-                                label:""
+                                component: ProjectForm2,
+                                label: ""
                             }
                         ]}
                         dataSubmitter={(value: any) => {
@@ -52,19 +49,24 @@ const Resources = () => {
                     />
                 )}
             >
-                    <TableWithPagination
-                        name={'ResourcesTable'}
-                        useList={true}
-                        API={async (data:any)=>{return Api.getProListByType({data:{...data,projectType:"资源"}})}}
-                        // initData={initData}
-                        renderItem={(item: any) => {
-                            return (
-                                <List.Item key={item.name}>
-                                    <ProCard item={item} onClick={() => handleClick(item)} TableName={'ResourceProjectMainTable'}/>
-                                </List.Item>
-                            )
-                        }}
-                    />
+                <TableWithPagination
+                    name={'ResourcesTable'}
+                    useList={true}
+                    API={async (data: any) => {
+                        return Api.getProListByType({data: {...data, projectType: "资源"}})
+                    }}
+                    // initData={initData}
+                    renderItem={(item: any) => {
+                        return (
+                            <List.Item key={item.name}>
+                                <ProCard item={item} onClick={() => handleClick(item)}
+                                         TableName={'ResourceProjectMainTable'}
+                                         pathname={location.pathname}
+                                />
+                            </List.Item>
+                        )
+                    }}
+                />
             </Card>
         </div>
 

@@ -6,7 +6,7 @@ const roles = ['student', 'teacher']
 
 const ProjectForm1 = (
     <>
-        <ItemUpload accept={'.jpg'} name={'img_id'} label={'上传图片'} aes={true}/>
+        <ItemUpload accept={'.jpg'} name={'img_id'} label={'上传图片'} aes={false}/>
         <ItemName label={'项目名称'} name={'name'} required={true}/>
         <ItemType label={'项目类型'} name={'type'} options={ProOptions} default={'1'} required={true}/>
         <ItemType label={'项目状态'} name={'active'} options={activeType} default={'0'} required={true}/>
