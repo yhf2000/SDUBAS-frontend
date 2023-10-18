@@ -25,3 +25,5 @@ export interface userQueryLogin {
 export interface userLogout {
     type: "userLogout"
 }
+
+

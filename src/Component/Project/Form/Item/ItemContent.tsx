@@ -73,7 +73,7 @@ const ItemContent = (props: any) => {
                                 </Select>
                             </Form.Item>
                             <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
-                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'}/>
+                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={true}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
                             <Switch defaultChecked={false} checkedChildren={'可置换'} onChange={onChange}
                                     unCheckedChildren={'不可置换'}/>

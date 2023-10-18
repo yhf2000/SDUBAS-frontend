@@ -4,22 +4,23 @@ import {calculateHash} from "../../../../Utils/fileUpload";
 import {useEffect, useState} from "react";
 import {Api} from "../../../../API/api";
 import {isValueEmpty} from "../../../../Utils/isValueEmpty";
+import {useDispatch} from "../../../../Redux/Store";
+import {useSelector} from "react-redux";
+import {IState} from "../../../../Type/base";
+import {encrypt} from "../../../../Utils/encrypt";
+import JSEncrypt from 'jsencrypt';
 
 const {Dragger} = Upload;
-
-const test_key =
-    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+UmBVe1vLKB+mNWU2dG" +
-    "WP3TsBKLfDnK7hAPz2RhHy0HsKgI2VGgdU/BW7kS0ckuMwUgs8hmZNZ8T1Oq3tJ0" +
-    "ua1cQUacfhIoVqj1GV07wiDjDainsWSKCfjpk3JBFjFQVt+LhdcV0a4COaRUwYIM" +
-    "XGjExJNjNLBLAl/yRxD7v/A1NKYSO/aIl6tCHM47/7kJiD+2pvCEejae2/PePn" +
-    "XVFUqMhGBC6rRwjr0RPwOHr58RplvPJH8FG13n+aldUwduSSAke5s/UvnLICFGcu" +
-    "xYp6bEkUR9phyoLLffAKXnAci1EEojRDlqopfZ+NgfWvgKgNvUpqXyjlFq7O+Eyg" +
-    "mwIDAQAB"
 const UploadFile = (props: any) => {
     const [visible, setVisible] = useState(false);
     const {value, onChange} = props;
     const [fileName, setFileName] = useState(value?.name || '');
-    const [publicKey, setPublicKey] = useState<string>(test_key)
+    const {AESKey,RSAPbKey} = useSelector((state:IState)=>state.KeyReducer)
+
+    const dispatch = useDispatch();
+    const setRSAPbKey = (data:any)=>{
+        dispatch({type:'setRSAPbKey',data:data})
+    }
 
     useEffect(() => {
         if (value?.name)
@@ -61,7 +62,7 @@ const UploadFile = (props: any) => {
                         setVisible(false);
                         return reject();
                     } else {
-                        // setPublicKey(publicKey);
+                        setRSAPbKey(res.key)
                         return resolve();
                     }
                 })
@@ -70,7 +71,18 @@ const UploadFile = (props: any) => {
 
     const handleUpload = async (file: any) => {
         const formData = new FormData();
-        formData.append('file', file);
+        if(props.aes)
+        {
+            const encryptedFile = await encrypt(file,AESKey);
+            formData.append('file',encryptedFile);
+            const rsaEncrypt = new JSEncrypt();
+            rsaEncrypt.setPublicKey(RSAPbKey);
+            const encryptedAESKey =  rsaEncrypt.encrypt(AESKey);
+            if(encryptedAESKey)
+                formData.append('AESKey',encryptedAESKey)
+        }else{
+            formData.append('file',file);
+        }
         Api.uploadFile({data: formData})
             .then((res: any) => {
                 message.success('上传成功')
