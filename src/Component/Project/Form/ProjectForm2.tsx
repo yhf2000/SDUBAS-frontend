@@ -7,9 +7,10 @@ import RoleManageForm from "../../Permission/Form/RoleManageForm";
 
 const ProjectForm2 =(props:any)=>{
     //通过路由判断
+    console.log(props.pathname)
     return(
         <>
-            <ItemContent options={CntOptions} path={props.pathname}/>
+            <ItemContent options={CntOptions} pathname={props.pathname}/>
             {/*<ItemPermission />*/}
             <RoleManageForm service_type={props.service_type} />
         </>

@@ -1,26 +1,30 @@
 import CryptoJS from 'crypto-js';
-import {useDispatch} from "../Redux/Store";
-import {useSelector} from "react-redux";
-import {IState} from "../Type/base";
+import {isUtf8} from "buffer";
 
 
 // 生成随机的AES密钥
 export const generateAESKey = () => {
-    const keySize = 256; // 密钥长度，可以根据需要进行调整
+    const keySize = 128; // 密钥长度，可以根据需要进行调整
     const key = CryptoJS.lib.WordArray.random(keySize / 8); // 生成随机的字节数组
-    return key.toString();
+    return key
 };
 
-export function encrypt(file:any,AESKey:string){
+export function encrypt(file:any,AESKey:any){
     //生成aes密钥
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<Blob>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             // @ts-ignore
             const fileData = event.target.result;
             // @ts-ignore
-            const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey).toString();
-            resolve(encryptedData);
+            const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey,{
+                iv: AESKey, //偏移量
+                mode: CryptoJS.mode.ECB,//加密模式
+                padding: CryptoJS.pad.Pkcs7 //填充
+            });
+            // @ts-ignore
+            const encryptedFile = new Blob([encryptedData],{name:file.name},{ type: file.type });
+            resolve(encryptedFile);
         };
         reader.onerror = (event) => {
             // @ts-ignore

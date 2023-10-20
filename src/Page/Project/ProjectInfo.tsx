@@ -208,7 +208,7 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                props.type === "office" && (
+                props.type === "application/msword" && (
                     <iframe
                         title="demo.docx"
                         src={"https://view.officeapps.live.com/op/view.aspx?src="+props.url}

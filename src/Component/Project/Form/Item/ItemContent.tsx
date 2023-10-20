@@ -13,6 +13,7 @@ const ItemContent = (props: any) => {
     const onChange = () => {
         setChecked(!checked);
     }
+    console.log(props.pathname)
     return (
         <Form.List name={'contents'}>
             {(fields, {add, remove}) => (

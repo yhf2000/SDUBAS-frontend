@@ -36,7 +36,7 @@ const Resources = () => {
                                 label: "",
                             },
                             {
-                                component: ProjectForm2,
+                                component: ProjectForm2({service_type:7,pathname:location.pathname}),
                                 label: ""
                             }
                         ]}
@@ -53,7 +53,7 @@ const Resources = () => {
                     name={'ResourcesTable'}
                     useList={true}
                     API={async (data: any) => {
-                        return Api.getProListByType({data: {...data, projectType: "资源"}})
+                        return Api.getProListByType({data: {...data, projectType: "课程",tag:''}})
                     }}
                     // initData={initData}
                     renderItem={(item: any) => {
