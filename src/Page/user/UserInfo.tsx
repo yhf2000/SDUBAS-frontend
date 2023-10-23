@@ -78,91 +78,102 @@ const UserInfo = () => {
                 direction={'vertical'}
                 size={'large'}
             >
-                <EditableInput
-                    label={'用户名'}
-                    onClick={async (data: any) => {
-                        return Api.updateUsername({data: {username: data}});
-                    }}
-                    defaultValue={userPro?.username}
-                />
-                <EditableInput
-                    label={'邮箱'}
-                    editable={false}
-                    defaultValue={userPro?.email}
-                    addonAfter={
-                        <ModalForm
-                            title={"修改邮箱"}
-                            trigger={<Button type={'link'}>修改</Button>}
-                            autoFocusFirstInput
-                            modalProps={{
-                                maskClosable: false,
-                                destroyOnClose: true,
-                                width: 500,
-                                okText: "提交"
-                            }}
-                            form={form}
-                            onFinish={(data: any) => {
-                                return Api.updateEmail({data: data}).then((res: any) => {
-                                    message.success('绑定成功');
-                                    return true;
-                                }).catch((error: any) => {
-                                })
-                            }
-                            }
-                        >
-                            <ItemEmail
-                                name={'token_s6'}
-                                needVerify={true}
-                                getEmail={() => {
-                                    return form.validateFields(["email"]).then((data: any) => {
-                                        return Promise.resolve(data.email)
-                                    }).catch(() => {
-                                    })
-                                }}
-                                type={1}
-                            />
-                        </ModalForm>
-                    }
-                />
-                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <div style={{minWidth: "100px"}}>个人信息绑定:</div>
-                    {/*<div style={{width: '400px', flex: 1}}>*/}
-                    {/*    {2===2*/}
-                    {/*        ? (<>已绑定</>)*/}
-                    {/*        : (<ModalFormUseForm*/}
-                    {/*                title={'绑定个人信息'}*/}
-                    {/*                subForm={[*/}
-                    {/*                    {*/}
-                    {/*                        component: BindForm,*/}
-                    {/*                        label: ''*/}
-                    {/*                    }*/}
-                    {/*                ]}*/}
-                    {/*                type={'create'}*/}
-                    {/*                btnName={'点击绑定'}*/}
-                    {/*                dataSubmitter={async (data: any) => {*/}
-                    {/*                    data.enrollment_dt = data.enrollment_dt.format("YYYY-MM-DD")*/}
-                    {/*                    data.graduation_dt = data.graduation_dt.format("YYYY-MM-DD")*/}
-                    {/*                    data.gender = data.gender.toString();*/}
-                    {/*                    // console.log('bind',data);*/}
-                    {/*                    return Api.bind({data: data});*/}
-                    {/*                }}*/}
-                    {/*                afterSubmit={(r:any) => {*/}
-                    {/*                    dispatch(getData(*/}
-                    {/*                        "getProfile",*/}
-                    {/*                        {},*/}
-                    {/*                        (res: any) => {*/}
-                    {/*                            // console.log(res);*/}
-                    {/*                            dispatch({type: "setUserInfo", data: res});*/}
-                    {/*                        },*/}
-                    {/*                        () => {*/}
-                    {/*                        }*/}
-                    {/*                    ))*/}
-                    {/*                }}*/}
-                    {/*            />*/}
-                    {/*        )*/}
-                    {/*    }*/}
-                    {/*</div>*/}
+                {/*<EditableInput*/}
+                {/*    label={'用户名'}*/}
+                {/*    onClick={async (data: any) => {*/}
+                {/*        return Api.updateUsername({data: {username: data}});*/}
+                {/*    }}*/}
+                {/*    defaultValue={userPro?.username}*/}
+                {/*/>*/}
+                {/*<EditableInput*/}
+                {/*    label={'邮箱'}*/}
+                {/*    editable={false}*/}
+                {/*    defaultValue={userPro?.email}*/}
+                {/*    addonAfter={*/}
+                {/*        <ModalForm*/}
+                {/*            title={"修改邮箱"}*/}
+                {/*            trigger={<Button type={'link'}>修改</Button>}*/}
+                {/*            autoFocusFirstInput*/}
+                {/*            modalProps={{*/}
+                {/*                maskClosable: false,*/}
+                {/*                destroyOnClose: true,*/}
+                {/*                width: 500,*/}
+                {/*                okText: "提交"*/}
+                {/*            }}*/}
+                {/*            form={form}*/}
+                {/*            onFinish={(data: any) => {*/}
+                {/*                return Api.updateEmail({data: data}).then((res: any) => {*/}
+                {/*                    message.success('绑定成功');*/}
+                {/*                    return true;*/}
+                {/*                }).catch((error: any) => {*/}
+                {/*                })*/}
+                {/*            }*/}
+                {/*            }*/}
+                {/*        >*/}
+                {/*            <ItemEmail*/}
+                {/*                name={'token_s6'}*/}
+                {/*                needVerify={true}*/}
+                {/*                getEmail={() => {*/}
+                {/*                    return form.validateFields(["email"]).then((data: any) => {*/}
+                {/*                        return Promise.resolve(data.email)*/}
+                {/*                    }).catch(() => {*/}
+                {/*                    })*/}
+                {/*                }}*/}
+                {/*                type={1}*/}
+                {/*            />*/}
+                {/*        </ModalForm>*/}
+                {/*    }*/}
+                {/*/>*/}
+                <div
+                    style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <div style={{minWidth: "100px"}}>用户名:</div>
+                    <Input value={userPro?.username} disabled />
                 </div>
+                <div
+                    style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <div style={{minWidth: "100px"}}>邮箱:</div>
+                    <Input value={userPro?.email} disabled />
+                </div>
+                {/*<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>*/}
+                {/*    /!*<div style={{width: '400px', flex: 1}}>*!/*/}
+                {/*    /!*    {2===2*!/*/}
+                {/*    /!*        ? (<>已绑定</>)*!/*/}
+                {/*    /!*        : (<ModalFormUseForm*!/*/}
+                {/*    /!*                title={'绑定个人信息'}*!/*/}
+                {/*    /!*                subForm={[*!/*/}
+                {/*    /!*                    {*!/*/}
+                {/*    /!*                        component: BindForm,*!/*/}
+                {/*    /!*                        label: ''*!/*/}
+                {/*    /!*                    }*!/*/}
+                {/*    /!*                ]}*!/*/}
+                {/*    /!*                type={'create'}*!/*/}
+                {/*    /!*                btnName={'点击绑定'}*!/*/}
+                {/*    /!*                dataSubmitter={async (data: any) => {*!/*/}
+                {/*    /!*                    data.enrollment_dt = data.enrollment_dt.format("YYYY-MM-DD")*!/*/}
+                {/*    /!*                    data.graduation_dt = data.graduation_dt.format("YYYY-MM-DD")*!/*/}
+                {/*    /!*                    data.gender = data.gender.toString();*!/*/}
+                {/*    /!*                    // console.log('bind',data);*!/*/}
+                {/*    /!*                    return Api.bind({data: data});*!/*/}
+                {/*    /!*                }}*!/*/}
+                {/*    /!*                afterSubmit={(r:any) => {*!/*/}
+                {/*    /!*                    dispatch(getData(*!/*/}
+                {/*    /!*                        "getProfile",*!/*/}
+                {/*    /!*                        {},*!/*/}
+                {/*    /!*                        (res: any) => {*!/*/}
+                {/*    /!*                            // console.log(res);*!/*/}
+                {/*    /!*                            dispatch({type: "setUserInfo", data: res});*!/*/}
+                {/*    /!*                        },*!/*/}
+                {/*    /!*                        () => {*!/*/}
+                {/*    /!*                        }*!/*/}
+                {/*    /!*                    ))*!/*/}
+                {/*    /!*                }}*!/*/}
+                {/*    /!*            />*!/*/}
+                {/*    /!*        )*!/*/}
+                {/*    /!*    }*!/*/}
+                {/*    /!*</div>*!/*/}
+                {/*</div>*/}
             </Space>
         </div>
     );

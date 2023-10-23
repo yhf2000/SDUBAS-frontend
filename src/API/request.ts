@@ -68,24 +68,24 @@ const dealResponse = async (resp: any, url: string) => {
 
 const get = async (url: string, params?: object, config?: AxiosRequestConfig) => {
     return await dealResponse(service.get(url, {
-        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}}, params, ...config,
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}}, params, ...config,
     }), url)
 }
 
 const post = async (url: string, data: object, config?: AxiosRequestConfig) => {
     return await dealResponse(service.post(url, data, {
-        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}}, ...config
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}}, ...config
     }), url);
 }
 
 const put = async (url: string, data?: object, config?: AxiosRequestConfig) => {
     return await dealResponse(service.put(url, data, {
-        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}, ...config}
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}, ...config}
     }), url);
 }
 const Delete = async (url: string, config?: AxiosRequestConfig) => {
     return await dealResponse(service.delete(url, {
-        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate"}},
+        ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}},
         ...config
     }), url);
 }
