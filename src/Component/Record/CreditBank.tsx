@@ -8,25 +8,28 @@ import records from "../../Page/Records";
 
 const CreditBank = () => {
     const [credits, setCredits] = useState<any>();
-    const [username, setUsername] = useState(undefined);
+    const [record, setRecord] = useState<any>(undefined);
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
     //自动得到学生的总学分
     useEffect(() => {
-        Api.getUserCredits({data: {username: username}}).then((res: any) => {
-            setCredits(res.credit);
-        }).catch(() => {
-            message.error('刷新重试')
-        })
-        AddTableVersion('StudentCreditTable');
-    }, [username]);
+        if(record)
+        {
+            Api.getUserCredits({data: {user_id: record.user_id}}).then((res: any) => {
+                setCredits(res.credit);
+            }).catch(() => {
+                message.error('刷新重试')
+            })
+            AddTableVersion('StudentCreditTable');
+        }
+    }, [record]);
     return (
         <>
             <Card extra={
                 <>
-                    <SelectUser setUsername={(record:any)=>{setUsername(record.username)}}/>
+                    <SelectUser setRecord={(record:any)=>{setRecord(record)}}/>
                     <span
                         style={{
                             backgroundColor: 'rgba(128, 128, 128, 0.1)',
@@ -34,7 +37,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {username === undefined ? "请选择" : `已修学分:${credits}`}
+                        {record?.user_name === undefined ? "请选择" : `已修学分:${credits}`}
                     </span>
                 </>
             }>
@@ -48,6 +51,7 @@ const CreditBank = () => {
                         for (let i = 0; i < rows.length; i++) {
                             rows[i] = {key:`${i}`,...rows[i]}
                         }
+                        console.log(rows)
                         return rows
                     }}
                 />

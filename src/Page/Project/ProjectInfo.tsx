@@ -18,7 +18,6 @@ import AddCreditByRole from "../../Component/Project/Form/AddCreditByRole";
 import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
-import internal from "stream";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
 
 const {Sider, Content} = Layout;

@@ -75,7 +75,7 @@ const Experiment = () => {
                 renderItem={(item: any) => {
                     return (
                         <List.Item key={item.name}>
-                            {/*<ProCard item={item}  TableName={'ExperimentMainTable'}/>*/}
+                            <ProCard item={item}  TableName={'ExperimentMainTable'}/>
                         </List.Item>
                     )
                 }}

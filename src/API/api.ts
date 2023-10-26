@@ -1,6 +1,4 @@
 import request from "./request";
-import any = jasmine.any;
-
 export const Api: { [key: string]: any } = {
     //file文件
     checkFile: async (data: any) => {
@@ -107,6 +105,9 @@ export const Api: { [key: string]: any } = {
     },
     deleteSchool: async (data: any) => {
         return request.delete(`/users/school_delete/${data.sId}`, data.data);//删除学校
+    },
+    newDefaultRole:async (data:any)=>{
+        return request.post('/',data.data);
     },
 
     //college
@@ -278,10 +279,10 @@ export const Api: { [key: string]: any } = {
     },
     //creditBank学分银行
     getUserCredits: async (data: any) => {
-        // return request.get('/projects/user/credits');
-        if(data.data.username === 'dyyy')
-            return {credit: 55};
-        else return {credit:66}
+        return request.get('/projects/user/credits',data.data);
+        // if(data.data.username === 'dyyy')
+        //     return {credit: 55};
+        // else return {credit:66}
     },
     getRequirements:async (data:any)=>{
         return request.get('/projects/user/credits')

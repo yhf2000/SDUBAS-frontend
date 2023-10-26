@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Api} from "../API/api";
 import {CheckCircleOutlined, CloseCircleFilled, CloseOutlined} from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
+import {Button} from "antd";
 
 const Pass = () => {
     return (
@@ -21,7 +22,7 @@ const Reject = () => {
     )
 }
 const OperationRecords = () => {
-    const [isPass, setIsPass] = useState(false);
+    const [isPass, setIsPass] = useState<any>(undefined);
     useEffect(() => {
         // Api.getValid().then((res: true) => {
         //     if(res)
@@ -30,8 +31,6 @@ const OperationRecords = () => {
     }, [])
     return (
         <>
-            {isPass && <Pass/>}
-            {!isPass && <Reject/>}
             <TableWithPagination
                 API={async (data: any) => {
                     return Api.getPersonalProfile({data: data})
@@ -48,6 +47,25 @@ const OperationRecords = () => {
                                 )
                             }).catch(()=>{return (<>×</>)})
                         }
+                    },
+                    {
+                        title:'结果',
+                        key:'result',
+                        render:()=>{
+                            return(
+                                <>
+                                    {isPass === undefined && <Button
+                                        type={'link'}
+                                        onClick={()=>{setIsPass(true)}}
+                                    >
+                                        验证
+                                    </Button>
+                                    }
+                                    {isPass === true && <Pass/>}
+                                    {isPass === false && <Reject/>}
+                                </>
+                            )
+                        },
                     }
                 ]}
             />
