@@ -44,7 +44,7 @@ const CreateTemplate = () => {
                     name={'TemplateRolesTable'}
                     API={async (data:any)=>{return Api.getTemplates({data:data})}}
                     useList={true}
-                    renderItem={(
+                    renderItem={()=>(
                         <>
                         </>
                     )}

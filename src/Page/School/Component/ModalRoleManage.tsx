@@ -52,8 +52,8 @@ const ModalRoleManage = (props: any) => {
                                     },
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    // console.log(data);
-                                    return Api.newDefaultRole({data: data});
+                                    console.log(data);
+                                    return Api.addDefaultRole({data: data});
                                 }}
                             />) : null
                         )

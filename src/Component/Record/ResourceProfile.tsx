@@ -2,19 +2,16 @@ import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import {Button, message} from "antd";
 import {useNavigate} from "react-router-dom";
-import React, {useState} from "react";
+import React from "react";
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
 import ItemName from "../Common/Form/Item/ItemName";
-import ItemText from "../Common/Form/Item/ItemText";
 import ItemNumber from "./Form/Item/ItemNumber";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
-import ItemRoles from "../User/Form/Item/ItemRoles";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
-import AssignRole from "../Permission/AssignRole";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
 
 

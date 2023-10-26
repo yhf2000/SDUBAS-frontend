@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Space, Tree, Image, Tag} from 'antd';
+import {Layout, Space, Tree, Image, Tag, Button} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import ReactPlayer from "react-player";
@@ -18,7 +18,6 @@ import AddCreditByRole from "../../Component/Project/Form/AddCreditByRole";
 import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
-import internal from "stream";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
 
 const {Sider, Content} = Layout;
@@ -156,6 +155,8 @@ const ProjectInfo: React.FC = () => {
                                         username={userinfo?.username}//这里可能会替换成userid
                                     />
                                     <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
+                                    <Button onClick={()=>{Api.getRefresh({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新我的</Button>
+                                    <Button onClick={()=>{Api.getRefreshAll({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新全部</Button>
                                 </>
                             )
                         }

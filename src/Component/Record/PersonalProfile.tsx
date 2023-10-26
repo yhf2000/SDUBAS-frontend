@@ -6,10 +6,19 @@ import {Card, Descriptions} from "antd";
 import "../../Config/CSS/PersonalProfile.css";
 import {SelectUser} from "./CreditBank";
 import TableWithPagination from "../Common/Table/TableWithPagination";
-import {PersonalProfileColumns} from "../../Config/Resource/columns"; // 引入 CSS 样式文件
+import {PersonalProfileColumns} from "../../Config/Resource/columns";
+import {useDispatch} from "../../Redux/Store"; // 引入 CSS 样式文件
 const PersonalProfile = () => {
     const userinfo = useSelector((state:IState)=>state.UserReducer)
     const [record, setRecord] = useState<any>(undefined);
+    const dispatch = useDispatch()
+    const AddTableVersion = (name:string)=>{
+        dispatch({type:'addTableVersion',name:name})
+    }
+    useEffect(()=>{
+        console.log(1)
+        AddTableVersion('PersonalTable')
+    },[record])
     return (
         <Card extra={
             <>
@@ -36,10 +45,11 @@ const PersonalProfile = () => {
             </Descriptions>
             {
                 record&&<TableWithPagination
+                    name={'PersonalTable'}
                     columns={PersonalProfileColumns}
                     API={async (data:any)=>{
                         // console.log(record)
-                        return Api.getPersonalProfile({data:{user_id:1,...data}})}}
+                        return Api.getPersonalProfile({data:{user_id:record.user_id,...data}})}}
                     bordered
                 />
             }

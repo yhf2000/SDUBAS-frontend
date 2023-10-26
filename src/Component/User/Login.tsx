@@ -12,6 +12,7 @@ import ItemEmail from "./Form/Item/ItemEmail";
 import {useForm} from "antd/es/form/Form";
 import {Api} from "../../API/api";
 import {findByRole} from "@testing-library/react";
+import md5 from "js-md5";
 
 type LoginType = 'SDUCAS' | 'account';
 
@@ -31,7 +32,7 @@ const Login = (props: any) => {
             "login",
             {data: data},
             (r: any) => {
-                console.log(r);
+                // console.log(r);
                 if (!r.first_time) {
                     dispatch(getData(
                         "getProfile",
@@ -72,8 +73,10 @@ const Login = (props: any) => {
                         if (loginType !== 'SDUCAS')
                             return <Button type={"primary"} block onClick={() => {
                                 formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                    if (value.username && value.password)
+                                    if (value.username && value.password){
+                                        // value.password = md5(value.password)
                                         login(value);
+                                    }
                                 }).catch((value) => {
                                     let sf = []
                                     value.username && sf.push(
@@ -168,7 +171,7 @@ const Login = (props: any) => {
                             textAlign: "right", marginBottom: 10
                         }}>
                             <Space size={3}>
-                                <Register button={<Button type={"link"} size={"small"}>注册</Button>}/>
+                                {/*<Register button={<Button type={"link"} size={"small"}>注册</Button>}/>*/}
                                 <ForgetPass button={<Button type={"link"} size={"small"}>忘记密码</Button>}/>
                             </Space>
                         </div>
@@ -186,7 +189,7 @@ const Login = (props: any) => {
                 <Form
                     form={form}
                     onFinish={(values) => {
-                        console.log(values)
+                        // console.log(values)
                         Api.active({data: values})
                             .then(() => {
                                 message.success('激活成功')

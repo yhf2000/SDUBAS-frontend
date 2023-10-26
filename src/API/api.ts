@@ -1,5 +1,4 @@
 import request from "./request";
-
 export const Api: { [key: string]: any } = {
     //file文件
     checkFile: async (data: any) => {
@@ -106,6 +105,9 @@ export const Api: { [key: string]: any } = {
     },
     deleteSchool: async (data: any) => {
         return request.delete(`/users/school_delete/${data.sId}`, data.data);//删除学校
+    },
+    newDefaultRole:async (data:any)=>{
+        return request.post('/',data.data);
     },
 
     //college
@@ -269,13 +271,18 @@ export const Api: { [key: string]: any } = {
     Sign: async (data: any) => {
         return request.put(`/projects/${data.pId}/content/video/renew`, data.data);
     },
-
+    getRefresh:async (data:any)=>{
+        return request.get(`/projects/${data.pId}/${data.cId}/finish/renew`)
+    },
+    getRefreshAll:async (data:any)=>{
+        return request.get(`/projects/${data.pId}/${data.cId}/finish/super`)
+    },
     //creditBank学分银行
     getUserCredits: async (data: any) => {
-        // return request.get('/projects/user/credits');
-        if(data.data.username === 'dyyy')
-            return {credit: 55};
-        else return {credit:66}
+        return request.get('/projects/user/credits',data.data);
+        // if(data.data.username === 'dyyy')
+        //     return {credit: 55};
+        // else return {credit:66}
     },
     getRequirements:async (data:any)=>{
         return request.get('/projects/user/credits')
@@ -329,7 +336,6 @@ export const Api: { [key: string]: any } = {
 
     //个人档案
     getPersonalProfile:async (data:any)=>{
-        console.log(data);
         return request.get('/projects/user/personal/file',data.data);
     },
 }

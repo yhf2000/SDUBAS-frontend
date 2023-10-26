@@ -3,6 +3,7 @@ import ItemPassword from "../../Component/User/Form/Item/ItemPassword";
 import {Api} from "../../API/api";
 import {useNavigate, useParams} from "react-router-dom";
 import Title from "antd/es/typography/Title";
+import md5 from "js-md5";
 
 const NewPwd = () =>{
     const {token} = useParams();
@@ -13,6 +14,7 @@ const NewPwd = () =>{
                 title={'设置新密码'}
                 autoFocus
                 onFinish={(data:any)=>{
+                    data.password = md5(data.password)
                     Api.setPass({token:token,data:data}).then(
                         (res:any)=>{
                             message.success('设置成功');
