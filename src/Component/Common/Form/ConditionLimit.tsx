@@ -1,14 +1,10 @@
 import {Button, Form, Input, Modal, Select, Space, Switch} from "antd";
-import {useState} from "react";
 import {ModalForm} from "@ant-design/pro-form";
-import {useForm} from "antd/es/form/Form";
 
 const ConditionLimitItem = (props:any) => {
     const {value,onChange} = props;
-    const [form] = Form.useForm<any>();
     return (
         <ModalForm
-            form={form}
             trigger={<Button type={'ghost'}>设置</Button>}
             onFinish={(value)=>{onChange(value.set_list);return Promise.resolve(true)}}
         >
@@ -19,7 +15,7 @@ const ConditionLimitItem = (props:any) => {
                             <Space wrap>
                                 <Form.Item
                                     {...field}
-                                    name={[field.name, "projects"]}
+                                    name={[field.name, "project_id_list"]}
                                     key={field.name + 'projects'}
                                 >
                                         <Select mode={'multiple'}>
@@ -28,7 +24,7 @@ const ConditionLimitItem = (props:any) => {
                                 </Form.Item>
                                 <Form.Item
                                     {...field}
-                                    name={[field.name, "lower_bound"]}
+                                    name={[field.name, "lower_limit"]}
                                     key={field.name + 'lower_bound'}
                                 >
                                     <Input />

@@ -1,4 +1,5 @@
 import request from "./request";
+import any = jasmine.any;
 
 export const Api: { [key: string]: any } = {
     //file文件
@@ -269,7 +270,12 @@ export const Api: { [key: string]: any } = {
     Sign: async (data: any) => {
         return request.put(`/projects/${data.pId}/content/video/renew`, data.data);
     },
-
+    getRefresh:async (data:any)=>{
+        return request.get(`/projects/${data.pId}/${data.cId}/finish/renew`)
+    },
+    getRefreshAll:async (data:any)=>{
+        return request.get(`/projects/${data.pId}/${data.cId}/finish/super`)
+    },
     //creditBank学分银行
     getUserCredits: async (data: any) => {
         // return request.get('/projects/user/credits');
@@ -329,7 +335,6 @@ export const Api: { [key: string]: any } = {
 
     //个人档案
     getPersonalProfile:async (data:any)=>{
-        console.log(data);
         return request.get('/projects/user/personal/file',data.data);
     },
 }

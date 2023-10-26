@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {Button, Divider, Dropdown, Layout, Menu, message, Space} from 'antd';
+import {Button, Divider, Dropdown, Layout, Menu, MenuProps, message, Space} from 'antd';
 import {DownOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import {headerMenu} from "../router";
 import {IState} from "../Type/base";
@@ -12,6 +12,8 @@ import {Api} from "../API/api";
 
 const {Header} = Layout;
 
+
+
 const CHeader = () => {
     const navigator = useNavigate();
     const location = useLocation();
@@ -20,6 +22,28 @@ const CHeader = () => {
 
     const [selectedKey, setSelectedKey] = useState('0');
     const [userLoginState, setUserLoginState] = useState(isLogin);
+
+    const items:MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <Button icon={<UserOutlined/>} onClick={() => navigator("/c/user")} type={"ghost"}>用户概况</Button>
+            )
+        },
+        {
+            key:'2',
+            label:(
+                <Button icon={<LogoutOutlined/>}
+                        onClick={() => Api.logout()
+                            .then(() => dispatch({type: "userLogout"}))
+                            .catch(()=>{})
+                        }
+                        type={"ghost"}>
+                    用户登出
+                </Button>
+            )
+        }
+    ]
 
     useEffect(() => {
         // 测试浏览器功能可用性
@@ -72,20 +96,23 @@ const CHeader = () => {
             </div>
             <div style={{flex: "0"}} key={"operator"}>
                 {isLogin ? (
-                    <Dropdown overlay={
-                        <Menu>
-                            <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
-                                用户概况
-                            </Menu.Item>
-                            <Menu.Item key="2" icon={<LogoutOutlined/>}
-                                       onClick={() => Api.logout()
-                                           .then(() => dispatch({type: "userLogout"}))
-                                           .catch(()=>{})
-                            }>
-                                登出
-                            </Menu.Item>
-                        </Menu>
-                    }>
+                    <Dropdown
+                    //     overlay={
+                    //     <Menu>
+                    //         <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
+                    //             用户概况
+                    //         </Menu.Item>
+                    //         <Menu.Item key="2" icon={<LogoutOutlined/>}
+                    //                    onClick={() => Api.logout()
+                    //                        .then(() => dispatch({type: "userLogout"}))
+                    //                        .catch(()=>{})
+                    //         }>
+                    //             登出
+                    //         </Menu.Item>
+                    //     </Menu>
+                    // }
+                        menu={{items}}
+                    >
                         <Button type="text" size={"large"}>
                             <Space>
                                 <div style={{marginTop: -10}}>

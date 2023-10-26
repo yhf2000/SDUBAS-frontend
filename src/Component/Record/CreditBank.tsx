@@ -26,7 +26,7 @@ const CreditBank = () => {
         <>
             <Card extra={
                 <>
-                    <SelectUser setUsername={setUsername}/>
+                    <SelectUser setUsername={(record:any)=>{setUsername(record.username)}}/>
                     <span
                         style={{
                             backgroundColor: 'rgba(128, 128, 128, 0.1)',

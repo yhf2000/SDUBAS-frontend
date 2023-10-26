@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Space, Tree, Image, Tag} from 'antd';
+import {Layout, Space, Tree, Image, Tag, Button} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import ReactPlayer from "react-player";
@@ -156,6 +156,8 @@ const ProjectInfo: React.FC = () => {
                                         username={userinfo?.username}//这里可能会替换成userid
                                     />
                                     <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
+                                    <Button onClick={()=>{Api.getRefresh({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新我的</Button>
+                                    <Button onClick={()=>{Api.getRefreshAll({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新全部</Button>
                                 </>
                             )
                         }

@@ -1,5 +1,5 @@
 import {Button, Card, Form, List, message, Space, Table} from "antd";
-import React, {Dispatch, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import {defaultPageSize} from "../../../Config/constValue";
 import {IState} from "../../../Type/base";
 import Search from "antd/es/input/Search";
@@ -9,10 +9,7 @@ import {ColumnsType} from "antd/lib/table/interface";
 import {useForm} from "antd/es/form/Form";
 import {useSelector} from "react-redux";
 import {ITablePageInfo} from "../../../Type/table";
-import {Simulate} from "react-dom/test-utils";
-import getData from "../../../API/getData";
 import {useDispatch} from "../../../Redux/Store";
-import projectInfo from "../../../Page/Project/ProjectInfo";
 
 
 export interface TableWithPaginationProps {
@@ -86,7 +83,7 @@ const TableWithPagination = (props: any) => {
             searchKey: sk,
             ...fmp
         }).then((data: any) => {
-            console.log('data',data)
+            // console.log('data',data)
             if (data.rows === null) data.rows = []
             if (props.APIRowsTransForm !== undefined) {
                 setTableData(props.APIRowsTransForm(data.rows))

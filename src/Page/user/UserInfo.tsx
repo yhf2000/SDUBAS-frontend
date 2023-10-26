@@ -1,24 +1,17 @@
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
-import React, {useEffect, useState} from "react";
-import {IUserInfo} from "../../Type/user";
+import React from "react";
 import {Button, Form, Input, message, Space} from "antd";
 import {ModalForm} from "@ant-design/pro-form";
 import ItemPassword from "../../Component/User/Form/Item/ItemPassword";
-import {useForm} from "antd/es/form/Form";
 import {Api} from "../../API/api";
 import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
 import '../../Config/CSS/UserInfo.css'
-import EditableInput from "../../Component/User/EditableInput";
-import ItemEmail from "../../Component/User/Form/Item/ItemEmail";
-import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
-// import BindForm from "../../Component/User/Form/BindForm";
 import {useNavigate} from "react-router-dom";
 
 
 const UserInfo = () => {
-    const [form] = useForm();
     const userPro = useSelector((state: IState) => state.UserReducer.userInfo);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -37,7 +30,6 @@ const UserInfo = () => {
                         width: 500,
                         okText: "提交"
                     }}
-                    form={form}
                     onFinish={(values) => {
                         return Api.updatePwd({data:values}).then((res: any) => {
                             dispatch(getData(

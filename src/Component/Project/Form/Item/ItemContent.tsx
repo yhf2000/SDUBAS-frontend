@@ -19,11 +19,10 @@ const ItemContent = (props: any) => {
             {(fields, {add, remove}) => (
                 <>
                     {fields.map((field) => (
-                        <Space key={field.name} style={{marginBottom: 8}} wrap>
+                        <Space key={field.key} style={{marginBottom: 8}} wrap>
                             <Form.Item
                                 {...field}
                                 name={[field.name, "prefix"]}
-                                key={field.name + 'prefix'}
                                 label={'目录'}
                                 noStyle
                             >
@@ -32,7 +31,6 @@ const ItemContent = (props: any) => {
                             <Form.Item
                                 {...field}
                                 name={[field.name, "name"]}
-                                key={field.name + 'name'}
                                 label={'名称'}
                                 noStyle
                             >
@@ -41,14 +39,12 @@ const ItemContent = (props: any) => {
                             <Form.Item
                                 {...field}
                                 name={[field.name, 'id']}
-                                key={field.name + 'id'}
                                 noStyle
                             >
                             </Form.Item>
                             <Form.Item
                                 {...field}
                                 name={[field.name, 'weight']}
-                                key={field.name + 'weight'}
                                 label={'权重'}
                                 noStyle
                             >
@@ -57,7 +53,6 @@ const ItemContent = (props: any) => {
                             <Form.Item
                                 {...field}
                                 name={[field.name, 'type']}
-                                key={field.name + 'type'}
                                 label={'类型'}
                                 noStyle
                             >
@@ -74,7 +69,7 @@ const ItemContent = (props: any) => {
                                 </Select>
                             </Form.Item>
                             <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
-                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname==='/c/resources'}/>
+                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname === '/c/resources'}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
                             <Switch defaultChecked={false} checkedChildren={'可置换'} onChange={onChange}
                                     unCheckedChildren={'不可置换'}/>
@@ -82,8 +77,9 @@ const ItemContent = (props: any) => {
                                 <ConditionLimitItem/>
                             </Form.Item>}
                             <Button
+                                key={field.name+'btn'}
                                 type={'link'}
-                                style={{width: 50}}
+                                // style={{width: 50}}
                                 onClick={() => remove(field.name)}>
                                 Remove
                             </Button>
