@@ -74,6 +74,7 @@ const SubmissionSForm = (props: any) => {
                         label={'上传文件'}
                         name={'file_id'}
                         accept={"."+props.rows.type_limit}
+                        aes={true}
                     />
                 )}
                 <Form.Item name={'pc_submit_id'} initialValue={props.rows.id} style={{display: 'none'}}>

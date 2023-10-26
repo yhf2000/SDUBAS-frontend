@@ -4,23 +4,24 @@ import {calculateHash} from "../../../../Utils/fileUpload";
 import {useEffect, useState} from "react";
 import {Api} from "../../../../API/api";
 import {isValueEmpty} from "../../../../Utils/isValueEmpty";
+import {useDispatch} from "../../../../Redux/Store";
+import {useSelector} from "react-redux";
+import {IState} from "../../../../Type/base";
+import {encrypt, generateAESKey} from "../../../../Utils/encrypt";
+import JSEncrypt from 'jsencrypt';
+import {setState} from "@antv/s2";
 
 const {Dragger} = Upload;
-
-const test_key =
-    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+UmBVe1vLKB+mNWU2dG" +
-    "WP3TsBKLfDnK7hAPz2RhHy0HsKgI2VGgdU/BW7kS0ckuMwUgs8hmZNZ8T1Oq3tJ0" +
-    "ua1cQUacfhIoVqj1GV07wiDjDainsWSKCfjpk3JBFjFQVt+LhdcV0a4COaRUwYIM" +
-    "XGjExJNjNLBLAl/yRxD7v/A1NKYSO/aIl6tCHM47/7kJiD+2pvCEejae2/PePn" +
-    "XVFUqMhGBC6rRwjr0RPwOHr58RplvPJH8FG13n+aldUwduSSAke5s/UvnLICFGcu" +
-    "xYp6bEkUR9phyoLLffAKXnAci1EEojRDlqopfZ+NgfWvgKgNvUpqXyjlFq7O+Eyg" +
-    "mwIDAQAB"
 const UploadFile = (props: any) => {
     const [visible, setVisible] = useState(false);
     const {value, onChange} = props;
     const [fileName, setFileName] = useState(value?.name || '');
-    const [publicKey, setPublicKey] = useState<string>(test_key)
-
+    const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
+    const [AESKey,setAESKey] = useState<any>();
+    const dispatch = useDispatch();
+    const setRSAPbKey = (data: any) => {
+        dispatch({type: 'setRSAPbKey', data: data})
+    }
     useEffect(() => {
         if (value?.name)
             onChange(value.file_id);
@@ -35,7 +36,7 @@ const UploadFile = (props: any) => {
     }
 
     const preUpload = async (file: any) => {
-        const code = await calculateHash(file);
+        //先计算时长
         const fileType = file.type;
         let duration: number | null = null;
         if (fileType.startsWith("video/")) {
@@ -45,15 +46,22 @@ const UploadFile = (props: any) => {
                 duration = audioElement.duration;
             });
         }
-        // console.log({time:duration})
+        //如果需要加密则加密
+        if(props.aes)
+        {
+            setAESKey(generateAESKey());
+            while(!AESKey){}//等不到就一直等
+            file = await encrypt(file,AESKey);
+        }
+        const code = await calculateHash(file);
         const size = file.size;
         return new Promise<void>((resolve, reject) => {
             let data;
-            if(duration)
-                data = {size: size, ...code,time:duration}
+            if (duration)
+                data = {size: size, ...code, time: duration}
             else
                 data = {size: size, ...code}
-            Api.checkFile({data: data})
+            Api.checkFile({data: {...data,type:props.aes}})
                 .then((res: any) => {
                     if (res.file_id !== null) {
                         callback(res);
@@ -61,16 +69,27 @@ const UploadFile = (props: any) => {
                         setVisible(false);
                         return reject();
                     } else {
-                        // setPublicKey(publicKey);
-                        return resolve();
+                        setRSAPbKey(res.public_key)
+                        return resolve(file);
                     }
-                })
+                }).catch(()=>{return reject()})
         })
     }
 
     const handleUpload = async (file: any) => {
         const formData = new FormData();
         formData.append('file', file);
+        if (props.aes) {
+            const rsaEncrypt = new JSEncrypt();
+            rsaEncrypt.setPublicKey(RSAPbKey);
+            console.log('rsa',RSAPbKey);
+            const encryptedAESKey = rsaEncrypt.encrypt(AESKey);
+            if(encryptedAESKey)
+                formData.append('ase_key', encryptedAESKey);
+        }
+        else{
+            formData.append('ase_key',' ');
+        }
         Api.uploadFile({data: formData})
             .then((res: any) => {
                 message.success('上传成功')
@@ -136,7 +155,7 @@ const ItemUpload = (props: any) => {
     return (
         <Form.Item
             name={props.name ?? 'file_id'}
-            label={props.label??'上传文件'}
+            label={props.label ?? '上传文件'}
             {...props}
         >
             <UploadFile {...props} />

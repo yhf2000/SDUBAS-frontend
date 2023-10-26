@@ -8,8 +8,8 @@ import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
 import Information from "../Component/Record/Information";
 import {Api} from "../API/api";
-import ConditionLimit from "../Component/Common/Form/ConditionLimit";
-import ConditionLimitItem from "../Component/Common/Form/ConditionLimit";
+import {generateAESKey} from "../Utils/encrypt";
+import CryptoJS from "crypto-js";
 
 const Home = () => {
     // Api.logout()

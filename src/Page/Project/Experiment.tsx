@@ -7,7 +7,7 @@ import {
     Space,
 } from "antd";
 import ProCard from "../../Component/Project/ProCard";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
@@ -17,11 +17,7 @@ import {arraytostr} from "../../Utils/arraytostr";
 
 const Experiment = () => {
     const navigate = useNavigate();
-
     // useMemo
-    function handleClick(item: any) {
-
-    }
 
     // console.log('there is ')
     return (
@@ -79,7 +75,7 @@ const Experiment = () => {
                 renderItem={(item: any) => {
                     return (
                         <List.Item key={item.name}>
-                            <ProCard item={item} onClick={() => handleClick(item)} TableName={'ExperimentMainTable'}/>
+                            <ProCard item={item}  TableName={'ExperimentMainTable'}/>
                         </List.Item>
                     )
                 }}

@@ -14,7 +14,7 @@ import {useDispatch} from "../../Redux/Store";
 import ProjectForm2 from "./Form/ProjectForm2";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
 import {arraytostr} from "../../Utils/arraytostr";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 // import ProjectForm2 from "./Form/ProjectForm2";
 
 
@@ -32,7 +32,7 @@ const initialValues = {
 };
 
 
-export default function ProCard({item,TableName}: any) {
+export default function ProCard({item,TableName,pathname}: any) {
     const [t] = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
     // const [url,setUrl] = useState('')
@@ -96,7 +96,7 @@ export default function ProCard({item,TableName}: any) {
                                 label: '',
                             },
                             {
-                                component: ProjectForm2({service_type:7}),
+                                component: ProjectForm2({service_type:7,pathname:pathname}),
                                 label:'',
                             }
                         ]}
