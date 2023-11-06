@@ -33,7 +33,7 @@ const BatchImport = (props: any) => {
                 return item
             })
             if(props.item) {
-                onChange(newArr)
+                onChange(newArr[0])
                 setVisible(false)
             }
             else{

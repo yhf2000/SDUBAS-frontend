@@ -9,7 +9,7 @@ export const SchoolForm = () => {
         <>
             <ItemName label={'学校全称'} name={'name'} required={true}/>
             <ItemName label={'学校简称'} name={'school_abbreviation'} required={true}/>
-            <ItemUpload name={'file_id'} accept={".png,.jpg"} label={'学校Logo'}/>
+            <ItemUpload name={'school_logo_id'} accept={".png,.jpg"} label={'学校Logo'}/>
             {/*type表示查询的对象（项目、学校等）*/}
             {/*<ItemPermission service_type={'0'}/>*/}
         </>
@@ -29,7 +29,7 @@ export const CollegeForm=(props:any)=>{
             <Form.Item name={'college_id'} initialValue={props.college_id??undefined} style={{display:'none'}}>
                 {/*<Input type={'hidden'} />*/}
             </Form.Item>
-            <ItemUpload name={'file_id'} label={'学院logo'} accept={".png,.jpg"}/>
+            <ItemUpload name={'college_logo_id'} label={'学院logo'} accept={".png,.jpg"}/>
         </>
     )
 }

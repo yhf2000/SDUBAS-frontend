@@ -8,8 +8,8 @@ export function getAddress() {
         }
     } else {
         return {
-            SERVER: 'https://43.138.34.119/api',
-            FRONT: 'https://43.138.34.119',
+            SERVER: 'http://43.138.34.119/api',
+            FRONT: 'http://43.138.34.119',
         }
     }
 }

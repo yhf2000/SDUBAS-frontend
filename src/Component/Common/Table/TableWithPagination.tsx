@@ -86,7 +86,6 @@ const TableWithPagination = (props: any) => {
             console.log('data',data)
             if (data.rows === null) data.rows = []
             if (props.APIRowsTransForm !== undefined) {
-                console.log('xx')
                 setTableData(props.APIRowsTransForm(data))
             } else setTableData(data.rows)
             if (data.totalNum !== undefined && data.totalNum !== "0") {
@@ -210,7 +209,6 @@ const TableWithPagination = (props: any) => {
                         loading={loading}
                         size={props.size}
                         dataSource={tableData}
-                        // dataSource={props.initData}
                         renderItem={props.renderItem}
                         pagination={{
                             onChange: (page, pageSize) => {
@@ -275,7 +273,6 @@ const TableWithPagination = (props: any) => {
                         columns={props.columns}
                         rowSelection={props.rowSelection}
                         dataSource={tableData}
-                        // dataSource={props.initData}
                         pagination={{
                             onChange: (page, pageSize) => {
                                 getInfo(page, pageSize)

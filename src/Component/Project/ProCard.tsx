@@ -51,7 +51,7 @@ export default function ProCard({item,TableName,pathname}: any) {
         >
             <Row gutter={16}>
                 <Col span={4}>
-                    <Image src={item.url} alt="Item Image" style={{width: '100%', height: 'auto'}}/>
+                    <Image src={item.url} alt="Item Image" style={{width: '100%', height: 'auto'}} preview={false}/>
                 </Col>
                 <Col span={16}
                      onMouseEnter={() => setIsHovered(true)}

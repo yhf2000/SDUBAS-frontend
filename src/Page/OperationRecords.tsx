@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {Api} from "../API/api";
-import {CheckCircleOutlined, CloseCircleFilled, CloseOutlined} from "@ant-design/icons";
+import {
+    CheckCircleOutlined,
+    CheckCircleTwoTone,
+    CloseCircleFilled,
+    CloseCircleOutlined,
+    CloseOutlined
+} from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
+import ValidButton from "../Component/Record/ValidButton";
 import {Button} from "antd";
+
 
 const Pass = () => {
     return (
@@ -23,53 +31,43 @@ const Reject = () => {
 }
 const OperationRecords = () => {
     const [isPass, setIsPass] = useState<any>(undefined);
-    useEffect(() => {
-        // Api.getValid().then((res: true) => {
-        //     if(res)
-        //         setIsPass(true);
-        // })
-    }, [])
+
     return (
-        <>
+        <div
+
+        >
             <TableWithPagination
                 API={async (data: any) => {
-                    return Api.getPersonalProfile({data: data})
+                    return Api.getOperationLogs({data: data})
                 }}
                 name={'OperationsTable'}
                 columns={[
                     {
                         title: '验证',
                         key: 'valid',
-                        render: () => {
-                            Api.getProfile().then(() => {
-                                return(
-                                    <>√</>
-                                )
-                            }).catch(()=>{return (<>×</>)})
-                        }
+                        dataIndex: 'valid',
+                        width: "200px"
                     },
                     {
-                        title:'结果',
-                        key:'result',
-                        render:()=>{
-                            return(
-                                <>
-                                    {isPass === undefined && <Button
-                                        type={'link'}
-                                        onClick={()=>{setIsPass(true)}}
-                                    >
-                                        验证
-                                    </Button>
-                                    }
-                                    {isPass === true && <Pass/>}
-                                    {isPass === false && <Reject/>}
-                                </>
-                            )
+                        title: '结果',
+                        key: 'result',
+                        dataIndex: 'result',
+                        render: (pass: any, record: any) => {
+                            if (isPass === undefined)
+                                return (
+                                    <ValidButton record={record} isPass={isPass}/>
+                                )
+                            if (pass)
+                                return <Button icon={<CheckCircleTwoTone twoToneColor={"#52c41a"}/>} type={'ghost'}
+                                               disabled={true}/>
+                            return <Button icon={<CloseCircleOutlined style={{color: 'red'}}/>} type={'ghost'}
+                                           disabled={true}/>
                         },
+                        width: "200px"
                     }
                 ]}
             />
-        </>
+        </div>
     );
 }
 

@@ -209,7 +209,7 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                props.type === "application/msword" && (
+                (props.type === "application/word" || props.type==='application/word') && (
                     <iframe
                         title="demo.docx"
                         src={"https://view.officeapps.live.com/op/view.aspx?src="+props.url}

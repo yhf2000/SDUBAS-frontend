@@ -338,4 +338,15 @@ export const Api: { [key: string]: any } = {
     getPersonalProfile:async (data:any)=>{
         return request.get('/projects/user/personal/file',data.data);
     },
+
+    //日志
+    getValid:async (data:any)=>{
+        // return request.get()
+        if(data.id == 1)
+            return {data:true}
+        return {data:false}
+    },
+    getOperationLogs:async (data:any)=>{
+        return {rows:[{valid:1,id:1},{valid:2,id:2}]}
+    }
 }

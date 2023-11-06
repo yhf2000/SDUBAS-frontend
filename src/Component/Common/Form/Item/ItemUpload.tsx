@@ -50,10 +50,10 @@ const UploadFile = (props: any) => {
         if(props.aes)
         {
             setAESKey(generateAESKey());
-            while(!AESKey){}//等不到就一直等
             file = await encrypt(file,AESKey);
         }
         const code = await calculateHash(file);
+        console.log(code);
         const size = file.size;
         return new Promise<void>((resolve, reject) => {
             let data;
@@ -82,7 +82,6 @@ const UploadFile = (props: any) => {
         if (props.aes) {
             const rsaEncrypt = new JSEncrypt();
             rsaEncrypt.setPublicKey(RSAPbKey);
-            console.log('rsa',RSAPbKey);
             const encryptedAESKey = rsaEncrypt.encrypt(AESKey);
             if(encryptedAESKey)
                 formData.append('ase_key', encryptedAESKey);

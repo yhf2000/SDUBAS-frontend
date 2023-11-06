@@ -34,7 +34,7 @@ const School = () => {
                                     }
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    // console.log(data)
+                                    console.log(data)
                                     return Api.newSchool({data: data})
                                 }}
                             />
