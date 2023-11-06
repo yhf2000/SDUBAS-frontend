@@ -9,6 +9,8 @@ import {useDispatch} from "../../Redux/Store";
 import {useNavigate} from "react-router-dom";
 import ItemPermission from "../../Component/Permission/Form/Item/ItemPermission";
 import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
+import "../../Config/CSS/Table.css";
+
 
 const ManageUsers = () => {
     const dispatch = useDispatch();
@@ -17,7 +19,7 @@ const ManageUsers = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 title={'用户管理'}
                 headStyle={{fontSize: 28}}
@@ -100,7 +102,7 @@ const ManageUsers = () => {
                     ]}
                 />
             </Card>
-        </>
+        </div>
     )
 }
 

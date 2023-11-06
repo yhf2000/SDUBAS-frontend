@@ -74,7 +74,7 @@ const Login = (props: any) => {
                             return <Button type={"primary"} block onClick={() => {
                                 formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
                                     if (value.username && value.password){
-                                        // value.password = md5(value.password)
+                                        value.password = md5(value.username+value.password)
                                         login(value);
                                     }
                                 }).catch((value) => {

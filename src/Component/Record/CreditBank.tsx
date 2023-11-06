@@ -4,32 +4,34 @@ import {Button, Card, Form, Input, message, Modal, Select, Space, Table} from "a
 import {useEffect, useState} from "react";
 import {useDispatch} from "../../Redux/Store";
 import {CreditBankChildColumns, CreditBankColumns} from "../../Config/Resource/columns";
-import records from "../../Page/Records";
+
 
 const CreditBank = () => {
     const [credits, setCredits] = useState<any>();
-    const [record, setRecord] = useState<any>(undefined);
+    const [User, setUser] = useState<any>(undefined);
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
     //自动得到学生的总学分
     useEffect(() => {
-        if(record)
+        if(User)
         {
-            Api.getUserCredits({data: {user_id: record.user_id}}).then((res: any) => {
+            Api.getUserCredits({data: {user_id: User.user_id}}).then((res: any) => {
                 setCredits(res.credit);
             }).catch(() => {
                 message.error('刷新重试')
             })
             AddTableVersion('StudentCreditTable');
         }
-    }, [record]);
+    }, [User]);
     return (
-        <>
+        <div
+            className={"table-container"}
+        >
             <Card extra={
                 <>
-                    <SelectUser setRecord={(record:any)=>{setRecord(record)}}/>
+                    <SelectUser setRecord={(User:any)=>{setUser(User)}}/>
                     <span
                         style={{
                             backgroundColor: 'rgba(128, 128, 128, 0.1)',
@@ -37,7 +39,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {record?.user_name === undefined ? "请选择" : `已修学分:${credits}`}
+                        {User?.user_name === undefined ? "请选择" : `已修学分:${credits}`}
                     </span>
                 </>
             }>
@@ -46,17 +48,16 @@ const CreditBank = () => {
                         return Api.getRequirements({data: data})
                     }}
                     columns={CreditBankColumns}
-                    expandedRowRender={(record: any) => ChildTable(record)}
+                    expandedRowRender={(record: any) => ChildTable(record,User)}
                     APIRowsTransForm={(rows: any) => {
                         for (let i = 0; i < rows.length; i++) {
                             rows[i] = {key:`${i}`,...rows[i]}
                         }
-                        console.log(rows)
                         return rows
                     }}
                 />
             </Card>
-        </>
+        </div>
     )
 }
 
@@ -119,15 +120,15 @@ export const SelectUser = (props: any) => {
 export default CreditBank;
 
 
-const ChildTable = (record: any) => {
-    // console.log(record);
+const ChildTable = (record: any,user:any) => {
     return (
-        // <Table
-        //     columns={CreditBankChildColumns}
-        // />
         <TableWithPagination
             API={async (data:any) => {
-                return Api.getCourseByCredit({type:record.type,data:data})
+                if(user !== undefined)
+                {
+                    data['user_id'] = user.uesr_id
+                }
+                return Api.getCourseByCredit({type:record.type,data:{...data}})
             }}
             columns={CreditBankChildColumns}
         />

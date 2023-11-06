@@ -5,8 +5,8 @@ import {Form, Input} from "antd";
 
 export const BindForm1 = (
         <>
-            <ItemUsername/>
-            <ItemPassword/>
+            <ItemUsername />
+            <ItemPassword />
             <ItemEmail needVerify={false}/>
         </>
     )

@@ -1,16 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Api} from "../API/api";
 import {
     CheckCircleOutlined,
     CheckCircleTwoTone,
-    CloseCircleFilled,
     CloseCircleOutlined,
     CloseOutlined
 } from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import ValidButton from "../Component/Record/ValidButton";
 import {Button} from "antd";
-
+import "../Config/CSS/Table.css";
 
 const Pass = () => {
     return (
@@ -34,7 +33,7 @@ const OperationRecords = () => {
 
     return (
         <div
-
+            className={"table-container"}
         >
             <TableWithPagination
                 API={async (data: any) => {

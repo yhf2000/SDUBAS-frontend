@@ -26,9 +26,9 @@ const MajorClass = () => {
         <>
             <Image src={college.image} alt={'学校图片'}/>
             <Title level={2}>{college.name}</Title>
-            <div style={{marginLeft: 1200, marginBottom: 20}}>
-                <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>
-            </div>
+            {/*<div style={{marginLeft: 1200, marginBottom: 20}}>*/}
+            {/*    <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>*/}
+            {/*</div>*/}
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',

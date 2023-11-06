@@ -1,6 +1,6 @@
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button, message} from "antd";
+import {Button, message, Space} from "antd";
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import {useSelector} from "react-redux";
@@ -55,66 +55,72 @@ const ResourceProfile = () => {
                     }}
                 />
             </div>
-            <TableWithPagination
-                name={'ResourceTable'}
-                API={async (data: any) => {
-                    return Api.getResource({data: data})
-                }}
-                columns={[
-                    {
-                        title: '名称',
-                        dataIndex: 'name',
-                        key: 'name',
-                        render: (title: string, rows: any) => {
-                            return (
-                                <Button type={'link'} onClick={() => {
-                                    navigate(`/c/resource-info/${rows.Id}`, {state: {row: rows}})
-                                }}>{title}</Button>
-                            )
+            <div className={"table-container"}>
+                <TableWithPagination
+                    name={'ResourceTable'}
+                    API={async (data: any) => {
+                        return Api.getResource({data: data})
+                    }}
+                    columns={[
+                        {
+                            title: '名称',
+                            dataIndex: 'name',
+                            key: 'name',
+                            render: (title: string, rows: any) => {
+                                return (
+                                    <Button type={'link'} onClick={() => {
+                                        navigate(`/c/resource-info/${rows.Id}`, {state: {row: rows}})
+                                    }}>{title}</Button>
+                                )
+                            },
+                            width:"150px"
+                        },
+                        {
+                            title: '状态',
+                            dataIndex: 'state',
+                            key: 'state',
+                            render: (state: any) => {
+                                return (state === 1 ? <span>可用</span> : <span>不可用</span>)
+                            },
+                            width: "150px"
+                        },
+                        {
+                            title: '操作',
+                            key: 'operator',
+                            render: (_: any, rows: any) => {
+                                return (
+                                    <>
+                                        <ModalRoleManage editable={false} newRole={false} newUser={false}
+                                                         btnType={'link'}
+                                                         TableName={`Resource${rows.Id}Roles`} service_type={5}
+                                                         service_id={rows.Id}/>
+                                        <DeleteConfirm
+                                            onConfirm={() => {
+                                                dispatch(getData(
+                                                    'deleteResource',
+                                                    {rId: rows.Id},
+                                                    (res: any) => {
+                                                        addTableVersion('ResourceTable')
+                                                        message.success('删除成功')
+                                                        return Promise.resolve(res);
+                                                    },
+                                                    (error: any) => {
+                                                        message.error('删除失败');
+                                                    }
+                                                ));
+                                            }}//删除的Api
+                                            content={
+                                                <Button type={'link'} danger={true}>删除</Button>
+                                            }
+                                        />
+                                    </>
+                                )
+                            },
+                            width:"150px"
                         }
-                    },
-                    {
-                        title: '状态',
-                        dataIndex: 'state',
-                        key: 'state',
-                        render: (state: any) => {
-                            return (state === 1 ? <span>可用</span> : <span>不可用</span>)
-                        }
-                    },
-                    {
-                        title: '操作',
-                        key: 'operator',
-                        render: (_: any, rows: any) => {
-                            return (
-                                <>
-                                    <ModalRoleManage editable={false} newRole={false} newUser={false} btnType={'link'}
-                                                     TableName={`Resource${rows.Id}Roles`} service_type={5}
-                                                     service_id={rows.Id}/>
-                                    <DeleteConfirm
-                                        onConfirm={() => {
-                                            dispatch(getData(
-                                                'deleteResource',
-                                                {rId: rows.Id},
-                                                (res: any) => {
-                                                    addTableVersion('ResourceTable')
-                                                    message.success('删除成功')
-                                                    return Promise.resolve(res);
-                                                },
-                                                (error: any) => {
-                                                    message.error('删除失败');
-                                                }
-                                            ));
-                                        }}//删除的Api
-                                        content={
-                                            <Button type={'link'} danger={true}>删除</Button>
-                                        }
-                                    />
-                                </>
-                            )
-                        }
-                    }
-                ]}
-            />
+                    ]}
+                />
+            </div>
         </>
     );
 }

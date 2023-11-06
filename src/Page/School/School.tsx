@@ -17,7 +17,7 @@ const School = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 extra={
                     (
@@ -109,7 +109,7 @@ const School = () => {
                     }
                 />
             </Card>
-        </>
+        </div>
     )
 }
 

@@ -11,6 +11,7 @@ import getData from "../../API/getData";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import BatchImport from "../../Component/Common/BatchImport";
+import md5 from "js-md5";
 
 const AddUsersByRole = () => {
     const location = useLocation();
@@ -49,6 +50,7 @@ const AddUsersByRole = () => {
                         dataSubmitter={async (data: any) => {
                             data.enrollment_dt = data.enrollment_dt.split(' ')[0]
                             data.graduation_dt = data.graduation_dt.split(' ')[0]
+                            data.password = md5(data.username+data.password)
                             return Api.newUser({data: data});
                         }}
                     />
