@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Layout, Space, Tree, Image, Tag, Button} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
-import ReactPlayer from "react-player";
 import ReactMarkdown from "react-markdown";
 import {useLocation, useParams} from "react-router-dom";
 import {md_str} from "../../Config/Project/data";
@@ -177,14 +176,16 @@ const ProjectInfo: React.FC = () => {
                 </Sider>
                 <Layout>
                     <Content style={{padding: '24px'}}>
-                        <div>当前选中的菜单ID: {selectedMenuKey}</div>
                         {
                             selectedMenuKey ? selectedMenuKey in IdConMap &&
                                 <ContentPlay url={IdConMap[selectedMenuKey].url} type={IdConMap[selectedMenuKey].file_type} pId={pId}
                                              cId={selectedMenuKey}/>
                                 : (
-                                    <>
-                                    </>
+                                    <div
+                                        style={{textAlign: "left"}}
+                                    >
+                                        <ReactMarkdown children={md_str}/>
+                                    </div>
                                 )
                         }
                     </Content>
@@ -209,10 +210,20 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                (props.type === "application/word" || props.type==='application/word') && (
+                (props.type === "application/docx" || props.type==='application/doc') && (
                     <iframe
                         title="demo.docx"
                         src={"https://view.officeapps.live.com/op/view.aspx?src="+props.url}
+                        width="100%"
+                        height="720px"
+                    />
+                )
+            }
+            {
+                props.type === 'application/pdf'&&(
+                    <iframe
+                        title="demo.docx"
+                        src={props.url}
                         width="100%"
                         height="720px"
                     />

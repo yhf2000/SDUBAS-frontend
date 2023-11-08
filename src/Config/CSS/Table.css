@@ -4,3 +4,9 @@
     padding: 20px; /* 添加内边距 */
     text-align: center;
 }
+.proCard-container{
+    margin: 0 auto; /* 居中对齐 */
+    max-width: 1500px; /* 设置最大宽度 */
+    padding: 20px; /* 添加内边距 */
+    text-align: center;
+}

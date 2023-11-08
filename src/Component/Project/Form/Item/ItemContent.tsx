@@ -72,8 +72,8 @@ const ItemContent = (props: any) => {
                                         accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname === '/c/resources'}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
                             <Switch defaultChecked={false} checkedChildren={'可置换'} onChange={onChange}
-                                    unCheckedChildren={'不可置换'}/>
-                            {checked&&<Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'set_list']}>
+                                    unCheckedChildren={'不可置换'} />
+                            {checked&&<Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'set_list']} noStyle>
                                 <ConditionLimitItem/>
                             </Form.Item>}
                             <Button

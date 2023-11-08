@@ -148,8 +148,11 @@ const TableWithPagination = (props: any) => {
         if (propsTableVersion !== undefined && tableVersion !== propsTableVersion) {
             // 如果数据被外部应用更新，则用 redux 中的数据更新当前行
             if (propsTableVersion < 0) {
-                setTableVersion(-propsTableVersion)
-                setTableDataX(tbData[props.name]?.dataSource)
+                const newTableVersion = -propsTableVersion;
+                if (newTableVersion !== tableVersion) {
+                    setTableVersion(-propsTableVersion)
+                    setTableDataX(tbData[props.name]?.dataSource)
+                }
             } else {
                 // 否则，重新进行请求
                 setTableVersion(propsTableVersion)
@@ -157,7 +160,7 @@ const TableWithPagination = (props: any) => {
                 getInfo(PageNow, PageSize, searchText, values)
             }
         }
-    }, [tbData, tableVersion])
+    }, [tbData,tableVersion])
 
     return (
         <>

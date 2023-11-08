@@ -21,7 +21,7 @@ const College = () => {
     }
     return (
         <>
-            <Image src={row.image} alt={'学校图片'}/>
+            <Image src={row.image} alt={'学校图片'} style={{width:'300px'}}/>
             <Title level={2}>{row.name}</Title>
             <div className={"table-container"}>
                 <Card
@@ -60,7 +60,7 @@ const College = () => {
                                 <List.Item>
                                     <Row>
                                         <Col>
-                                            <Image src={item.image} alt={'学院院徽'}/>
+                                            <Image src={item.image} alt={'学院院徽'} style={{width:'125px'}} />
                                         </Col>
                                         <Col flex={'auto'}>
                                             <Button type={'link'}

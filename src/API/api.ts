@@ -200,7 +200,7 @@ export const Api: { [key: string]: any } = {
         return request.put(`/resources/financial/${data.fId}`, data?.data);//修改资金项目
     },
     getFund: async (data: any) => {
-        return request.get('/resources/financial', data?.data);//获得资金列表
+        return request.get('/resources/financial/search', data?.data);//获得资金列表
     },
     updateNote: async (data: any) => {
         return Promise.resolve(true);//需要重写
@@ -341,12 +341,16 @@ export const Api: { [key: string]: any } = {
 
     //日志
     getValid:async (data:any)=>{
-        // return request.get()
-        if(data.id == 1)
-            return {data:true}
-        return {data:false}
+        return request.get("/users/get_operation",data.data)
+        // if(data.id == 1)
+        //     return {data:true}
+        // return {data:false}
+    },
+    getValidAll:async (data:any)=>{
+        // console.log(data.data)
+        return request.get('/users/verify_hash',data.data);
     },
     getOperationLogs:async (data:any)=>{
-        return {rows:[{valid:1,id:1},{valid:2,id:2}]}
+        return request.get("/users/get_operation",data.data)
     }
 }

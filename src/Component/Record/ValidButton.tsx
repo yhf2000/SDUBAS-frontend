@@ -6,16 +6,17 @@ import {CheckCircleTwoTone, CloseCircleOutlined, CloseOutlined} from "@ant-desig
 const ValidButton = (props: any) => {
     const [loadings, setLoadings] = useState<boolean>(false);
     const [res, setRes] = useState<boolean | undefined>(undefined)
-
-    useEffect(()=>{
+    useEffect(() => {
         setRes(props.isPass);
-    },[])
+    }, [props.isPass])
     const enterLoading = () => {
         setLoadings(true);
-        Api.getValid({id:props.record.id})
+        Api.getValid({id: props.record.id})
             .then((data: any) => {
                 setRes(data.data);
-            })
+            }).catch(() => {
+            setLoadings(false)
+        })
     };
     return (
         <>
@@ -23,8 +24,8 @@ const ValidButton = (props: any) => {
                 res === undefined && (
                     <Button
                         type="link"
-                        loading={loadings}
                         onClick={() => enterLoading()}
+                        loading={props.loading || loadings}
                     >
                         Click me!
                     </Button>
@@ -32,12 +33,12 @@ const ValidButton = (props: any) => {
             }
             {
                 res === true && (
-                    <Button icon={<CheckCircleTwoTone twoToneColor={"#52c41a"}/>} type={'ghost'} disabled={true} />
+                    <Button icon={<CheckCircleTwoTone twoToneColor={"#52c41a"}/>} type={'ghost'} disabled={true}/>
                 )
             }
             {
                 res === false && (
-                    <Button icon={<CloseCircleOutlined style={{color: 'red'}}/>} type={'ghost'} disabled={true} />
+                    <Button icon={<CloseCircleOutlined style={{color: 'red'}}/>} type={'ghost'} disabled={true}/>
                 )
             }
         </>

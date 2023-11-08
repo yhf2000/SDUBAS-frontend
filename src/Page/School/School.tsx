@@ -55,7 +55,7 @@ const School = () => {
                                     <List.Item>
                                         <Row>
                                             <Col>
-                                                <Image src={row.image} alt={'学校校徽'}/>
+                                                <Image src={row.image} alt={'学校校徽'} style={{width:'125px'}}/>
                                             </Col>
                                             <Col flex={'auto'}>
                                                 <Button type={'link'} onClick={() => {

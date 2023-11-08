@@ -103,7 +103,7 @@ const UploadFile = (props: any) => {
     return (
         <>
             {!isValueEmpty(value) ? (
-                <div>
+                <>
                     <Button type={'link'} onClick={() => {
                         Api.getDownLoadUrl({data: {id: value.file_id ? value.file_id : value}}).then((data: any) => {
                             window.open(data.url);
@@ -113,7 +113,7 @@ const UploadFile = (props: any) => {
                         setVisible(true);
                         onChange(null);
                     }}>重新上传</Button>
-                </div>
+                </>
             ) : (!visible && <Button style={{width: '80px'}} onClick={() => {
                 setVisible(true)
             }} icon={<UploadOutlined/>}/>)}
@@ -153,8 +153,9 @@ const ItemUpload = (props: any) => {
     return (
         <Form.Item
             name={props.name ?? 'file_id'}
-            label={props.label ?? '上传文件'}
+            // label={props.label ?? '上传文件 '}
             {...props}
+            noStyle
         >
             <UploadFile {...props} />
         </Form.Item>

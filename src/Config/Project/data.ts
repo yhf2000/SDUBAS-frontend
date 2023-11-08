@@ -68,17 +68,13 @@ export const ProOptions=[
         value: '实验'
     },
     {
-        key: '活动',
-        value: '活动'
-    },
-    {
-        key: '竞赛',
-        value: '竞赛'
-    },
-    {
         key: '课程',
         value: '课程'
-    }
+    },
+    {
+        key:'教学资源',
+        value:'教学资源'
+    },
 ]
 
 export const CntOptions = [
@@ -104,7 +100,39 @@ export const tagOptions = [
     {
         key:'2',
         value:"省级优秀"
-    }
+    },
+    {
+        key: '3',
+        value: '学术研究',
+    },
+    {
+        key: '4',
+        value: '科技创新',
+    },
+    {
+        key: '5',
+        value: '文化艺术',
+    },
+    {
+        key: '6',
+        value: '社会公益',
+    },
+    {
+        key: '7',
+        value: '教育培训',
+    },
+    {
+        key: '8',
+        value: '健康生活',
+    },
+    {
+        key: '9',
+        value: '环境保护',
+    },
+    {
+        key: '10',
+        value: '创业创新',
+    },
 ]
 
 

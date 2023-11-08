@@ -9,8 +9,8 @@ import {useDispatch} from "../../../Redux/Store";
 const SubmissionSForm = (props: any) => {
     const [inputValue, setInputValue] = useState('');
     const dispatch = useDispatch();
-    const addTableVersion = (name:string)=>{
-        dispatch({type:'addTableVersion',name:name})
+    const addTableVersion = (name: string) => {
+        dispatch({type: 'addTableVersion', name: name})
     }
     const handleInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -40,12 +40,14 @@ const SubmissionSForm = (props: any) => {
                 }}
                 onFinish={(values: any) => {
                     console.log(values);
-                        return Api.submit({pId: props.pId, cId: props.cId, data: values}).then(() => {
-                            message.success('提交成功');
-                            addTableVersion(`SubmitContentTable-${props.cId}`);
-                            return Promise.resolve(true);
-                        }).catch(()=>{message.error('错误')})
-                    }
+                    return Api.submit({pId: props.pId, cId: props.cId, data: values}).then(() => {
+                        message.success('提交成功');
+                        addTableVersion(`SubmitContentTable-${props.cId}`);
+                        return Promise.resolve(true);
+                    }).catch(() => {
+                        // message.error('错误')
+                    })
+                }
                 }//需要添加addTableVersion
             >
                 {props.rows.type === 0 && (
@@ -73,12 +75,12 @@ const SubmissionSForm = (props: any) => {
                     <ItemUpload
                         label={'上传文件'}
                         name={'file_id'}
-                        accept={"."+props.rows.type_limit}
+                        accept={"." + props.rows.type_limit}
                         aes={true}
                     />
                 )}
                 <Form.Item name={'pc_submit_id'} initialValue={props.rows.id} style={{display: 'none'}}>
-                    <Input type={'hidden'} />
+                    <Input type={'hidden'}/>
                 </Form.Item>
             </ModalForm>
         </>

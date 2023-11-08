@@ -10,13 +10,13 @@ import {PersonalProfileColumns} from "../../Config/Resource/columns";
 import {useDispatch} from "../../Redux/Store"; // 引入 CSS 样式文件
 const PersonalProfile = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer)
-    const [record, setRecord] = useState<any>(undefined);
+    const [record, setRecord] = useState<any>({user_name:userinfo.userInfo?.username,card_id:userinfo.userInfo?.card_id});
     const dispatch = useDispatch()
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
     useEffect(() => {
-        console.log(1)
+        // console.log(record)
         AddTableVersion('PersonalTable')
     }, [record])
     return (
@@ -40,23 +40,25 @@ const PersonalProfile = () => {
                 <Descriptions
                     title={"用户信息"}
                 >
-                    <Descriptions.Item label={'姓名'}>{record?.username}</Descriptions.Item>
-                    <Descriptions.Item label={'入学时间'}>2021-09-06</Descriptions.Item>
+                    <Descriptions.Item label={'姓名'}>{record?.user_name}</Descriptions.Item>
+                    <Descriptions.Item label={'入学时间'}>{record?.enrollment_dt}</Descriptions.Item>
                     <Descriptions.Item label={'毕业时间'}>/</Descriptions.Item>
-                    <Descriptions.Item label={'学号'}>202100150155</Descriptions.Item>
-                    <Descriptions.Item label={'去向'}>家里蹲</Descriptions.Item>
+                    <Descriptions.Item label={'学号'}>{record?.card_id}</Descriptions.Item>
                 </Descriptions>
-                {
-                    record && <TableWithPagination
+                <TableWithPagination
                         name={'PersonalTable'}
                         columns={PersonalProfileColumns}
                         API={async (data: any) => {
                             // console.log(record)
-                            return Api.getPersonalProfile({data: {user_id: record.user_id, ...data}})
+                            if(record?.user_id)
+                            {
+                                data = {user_id:record.user_id, ...data}
+                            }
+                            return Api.getPersonalProfile({data: {...data}})
                         }}
                         bordered
                     />
-                }
+
 
                 {/*<TableWithPagination*/}
                 {/*    */}

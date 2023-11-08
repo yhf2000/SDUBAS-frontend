@@ -40,7 +40,7 @@ const ConditionLimitItem = (props:any) => {
                         }
                         <Form.Item>
                             <Button type="dashed" onClick={() => add()} block>
-                                添加内容
+                                添加置换条件
                             </Button>
                         </Form.Item>
                     </div>

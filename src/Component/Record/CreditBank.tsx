@@ -4,27 +4,30 @@ import {Button, Card, Form, Input, message, Modal, Select, Space, Table} from "a
 import {useEffect, useState} from "react";
 import {useDispatch} from "../../Redux/Store";
 import {CreditBankChildColumns, CreditBankColumns} from "../../Config/Resource/columns";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
 
 
 const CreditBank = () => {
+    const userinfo = useSelector((state: IState) => state.UserReducer)
     const [credits, setCredits] = useState<any>();
-    const [User, setUser] = useState<any>(undefined);
+    const [User, setUser] = useState<any>({user_name:userinfo.userInfo?.username});
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
     //自动得到学生的总学分
-    useEffect(() => {
-        if(User)
-        {
-            Api.getUserCredits({data: {user_id: User.user_id}}).then((res: any) => {
-                setCredits(res.credit);
-            }).catch(() => {
-                message.error('刷新重试')
-            })
-            AddTableVersion('StudentCreditTable');
-        }
-    }, [User]);
+    // useEffect(() => {
+    //     if(User)
+    //     {
+    //         Api.getUserCredits({data: {user_id: User.user_id}}).then((res: any) => {
+    //             setCredits(res.credit);
+    //         }).catch(() => {
+    //             // message.error('刷新重试')
+    //         })
+    //         AddTableVersion('StudentCreditTable');
+    //     }
+    // }, [User]);
     return (
         <div
             className={"table-container"}
@@ -39,7 +42,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {User?.user_name === undefined ? "请选择" : `已修学分:${credits}`}
+                        {User?.user_name === undefined ? "请选择" : `${User.user_name} 已修学分:${credits}`}
                     </span>
                 </>
             }>
@@ -50,9 +53,12 @@ const CreditBank = () => {
                     columns={CreditBankColumns}
                     expandedRowRender={(record: any) => ChildTable(record,User)}
                     APIRowsTransForm={(rows: any) => {
+                        let tot = 0;
                         for (let i = 0; i < rows.length; i++) {
+                            tot += rows[i].completedCredits
                             rows[i] = {key:`${i}`,...rows[i]}
                         }
+                        setCredits(tot);
                         return rows
                     }}
                 />

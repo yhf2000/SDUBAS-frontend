@@ -1,15 +1,16 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Api} from "../API/api";
 import {
     CheckCircleOutlined,
-    CheckCircleTwoTone,
-    CloseCircleOutlined,
     CloseOutlined
 } from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import ValidButton from "../Component/Record/ValidButton";
 import {Button} from "antd";
 import "../Config/CSS/Table.css";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
+import {useDispatch} from "../Redux/Store";
 
 const Pass = () => {
     return (
@@ -29,12 +30,41 @@ const Reject = () => {
     )
 }
 const OperationRecords = () => {
+    const dataSource = useSelector((state: IState) => state.TableReducer.tableData['OperationsTable'])
     const [isPass, setIsPass] = useState<any>(undefined);
-
+    const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch();
+    const setDataSource = (data: any, name: string) => {
+        return dispatch({type: 'setDataSource', data: data, name: name, add: true})
+    }
+    useEffect(() => {
+        setIsPass(undefined);
+    }, [dataSource?.tablePageInfo?.pageNow])
+    const onClick = () => {
+        setLoading(true)
+        if (dataSource) {
+            const ids = dataSource['dataSource'].map((d: any) => d.id)
+            Api.getValidAll({data: {id_list: ids}}).then((res: any) => {
+                let flag = true;
+                const data = dataSource['dataSource'].map((d: any,index:number) => {
+                    if(res[index].verify === false){flag=false}
+                    return {...d, result: res[index].verify}
+                })
+                setIsPass(flag)
+                setDataSource(data, 'OperationsTable');
+                setLoading(false);
+            })
+                .catch(() => {
+                    setLoading(false)
+                })
+        }
+    }
     return (
         <div
             className={"table-container"}
         >
+            {isPass === undefined ? <Button onClick={onClick} loading={loading}>全部验证</Button> : (isPass ? <Pass/> :
+                <Reject/>)}
             <TableWithPagination
                 API={async (data: any) => {
                     return Api.getOperationLogs({data: data})
@@ -42,25 +72,23 @@ const OperationRecords = () => {
                 name={'OperationsTable'}
                 columns={[
                     {
-                        title: '验证',
-                        key: 'valid',
-                        dataIndex: 'valid',
-                        width: "200px"
+                        title:'操作',
+                        key:'operation',
+                        dataIndex: 'func'
+                    },
+                    {
+                        title: '时间',
+                        key:'time',
+                        dataIndex: 'oper_dt'
                     },
                     {
                         title: '结果',
                         key: 'result',
                         dataIndex: 'result',
                         render: (pass: any, record: any) => {
-                            if (isPass === undefined)
-                                return (
-                                    <ValidButton record={record} isPass={isPass}/>
-                                )
-                            if (pass)
-                                return <Button icon={<CheckCircleTwoTone twoToneColor={"#52c41a"}/>} type={'ghost'}
-                                               disabled={true}/>
-                            return <Button icon={<CloseCircleOutlined style={{color: 'red'}}/>} type={'ghost'}
-                                           disabled={true}/>
+                            return (
+                                <ValidButton record={record} loading={loading} isPass={record?.result}/>
+                            )
                         },
                         width: "200px"
                     }

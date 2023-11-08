@@ -1,17 +1,14 @@
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button, Card, DatePicker, message, Modal, Space} from "antd";
+import { Card, Space} from "antd";
 import {useLocation} from "react-router-dom";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {BindForm1, EditUserForm} from "../../Component/User/Form/BindForm1";
 import {BindForm2} from "../../Component/User/Form/BindForm";
-import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
-import DeleteConfirm from "../../Component/Common/DeleteConfirm";
-import getData from "../../API/getData";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import BatchImport from "../../Component/Common/BatchImport";
-import md5 from "js-md5";
+import {sha256} from "js-sha256";
 
 const AddUsersByRole = () => {
     const location = useLocation();
@@ -50,7 +47,7 @@ const AddUsersByRole = () => {
                         dataSubmitter={async (data: any) => {
                             data.enrollment_dt = data.enrollment_dt.split(' ')[0]
                             data.graduation_dt = data.graduation_dt.split(' ')[0]
-                            data.password = md5(data.username+data.password)
+                            data.password = sha256(data.password+data.username)
                             return Api.newUser({data: data});
                         }}
                     />

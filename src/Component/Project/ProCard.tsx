@@ -15,30 +15,13 @@ import ProjectForm2 from "./Form/ProjectForm2";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
 import {arraytostr} from "../../Utils/arraytostr";
 import {useLocation, useNavigate} from "react-router-dom";
-// import ProjectForm2 from "./Form/ProjectForm2";
-
-
-const initialValues = {
-    roles: [
-        {
-            roleName: '角色1',
-            assignedUsers: ['用户1', '用户2'],
-        },
-        {
-            roleName: '角色2',
-            assignedUsers: ['用户3', '用户4'],
-        },
-    ],
-};
 
 
 export default function ProCard({item,TableName,pathname}: any) {
     const [t] = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
-    // const [url,setUrl] = useState('')
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log(item.url);
     const AddTableVersion = (name:string)=>{
         dispatch({type:'addTableVersion',name:name});
     }
@@ -51,7 +34,7 @@ export default function ProCard({item,TableName,pathname}: any) {
         >
             <Row gutter={16}>
                 <Col span={4}>
-                    <Image src={item.url} alt="Item Image" style={{width: '100%', height: 'auto'}} preview={false}/>
+                    <Image src={item.url} alt="Item Image" style={{width: '150px', height: '150px'}} preview={false}/>
                 </Col>
                 <Col span={16}
                      onMouseEnter={() => setIsHovered(true)}

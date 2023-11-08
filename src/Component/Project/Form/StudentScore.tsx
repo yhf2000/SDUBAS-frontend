@@ -23,14 +23,14 @@ const MyRender = (props:any)=>{
                 >
                     <TextArea
                         disabled={true}
-                        value={"别看了没有传"}
+                        value={rows.content}
                     />
                 </Modal>
                 <Button type={'link'} onClick={()=>{setVisible(true)}}>查看</Button>
             </>
         )
     }
-    return <Button type={'link'}>查看</Button>
+    return <Button type={'link'} href={rows.url} download>下载</Button>
 }
 const columns = [
     {

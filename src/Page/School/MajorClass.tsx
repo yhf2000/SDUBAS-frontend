@@ -24,7 +24,7 @@ const MajorClass = () => {
     }
     return (
         <>
-            <Image src={college.image} alt={'学校图片'}/>
+            <Image src={college.image} alt={'学院图片'} style={{width:'300px'}}/>
             <Title level={2}>{college.name}</Title>
             {/*<div style={{marginLeft: 1200, marginBottom: 20}}>*/}
             {/*    <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>*/}
@@ -71,9 +71,6 @@ const MajorClass = () => {
                             return (
                                 <List.Item>
                                     <Row>
-                                        <Col>
-                                            <Image src={item.image} alt={'专业'}/>
-                                        </Col>
                                         <Col flex={'auto'}>
                                             <span>{item.name}</span>
                                         </Col>
@@ -170,9 +167,6 @@ const MajorClass = () => {
                             return (
                                 <List.Item>
                                     <Row>
-                                        <Col>
-                                            <Image src={item.image} alt={'班级'}/>
-                                        </Col>
                                         <Col flex="auto">
                                             <span>{item.name}</span>
                                         </Col>

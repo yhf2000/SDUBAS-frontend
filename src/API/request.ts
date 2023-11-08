@@ -30,9 +30,8 @@ const getZipFile: any = async (url: string, data: object, config?: AxiosRequestC
 
 
 const messageDisabledList = [
-    "/user/getProfile",
-    "/submit/queryACProblem",
-    "/group/my"
+    "/users/getProfile",
+    "/projects/project/type"
 ]
 
 const dealResponse = async (resp: any, url: string) => {
@@ -58,6 +57,8 @@ const dealResponse = async (resp: any, url: string) => {
             return Promise.reject("网络错误")
         }
         switch (response.data.code) {
+            case 401:
+                return Promise.reject(response.data.message)
             default:
                 if (messageDisabledList.indexOf(url) === -1)
                     message.error(response.data.message);

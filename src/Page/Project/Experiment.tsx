@@ -22,56 +22,40 @@ const Experiment = () => {
     // console.log('there is ')
     return (
         <>
-            <div></div>
-            <ModalFormUseForm
-                titile={'新建实验'}
-                type={'create'}
-                btnName={'新建项目'}
-                TableName={'ExperimentMainTable'}
-                subForm={[
-                    {
-                        component: ProjectForm1,
-                        label: "",
-                    },
-                    {
-                        component: ProjectForm2({service_type: 7}),
-                        label: ""
-                    }
-                ]}
-                dataSubmitter={(value: any) => {
-                    console.log('up', value);
-                    value.tag = arraytostr(value.tag);
-                    return Api.newPro({
-                        data: value
-                    });
+            <div
+                style={{
+                    right: 0, top: 0,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    padding: '20px',
                 }}
-            />
-
-            <Card
-                extra={
-                    <ModalFormUseForm
-                        titile={'新建实验'}
-                        type={'create'}
-                        btnName={'新建项目'}
-                        TableName={'ExperimentMainTable'}
-                        subForm={[
-                            {
-                                component: ProjectForm1,
-                                label: "",
-                            },
-                            {
-                                component: ProjectForm2({service_type: 7}),
-                                label: ""
-                            }
-                        ]}
-                        dataSubmitter={(value: any) => {
-                            console.log('up', value);
-                            value.tag = arraytostr(value.tag);
-                            return Api.newPro({
-                                data: value
-                            });
-                        }}
-                    />}
+            >
+                <ModalFormUseForm
+                    titile={'新建实验'}
+                    type={'create'}
+                    btnName={'新建项目'}
+                    TableName={'ExperimentMainTable'}
+                    subForm={[
+                        {
+                            component: ProjectForm1,
+                            label: "",
+                        },
+                        {
+                            component: ProjectForm2({service_type: 7}),
+                            label: ""
+                        }
+                    ]}
+                    dataSubmitter={(value: any) => {
+                        console.log('up', value);
+                        value.tag = arraytostr(value.tag);
+                        return Api.newPro({
+                            data: value
+                        });
+                    }}
+                />
+            </div>
+            <div
+                className={"proCard-container"}
             >
                 <TableWithPagination
                     name={'ExperimentMainTable'}
@@ -108,7 +92,7 @@ const Experiment = () => {
                         )
                     }}
                 />
-            </Card>
+            </div>
         </>
     );
 }
