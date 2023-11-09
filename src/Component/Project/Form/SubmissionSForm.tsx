@@ -8,6 +8,7 @@ import {useDispatch} from "../../../Redux/Store";
 
 const SubmissionSForm = (props: any) => {
     const [inputValue, setInputValue] = useState('');
+    const text = props.rows.commit ? "重新提交" : "提交";
     const dispatch = useDispatch();
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
@@ -19,12 +20,12 @@ const SubmissionSForm = (props: any) => {
 
     const button = (props.rows.type === 0 ? (
             <Button type="link">
-                提交文本
+                {text+"文本"}
             </Button>
         )
         : (
             <Button type="link">
-                提交文件
+                {text+"文件"}
             </Button>
         ))
     return (

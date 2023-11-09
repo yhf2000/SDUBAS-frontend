@@ -13,9 +13,10 @@ import {setState} from "@antv/s2";
 
 const {Dragger} = Upload;
 const UploadFile = (props: any) => {
-    const [visible, setVisible] = useState(false);
     const {value, onChange} = props;
-    const [fileName, setFileName] = useState(value?.name || '');
+    const [visible, setVisible] = useState(false);
+    console.log(value)
+    const [fileName, setFileName] = useState(value?.name);
     const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
     const [AESKey,setAESKey] = useState<any>();
     const dispatch = useDispatch();
@@ -23,9 +24,12 @@ const UploadFile = (props: any) => {
         dispatch({type: 'setRSAPbKey', data: data})
     }
     useEffect(() => {
-        if (value?.name)
-            onChange(value.file_id);
-    }, [])
+        if(props.value?.name)
+        {
+            setFileName(value?.name)
+            onChange(value?.file_id);
+        }
+    }, [props.value])
 
     let nameList: string[] = []
     for (let nm of props.accept.split(",")) {
@@ -36,6 +40,13 @@ const UploadFile = (props: any) => {
     }
 
     const preUpload = async (file: any) => {
+        if(props.sizeLimit)
+        {
+            if(file.size/(1024*1024) > props.sizeLimit)//MB
+            {
+                return new Promise<void>((resolve,reject)=>{message.error('文件大小超过限制');return reject();})
+            }
+        }
         //先计算时长
         const fileType = file.type;
         let duration: number | null = null;
@@ -50,10 +61,11 @@ const UploadFile = (props: any) => {
         if(props.aes)
         {
             setAESKey(generateAESKey());
+            // console.log(file)
             file = await encrypt(file,AESKey);
         }
         const code = await calculateHash(file);
-        console.log(code);
+        // console.log(code);
         const size = file.size;
         return new Promise<void>((resolve, reject) => {
             let data;
@@ -108,7 +120,7 @@ const UploadFile = (props: any) => {
                         Api.getDownLoadUrl({data: {id: value.file_id ? value.file_id : value}}).then((data: any) => {
                             window.open(data.url);
                         })
-                    }}>{fileName}</Button>
+                    }}>{fileName||value?.name}</Button>
                     <Button danger onClick={() => {
                         setVisible(true);
                         onChange(null);

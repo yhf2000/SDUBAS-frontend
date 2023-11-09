@@ -23,8 +23,7 @@ const ModalContentSubmit = (props: any) => {
             title: "提交",
             key: "submit",
             render: (_: any, rows: any) => {
-                return (rows.commit===0?<SubmissionSForm pId={props.pId} cId={props.cId} rows={rows} />
-                        :<span>已提交</span> //如果需要
+                return (<SubmissionSForm pId={props.pId} cId={props.cId} rows={rows} />//如果需要，可以重新提交
                 )
             }
         },

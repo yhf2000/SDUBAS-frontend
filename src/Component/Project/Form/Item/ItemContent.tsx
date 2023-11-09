@@ -13,11 +13,17 @@ const ItemContent = (props: any) => {
     const onChange = () => {
         setChecked(!checked);
     }
-    console.log(props.pathname)
+    // console.log(props.pathname)
     return (
         <Form.List name={'contents'}>
             {(fields, {add, remove}) => (
                 <>
+                    <Form.Item
+                    >
+                        <Button type="dashed" onClick={() => add()} block>
+                            添加内容
+                        </Button>
+                    </Form.Item>
                     {fields.map((field) => (
                         <Space key={field.key} style={{marginBottom: 8}} wrap>
                             <Form.Item
@@ -56,7 +62,7 @@ const ItemContent = (props: any) => {
                                 label={'类型'}
                                 noStyle
                             >
-                                <Select style={{width: 120}}>
+                                <Select style={{width: 120}} placeholder={"内容类型"}>
                                     {props.options.map((option: { key: string, value: string }) => {
                                         return (
                                             <Select.Option
@@ -71,11 +77,9 @@ const ItemContent = (props: any) => {
                             <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
                                         accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname === '/c/resources'}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
-                            <Switch defaultChecked={false} checkedChildren={'可置换'} onChange={onChange}
-                                    unCheckedChildren={'不可置换'} />
-                            {checked&&<Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'set_list']} noStyle>
-                                <ConditionLimitItem/>
-                            </Form.Item>}
+                            <Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'feature']} noStyle>
+                                <ConditionLimitItem />
+                            </Form.Item>
                             <Button
                                 key={field.name+'btn'}
                                 type={'link'}
@@ -85,11 +89,6 @@ const ItemContent = (props: any) => {
                             </Button>
                         </Space>
                     ))}
-                    <Form.Item>
-                        <Button type="dashed" onClick={() => add()} block>
-                            添加内容
-                        </Button>
-                    </Form.Item>
                 </>
             )
             }

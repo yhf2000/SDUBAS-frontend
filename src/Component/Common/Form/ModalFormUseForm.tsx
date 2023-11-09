@@ -211,6 +211,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     >
                         {props.subForm[0].component}
                     </Form>
+                    {props.otherContent&&props.otherContent}
                 </Modal>
             )}
             {props.subForm.length !== 1 && (

@@ -9,6 +9,11 @@ const RoleManageForm = (props:any) => {
         <Form.List name="roles">
             {(fields, {add, remove}) => (
                 <>
+                    <Form.Item>
+                        <Button type="dashed" onClick={() => add()} block>
+                            添加角色
+                        </Button>
+                    </Form.Item>
                     {fields.map((field) => (
                         <Space key={field.name} style={{display: 'flex', marginBottom: 8}} align="baseline">
                             <Form.Item
@@ -36,11 +41,6 @@ const RoleManageForm = (props:any) => {
                             </Button>
                         </Space>
                     ))}
-                    <Form.Item>
-                        <Button type="dashed" onClick={() => add()} block>
-                            添加角色
-                        </Button>
-                    </Form.Item>
                 </>
             )}
         </Form.List>

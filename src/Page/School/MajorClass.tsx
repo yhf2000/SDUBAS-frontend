@@ -24,8 +24,10 @@ const MajorClass = () => {
     }
     return (
         <>
-            <Image src={college.image} alt={'学院图片'} style={{width:'300px'}}/>
-            <Title level={2}>{college.name}</Title>
+            <div style={{minWidth: '1500px'}}>
+                <Image src={college.image} alt={'学院图片'} style={{width: 'auto', height: '200px'}}/>
+                <Title level={2}>{college.name}</Title>
+            </div>
             {/*<div style={{marginLeft: 1200, marginBottom: 20}}>*/}
             {/*    <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>*/}
             {/*</div>*/}
@@ -33,10 +35,12 @@ const MajorClass = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 gap: '20px',
+                minWidth: '1500px'
             }}>
                 <Card
-                    style={{width: 800}}
+                    style={{minWidth: "700px"}}
                     title={'专业'}
+                    headStyle={{textAlign: 'left'}}
                     extra={
                         (
                             <Space>
@@ -134,8 +138,9 @@ const MajorClass = () => {
                     />
                 </Card>
                 <Card
-                    style={{width: 800}}
+                    style={{minWidth: "700px"}}
                     title={'班级'}
+                    headStyle={{textAlign: 'left'}}
                     extra={(
                         <Space>
                             <ModalFormUseForm

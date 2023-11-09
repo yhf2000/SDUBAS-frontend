@@ -19,6 +19,9 @@ const School = () => {
     return (
         <div className={"table-container"}>
             <Card
+                title={'学校管理'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1000px'}}
                 extra={
                     (
                         <>

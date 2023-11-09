@@ -32,7 +32,11 @@ const CreditBank = () => {
         <div
             className={"table-container"}
         >
-            <Card extra={
+            <Card
+                title={'学分银行'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1000px'}}
+                extra={
                 <>
                     <SelectUser setRecord={(User:any)=>{setUser(User)}}/>
                     <span

@@ -29,9 +29,12 @@ const Course = () => {
     return (
         <>
             <Card
+                title={'课程平台'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1500px'}}
                 extra={
                     <ModalFormUseForm
-                        titile={'新建课程'}
+                        title={'新建课程'}
                         type={'create'}
                         btnName={'新建课程'}
                         TableName={'CourseTable'}
@@ -47,7 +50,7 @@ const Course = () => {
                         ]}
                         dataSubmitter={(value:any)=>{
                             value.tag = arraytostr(value.tag);
-                            console.log(value)
+                            // console.log(value)
                             return Api.newPro({data:value});
                         }}
                     />}

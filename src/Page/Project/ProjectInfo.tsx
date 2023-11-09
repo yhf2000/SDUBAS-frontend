@@ -18,11 +18,14 @@ import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
+import {DownOutlined} from "@ant-design/icons";
+import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
+import {creditsTypeColumn} from "../../Config/Project/columns";
 
 const {Sider, Content} = Layout;
 
 
-type IProjectContentType = "file-video" | "office"  | "markdown"
+type IProjectContentType = "file-video" | "office" | "markdown"
 
 
 interface keyIdMap {
@@ -54,38 +57,6 @@ const ProjectInfo: React.FC = () => {
         setSelectedMenuKey(node.key);
     };
     useEffect(() => {
-        let newTree = [
-            {
-                key: 'credits', title:
-                    <ModalFormUseForm
-                        btnName={'学分认定'}
-                        btnType={'text'}
-                        title={'学分认定'}
-                        subForm={[
-                            {
-                                component: AddCreditByRole({pId: pId}),
-                                label: ''
-                            }
-                        ]}
-                        // dataLoader
-                        dataSubmitter={async (value: any) => {
-                            return Api.addProCredit({pId: pId, data: value})
-                        }}
-                    />,
-            },
-            {
-                key: 'score',
-                title: <UserContentScore pId={pId}/>,
-            },
-            {
-                key: 'apply',
-                title: <ApplyPermission />,
-            },
-            {
-                key:'createApply',
-                title:<CreateTemplate />
-            }
-        ]
         Api.getProContent({pId: pId})
             .then(async (data: any) => {
                 data.map((d: any) => {
@@ -95,7 +66,7 @@ const ProjectInfo: React.FC = () => {
                 console.log(IdConMap);
                 const Tree = buildTree(data);
                 await setTreeData(() => {
-                    return [...Tree, ...newTree]
+                    return [...Tree]
                 });
             })
             .catch(() => {
@@ -112,7 +83,7 @@ const ProjectInfo: React.FC = () => {
                         preview={false}
                         width={80}
                         height={45}
-                        src = {item.url}
+                        src={item.url}
                         alt="数据结构"
                     />
                     <Space direction="vertical" size={0}>
@@ -154,8 +125,12 @@ const ProjectInfo: React.FC = () => {
                                         username={userinfo?.username}//这里可能会替换成userid
                                     />
                                     <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
-                                    <Button onClick={()=>{Api.getRefresh({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新我的</Button>
-                                    <Button onClick={()=>{Api.getRefreshAll({pId:pId,cId:keyIdMap[selectedMenuKey].key})}}>更新全部</Button>
+                                    <Button onClick={() => {
+                                        Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                                    }}>更新我的</Button>
+                                    <Button onClick={() => {
+                                        Api.getRefreshAll({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                                    }}>更新全部</Button>
                                 </>
                             )
                         }
@@ -167,18 +142,53 @@ const ProjectInfo: React.FC = () => {
                     <Tree
                         showLine
                         autoExpandParent={true}
-                        defaultExpandAll={true}
+                        // defaultExpandAll={true}
+                        switcherIcon={<DownOutlined/>}
                         onSelect={handleMenuSelect}
                         selectedKeys={selectedMenuKey !== null ? [selectedMenuKey] : []}
                         treeData={treeData}
                         style={{background: '#f0f2f5', paddingTop: 8, paddingLeft: 4, paddingBottom: 8}}
                     />
+                    <div style={{left: '0%', width: '100px'}}>
+                        {item.type != '教学资源' && (
+                            <><ModalFormUseForm
+                                btnName={'学分认定'}
+                                btnType={'text'}
+                                title={'学分认定'}
+                                subForm={[
+                                    {
+                                        component: AddCreditByRole({pId: pId}),
+                                        label: ''
+                                    }
+                                ]}
+                                // dataLoader
+                                dataSubmitter={async (value: any) => {
+                                    return Api.addProCredit({pId: pId, data: value})
+                                }}
+                                otherContent={
+                                    <TableWithPagination
+                                        name={'CreditsTypeTable'}
+                                        API={async (data: any) => {
+                                            return Api.getTypeCredits({pId: pId, data: data})
+                                        }}
+                                        columns={creditsTypeColumn}
+                                    />
+                                }
+                            />
+                                <UserContentScore pId={pId}/>
+                            </>
+                        )
+                        }
+                        <ApplyPermission/>
+                        <CreateTemplate/>
+                    </div>
                 </Sider>
                 <Layout>
                     <Content style={{padding: '24px'}}>
                         {
                             selectedMenuKey ? selectedMenuKey in IdConMap &&
-                                <ContentPlay url={IdConMap[selectedMenuKey].url} type={IdConMap[selectedMenuKey].file_type} pId={pId}
+                                <ContentPlay url={IdConMap[selectedMenuKey].url}
+                                             type={IdConMap[selectedMenuKey].file_type} pId={pId}
                                              cId={selectedMenuKey}/>
                                 : (
                                     <div
@@ -210,17 +220,17 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                (props.type === "application/docx" || props.type==='application/doc') && (
+                (props.type === "application/docx" || props.type === 'application/doc') && (
                     <iframe
                         title="demo.docx"
-                        src={"https://view.officeapps.live.com/op/view.aspx?src="+props.url}
+                        src={"https://view.officeapps.live.com/op/view.aspx?src=" + props.url}
                         width="100%"
                         height="720px"
                     />
                 )
             }
             {
-                props.type === 'application/pdf'&&(
+                props.type === 'application/pdf' && (
                     <iframe
                         title="demo.docx"
                         src={props.url}

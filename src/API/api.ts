@@ -277,6 +277,9 @@ export const Api: { [key: string]: any } = {
     getRefreshAll:async (data:any)=>{
         return request.get(`/projects/${data.pId}/${data.cId}/finish/super`)
     },
+    getTypeCredits:async (data:any)=>{
+        return request.get(`/projects/${data.pId}/credits/all`,data.data);//获得所有的学分认证
+    },
     //creditBank学分银行
     getUserCredits: async (data: any) => {
         return request.get('/projects/user/credits',data.data);
@@ -289,8 +292,11 @@ export const Api: { [key: string]: any } = {
         // return {rows:[{key:'0',name:'黄垚挺',type:'必修',completedCredits:70,requiredCredits:100},{key:'1',name:'黄垚挺',type:'国学',completedCredits:70,requiredCredits:100}]}
     },
     getCourseByCredit:async (data:any)=>{
-      return request.get(`/projects/project/list/${data.type}`,data.data);
+      return request.get(`/projects/project/list/${data.type}`,data?.data);
       // return {rows:[{course:'人工智能',credits:5,complete:1}]}
+    },
+    getAllCourse:async (data:any)=>{
+        return request.get('/projects/list',data?.data);//请求所有课程
     },
 
     //permission权限

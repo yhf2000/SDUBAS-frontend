@@ -65,7 +65,7 @@ const AddSubmissionForm = (props:any) => {
                                 ]}
                                 noStyle
                             >
-                                <InputNumber placeholder="字数限制"/>
+                                <InputNumber placeholder="字数限制" min={0} max={10000}/>
                             </Form.Item>)}
                             {type[field.name] === "1" && (
                                 <>
@@ -86,7 +86,7 @@ const AddSubmissionForm = (props:any) => {
                                         ]}
                                         noStyle
                                     >
-                                        <InputNumber placeholder="文件大小限制"/>
+                                        <InputNumber placeholder="文件大小限制" min={0} max={1000}/>
                                     </Form.Item>
                                     <Form.Item
                                         {...field}

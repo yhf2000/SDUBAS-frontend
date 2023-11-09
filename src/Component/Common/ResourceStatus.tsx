@@ -51,7 +51,7 @@ const ContinuousTimeGrid: React.FC<Props> = ({id, apply, start, end}) => {
         // console.log('activeKey',activeKey)
         Api.getResourceUse({rId: id,day:activeKey})
             .then((res: any) => {
-                console.log(res);
+                // console.log(res);
                 setBookings(res);
             })
     }, [activeKey])
@@ -156,7 +156,7 @@ const ContinuousTimeGrid: React.FC<Props> = ({id, apply, start, end}) => {
                                 }
                             ]}
                             dataSubmitter={(value: any) => {
-                                console.log('test',value)
+                                // console.log('test',value)
                                 return Api.applyResource({rId: id, data: value})
                             }}
                             afterSubmit={() => {

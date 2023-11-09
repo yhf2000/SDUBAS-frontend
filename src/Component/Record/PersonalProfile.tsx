@@ -10,7 +10,7 @@ import {PersonalProfileColumns} from "../../Config/Resource/columns";
 import {useDispatch} from "../../Redux/Store"; // 引入 CSS 样式文件
 const PersonalProfile = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer)
-    const [record, setRecord] = useState<any>({user_name:userinfo.userInfo?.username,card_id:userinfo.userInfo?.card_id});
+    const [record, setRecord] = useState<any>({user_name:userinfo.userInfo?.username});
     const dispatch = useDispatch()
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
@@ -23,7 +23,11 @@ const PersonalProfile = () => {
         <div
             className={"table-container"}
         >
-            <Card extra={
+            <Card
+                title={'个人档案'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1000px'}}
+                extra={
                 <>
                     <SelectUser setRecord={setRecord}/>
                     <span
@@ -33,7 +37,7 @@ const PersonalProfile = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {record === undefined ? "请选择" : `当前用户为:${record.user_name}`}
+                        {record?.username === undefined ? "请选择" : `当前用户为:${record?.user_name??userinfo.userInfo?.username}`}
                 </span>
                 </>
             }>
