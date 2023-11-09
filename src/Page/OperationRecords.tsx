@@ -56,7 +56,7 @@ const OperationRecords = () => {
                     if (res[index].verify === false) {
                         flag = false
                     }
-                    return {...d, result: res[index].verify}
+                    return {...d, result: res[index].verify,block_number:res[index].block_number}
                 })
                 setIsPass(flag)
                 setDataSource(data, 'OperationsTable');
@@ -110,7 +110,7 @@ const OperationRecords = () => {
                             dataIndex: 'oper_dt'
                         },
                         {
-                            title: '结果',
+                            title: '验证结果',
                             key: 'result',
                             dataIndex: 'result',
                             render: (pass: any, record: any) => {
@@ -119,6 +119,14 @@ const OperationRecords = () => {
                                 )
                             },
                             width: "200px"
+                        },
+                        {
+                            title:'区块号',
+                            key:'block_number',
+                            dataIndex:'block_number',
+                            render:(block_number:number)=>{
+                                return(block_number === undefined ? (<>未验证</>) : (<>{block_number}</>))
+                            }
                         }
                     ]}
                 />
