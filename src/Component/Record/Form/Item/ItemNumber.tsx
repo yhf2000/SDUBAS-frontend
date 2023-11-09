@@ -1,17 +1,19 @@
-import {Form, Input, InputNumber} from "antd";
+import {Form, InputNumber} from "antd";
 import React from "react";
 import {withTranslation} from "react-i18next";
-import {Api} from "../../../../API/api";
 
 const ItemNumber = (props: any) => {
     const validateNumber = (_:any, value:any, callback:any) => {
         if (isNaN(value)) {
             callback('请输入有效的数字');
         } else {
-            callback();
+            if(value > props.max || value < props.min)
+                callback('输入越界')
+            else
+                callback();
         }
-    };
 
+    };
     return (
         <Form.Item
             name={props.name}
@@ -24,6 +26,8 @@ const ItemNumber = (props: any) => {
             <InputNumber
                 disabled={props.editable === false}
                 bordered={props.editable}
+                min={props.min??0}
+                max={props.max??undefined}
             />
         </Form.Item>
     )

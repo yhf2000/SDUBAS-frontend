@@ -3,18 +3,21 @@ import ItemPassword from "../../Component/User/Form/Item/ItemPassword";
 import {Api} from "../../API/api";
 import {useNavigate, useParams} from "react-router-dom";
 import Title from "antd/es/typography/Title";
-import md5 from "js-md5";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
+import {sha256} from "js-sha256";
 
 const NewPwd = () =>{
     const {token} = useParams();
     const navigate = useNavigate();
+    const userName = useSelector((state:IState)=>state.UserReducer.userInfo?.username)
     return(
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Form
                 title={'设置新密码'}
                 autoFocus
                 onFinish={(data:any)=>{
-                    data.password = md5(data.password)
+                    data.password = sha256(data.password+userName)
                     Api.setPass({token:token,data:data}).then(
                         (res:any)=>{
                             message.success('设置成功');

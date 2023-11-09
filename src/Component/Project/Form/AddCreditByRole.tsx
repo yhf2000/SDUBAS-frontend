@@ -74,11 +74,15 @@ const AddCreditByRole = (props: any) => {
             </Form.Item>
             <Form.Item
                 name={'role_id'}
+                label={'目标角色'}
+                rules={[{required:true}]}
             >
                 <Input placeholder={'请输入角色'}/>
             </Form.Item>
             <Form.Item
                 name={'type'}
+                label={'类型'}
+                rules={[{required:true}]}
             >
                 <Input placeholder={'请输入学分类型'}/>
             </Form.Item>
@@ -95,7 +99,7 @@ const AddCreditByRole = (props: any) => {
             {/*    })}*/}
             {/*    </Select>*/}
             {/*</Form.Item>*/}
-            <ItemNumber required={true} name={'credit'}/>
+            <ItemNumber required={true} name={'credit'} min={0} max={10} label={'学分'}/>
         </>
     );
 }

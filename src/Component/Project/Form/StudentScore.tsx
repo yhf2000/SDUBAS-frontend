@@ -23,14 +23,14 @@ const MyRender = (props:any)=>{
                 >
                     <TextArea
                         disabled={true}
-                        value={"别看了没有传"}
+                        value={rows.content}
                     />
                 </Modal>
                 <Button type={'link'} onClick={()=>{setVisible(true)}}>查看</Button>
             </>
         )
     }
-    return <Button type={'link'}>查看</Button>
+    return <Button type={'link'} href={rows.url} download>下载</Button>
 }
 const columns = [
     {
@@ -62,7 +62,7 @@ const StudentScore = (props: any) => {
             </Form.Item>
             <Form.Item name={'user_id'} initialValue={props.uId} style={{display:'none'}}>
             </Form.Item>
-            <ItemNumber name={'score'} label={'成绩'}/>
+            <ItemNumber name={'score'} label={'成绩'} max={100}/>
 
             <ItemType name={'is_pass'} label={'通过'} options={[
                 {

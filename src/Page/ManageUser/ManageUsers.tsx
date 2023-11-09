@@ -1,14 +1,14 @@
-import {Button, Card, Form, Input, message, Select} from "antd";
+import {Button, Card, Form, Input} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {Api} from "../../API/api";
 import React from "react";
-import getData from "../../API/getData";
-import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import {useDispatch} from "../../Redux/Store";
 import {useNavigate} from "react-router-dom";
 import ItemPermission from "../../Component/Permission/Form/Item/ItemPermission";
 import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
+import "../../Config/CSS/Table.css";
+
 
 const ManageUsers = () => {
     const dispatch = useDispatch();
@@ -17,10 +17,10 @@ const ManageUsers = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 title={'用户管理'}
-                headStyle={{fontSize: 28}}
+                headStyle={{textAlign:'left'}}
                 extra={(
                     <ModalFormUseForm
                         title={'添加角色'}
@@ -75,7 +75,7 @@ const ManageUsers = () => {
                                                 {
                                                     component: (
                                                         <>
-                                                            <Form.Item name={'role_id'} style={{display:'none'}}>
+                                                            <Form.Item name={'role_id'} style={{display:'none'}} initialValue={row.role_id}>
                                                             </Form.Item>
                                                             <Form.Item name={'role_name'}>
                                                                 <Input/>
@@ -88,9 +88,9 @@ const ManageUsers = () => {
                                                     label: ''
                                                 },
                                             ]}
-                                            // dataSubmitter={async (values: any) => {
-                                            //     return Api.updateUser({: row.id, data: values})
-                                            // }}
+                                            dataSubmitter={async (values: any) => {
+                                                return Api.updateRole({role_id: row.id, data: values})
+                                            }}
                                             initData={row}//还需要有权限,或者使用dataLoader
                                         />
                                     </>
@@ -100,7 +100,7 @@ const ManageUsers = () => {
                     ]}
                 />
             </Card>
-        </>
+        </div>
     )
 }
 

@@ -12,7 +12,7 @@ const ApplyPermission = (props:any)=>{
     const [visible,setVisible] = useState(false);
     return(
             <>
-                <Button type={'text'} onClick={()=>setVisible(true)}>申请</Button>
+                <Button type={'text'} onClick={()=>setVisible(true)}>申请角色</Button>
                 <Modal
                     open={visible}
                     onCancel={()=>setVisible(false)}

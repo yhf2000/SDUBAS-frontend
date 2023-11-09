@@ -31,13 +31,15 @@ const ForgetPass = (props: any) => {
                     captchaId: imgId,
                     captcha: values.captcha
                 }
-                data.username=values.username;
+                data.username = values.username;
                 data.email = values.email;
                 data.type = 2;
-                return Api.forgetPassword({data:data}).then(() => {
+                return Api.forgetPassword({data: data}).then(() => {
                     message.success('验证成功');
                     return true
-                }).catch(()=>{console.log('data',data);})
+                }).catch(() => {
+                    // console.log('data', data);
+                })
             }}
         >
             <ItemUsername/>

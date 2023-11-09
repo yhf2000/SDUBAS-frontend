@@ -13,6 +13,7 @@ import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
+import Title from "antd/es/typography/Title";
 
 
 const Experiment = () => {
@@ -21,12 +22,16 @@ const Experiment = () => {
 
     // console.log('there is ')
     return (
-        <Card
-            extra={
-                <ModalFormUseForm
-                    titile={'新建实验'}
+        <>
+            <Card
+                title={'实验平台'}
+                headStyle={{textAlign: 'left'}}
+                style={{minWidth:'1500px'}}
+                bordered={false}
+                extra={<ModalFormUseForm
+                    title={'新建实验'}
                     type={'create'}
-                    btnName={'新建项目'}
+                    btnName={'新建实验'}
                     TableName={'ExperimentMainTable'}
                     subForm={[
                         {
@@ -34,53 +39,63 @@ const Experiment = () => {
                             label: "",
                         },
                         {
-                            component: ProjectForm2({service_type:7}),
+                            component: ProjectForm2({service_type: 7}),
                             label: ""
                         }
                     ]}
                     dataSubmitter={(value: any) => {
-                        console.log('up',value);
+                        console.log('up', value);
                         value.tag = arraytostr(value.tag);
+                        value.contents.forEach((e: any) => {
+                            e.feature = JSON.stringify(e.feature);
+                        })
                         return Api.newPro({
                             data: value
                         });
                     }}
                 />}
-        >
-            <TableWithPagination
-                name={'ExperimentMainTable'}
-                useList={true}
-                API={async (data:any)=>{return Api.getProListByType({data:{projectType:'实验',tag:'',...data}})}}
-                // initData={initData}
-                size={'small'}
-                getForm={(onFinish: any) => {
-                    return (
-                        <Space size={30}>
-                            <Form.Item label={'标签'}>
-                                <Select onChange={onFinish} mode={'multiple'} style={{width:120}}>
-                                    <Select.Option value={'国家'}>国家</Select.Option>
-                                    <Select.Option value={'省级'}>省级</Select.Option>
-                                </Select>
-                            </Form.Item>
-                            <Form.Item label={"名称"} name={"title"}>
-                                <Input onPressEnter={() => {
-                                    onFinish();
-                                }}/>
-                            </Form.Item>
-                        </Space>
-                    );
-                }}
-                useFormBtn={false}
-                defaultPageSize={12}
-                renderItem={(item: any) => {
-                    return (
-                        <List.Item key={item.name}>
-                            <ProCard item={item}  TableName={'ExperimentMainTable'}/>
-                        </List.Item>
-                    )
-                }}
-            />
-        </Card>
+            >
+                <div
+                    className={"proCard-container"}
+                >
+                    <TableWithPagination
+                        name={'ExperimentMainTable'}
+                        useList={true}
+                        API={async (data: any) => {
+                            return Api.getProListByType({data: {projectType: '实验', tag: '', ...data}})
+                        }}
+                        // initData={initData}
+                        size={'small'}
+                        getForm={(onFinish: any) => {
+                            return (
+                                <Space size={30}>
+                                    <Form.Item label={'标签'}>
+                                        <Select onChange={onFinish} mode={'multiple'} style={{width: 120}}>
+                                            <Select.Option value={'国家'}>国家</Select.Option>
+                                            <Select.Option value={'省级'}>省级</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item label={"名称"} name={"title"}>
+                                        <Input onPressEnter={() => {
+                                            onFinish();
+                                        }}/>
+                                    </Form.Item>
+                                </Space>
+                            );
+                        }}
+                        useFormBtn={false}
+                        defaultPageSize={12}
+                        renderItem={(item: any) => {
+                            return (
+                                <List.Item key={item.name}>
+                                    <ProCard item={item} TableName={'ExperimentMainTable'}/>
+                                </List.Item>
+                            )
+                        }}
+                    />
+                </div>
+            </Card>
+        </>
     );
 }
 

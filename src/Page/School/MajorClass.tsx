@@ -24,19 +24,23 @@ const MajorClass = () => {
     }
     return (
         <>
-            <Image src={college.image} alt={'学校图片'}/>
-            <Title level={2}>{college.name}</Title>
-            <div style={{marginLeft: 1200, marginBottom: 20}}>
-                <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>
+            <div style={{minWidth: '1500px'}}>
+                <Image src={college.image} alt={'学院图片'} style={{width: 'auto', height: '200px'}}/>
+                <Title level={2}>{college.name}</Title>
             </div>
+            {/*<div style={{marginLeft: 1200, marginBottom: 20}}>*/}
+            {/*    <ModalRoleManage newRole={true} TableName={'CollegeRolesTable' + college.college_id}/>*/}
+            {/*</div>*/}
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 gap: '20px',
+                minWidth: '1500px'
             }}>
                 <Card
-                    style={{width: 800}}
+                    style={{minWidth: "700px"}}
                     title={'专业'}
+                    headStyle={{textAlign: 'left'}}
                     extra={
                         (
                             <Space>
@@ -71,9 +75,6 @@ const MajorClass = () => {
                             return (
                                 <List.Item>
                                     <Row>
-                                        <Col>
-                                            <Image src={item.image} alt={'专业'}/>
-                                        </Col>
                                         <Col flex={'auto'}>
                                             <span>{item.name}</span>
                                         </Col>
@@ -137,8 +138,9 @@ const MajorClass = () => {
                     />
                 </Card>
                 <Card
-                    style={{width: 800}}
+                    style={{minWidth: "700px"}}
                     title={'班级'}
+                    headStyle={{textAlign: 'left'}}
                     extra={(
                         <Space>
                             <ModalFormUseForm
@@ -170,9 +172,6 @@ const MajorClass = () => {
                             return (
                                 <List.Item>
                                     <Row>
-                                        <Col>
-                                            <Image src={item.image} alt={'班级'}/>
-                                        </Col>
                                         <Col flex="auto">
                                             <span>{item.name}</span>
                                         </Col>

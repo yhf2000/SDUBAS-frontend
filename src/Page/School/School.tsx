@@ -17,8 +17,11 @@ const School = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <>
+        <div className={"table-container"}>
             <Card
+                title={'学校管理'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1000px'}}
                 extra={
                     (
                         <>
@@ -34,7 +37,7 @@ const School = () => {
                                     }
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    // console.log(data)
+                                    console.log(data)
                                     return Api.newSchool({data: data})
                                 }}
                             />
@@ -55,7 +58,7 @@ const School = () => {
                                     <List.Item>
                                         <Row>
                                             <Col>
-                                                <Image src={row.image} alt={'学校校徽'}/>
+                                                <Image src={row.image} alt={'学校校徽'} style={{width:'125px'}}/>
                                             </Col>
                                             <Col flex={'auto'}>
                                                 <Button type={'link'} onClick={() => {
@@ -109,7 +112,7 @@ const School = () => {
                     }
                 />
             </Card>
-        </>
+        </div>
     )
 }
 

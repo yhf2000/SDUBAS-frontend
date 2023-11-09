@@ -47,7 +47,7 @@ const AddBill = (props: any) => {
                     <Select.Option value={1}>出账</Select.Option>
                 </Select>
             </Form.Item>
-            <ItemNumber label='数目' name='amount' required={true}/>
+            <ItemNumber label='数目' name='amount' required={true} min={0}/>
             <ItemText label={'日志'} name={'log_content'} required={true}/>
         </ModalForm>
     )

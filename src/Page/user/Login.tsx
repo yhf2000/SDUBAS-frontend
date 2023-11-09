@@ -12,19 +12,19 @@ const CLogin = () => {
     const location = useLocation()
     const isLogin = useSelector((state: IState) => state.UserReducer.isLogin)
     const navigate = useNavigate();
-    const testLogin = () => {
-        if (isLogin) {
-            let to = getUrlParams(location.search).to
-            if (to === undefined) navigate(UrlPrefix + "/home", {replace: true})
-            else {
-                navigate(to, {replace: true})
-                message.success("loginSuccessfully")
-            }
-        }
-    }
-    useEffect(() => {
-        testLogin();
-    }, []);
+    // const testLogin = () => {
+    //     if (isLogin) {
+    //         let to = getUrlParams(location.search).to
+    //         if (to === undefined) navigate(UrlPrefix + "/home", {replace: true})
+    //         else {
+    //             navigate(to, {replace: true})
+    //             message.success("loginSuccessfully")
+    //         }
+    //     }
+    // }
+    // useEffect(() => {
+    //     testLogin();
+    // }, []);
 
     return (
         <>

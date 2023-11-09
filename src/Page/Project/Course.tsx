@@ -1,11 +1,9 @@
 import {Card, Form, Input, List, message, Select, Space, Tag, Typography} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
-import {useTranslation} from "react-i18next";
 import ProCard from "../../Component/Project/ProCard";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
-import {Link, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
-import {useDispatch} from "../../Redux/Store";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
@@ -31,9 +29,12 @@ const Course = () => {
     return (
         <>
             <Card
+                title={'课程平台'}
+                headStyle={{textAlign:'left'}}
+                style={{minWidth:'1500px'}}
                 extra={
                     <ModalFormUseForm
-                        titile={'新建课程'}
+                        title={'新建课程'}
                         type={'create'}
                         btnName={'新建课程'}
                         TableName={'CourseTable'}
@@ -49,7 +50,7 @@ const Course = () => {
                         ]}
                         dataSubmitter={(value:any)=>{
                             value.tag = arraytostr(value.tag);
-                            console.log(value)
+                            // console.log(value)
                             return Api.newPro({data:value});
                         }}
                     />}

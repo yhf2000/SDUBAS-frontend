@@ -86,7 +86,6 @@ const TableWithPagination = (props: any) => {
             console.log('data',data)
             if (data.rows === null) data.rows = []
             if (props.APIRowsTransForm !== undefined) {
-                console.log('xx')
                 setTableData(props.APIRowsTransForm(data))
             } else setTableData(data.rows)
             if (data.totalNum !== undefined && data.totalNum !== "0") {
@@ -109,7 +108,7 @@ const TableWithPagination = (props: any) => {
                 })
             }
             setLoading(false)
-        }).catch((error:any)=>{})
+        }).catch((error:any)=>{setLoading(false)})
     }
 
     useEffect(() => {
@@ -149,8 +148,11 @@ const TableWithPagination = (props: any) => {
         if (propsTableVersion !== undefined && tableVersion !== propsTableVersion) {
             // 如果数据被外部应用更新，则用 redux 中的数据更新当前行
             if (propsTableVersion < 0) {
-                setTableVersion(-propsTableVersion)
-                setTableDataX(tbData[props.name]?.dataSource)
+                const newTableVersion = -propsTableVersion;
+                if (newTableVersion !== tableVersion) {
+                    setTableVersion(-propsTableVersion)
+                    setTableDataX(tbData[props.name]?.dataSource)
+                }
             } else {
                 // 否则，重新进行请求
                 setTableVersion(propsTableVersion)
@@ -158,7 +160,7 @@ const TableWithPagination = (props: any) => {
                 getInfo(PageNow, PageSize, searchText, values)
             }
         }
-    }, [tbData, tableVersion])
+    }, [tbData,tableVersion])
 
     return (
         <>
@@ -210,7 +212,6 @@ const TableWithPagination = (props: any) => {
                         loading={loading}
                         size={props.size}
                         dataSource={tableData}
-                        // dataSource={props.initData}
                         renderItem={props.renderItem}
                         pagination={{
                             onChange: (page, pageSize) => {
@@ -275,7 +276,6 @@ const TableWithPagination = (props: any) => {
                         columns={props.columns}
                         rowSelection={props.rowSelection}
                         dataSource={tableData}
-                        // dataSource={props.initData}
                         pagination={{
                             onChange: (page, pageSize) => {
                                 getInfo(page, pageSize)

@@ -80,7 +80,6 @@ const CHeader = () => {
         }}>
             <div style={{flex: "125px 0 0", margin: "10px 16px 16px -26px"}} key={"logo"}>
                 <img src={sdu_logo} style={{width: "125px"}} alt={"山东大学 logo"}/>
-
             </div>
             <div style={{minWidth: 0, flex: "auto"}}>
                 <Menu

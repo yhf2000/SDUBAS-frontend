@@ -27,13 +27,13 @@ const Home = () => {
                     <h2 style={{textAlign: 'center', marginBottom: '20px'}}>快速跳转</h2>
                     <Row gutter={[16, 16]} justify="center">
                         <Col xs={24} sm={12} md={8} lg={6}>
-                            <JumpButton title="区块链实验平台" link="/your-link-here" img={BC}/>
+                            <JumpButton title="区块链实验平台" link="/c/experiment" img={BC}/>
                         </Col>
                         <Col xs={24} sm={12} md={8} lg={6}>
-                            <JumpButton title="学分银行" link="/your-link-here" img={CB}/>
+                            <JumpButton title="学分银行" link="/c/creditBank" img={CB}/>
                         </Col>
                         <Col xs={24} sm={12} md={8} lg={6}>
-                            <JumpButton title="个人档案" link="/your-link-here" img={PP}/>
+                            <JumpButton title="个人档案" link="/c/record_personal" img={PP}/>
                         </Col>
                     </Row>
                 </div>

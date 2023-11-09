@@ -6,12 +6,11 @@ import ForgetPass from "./Form/ForgetPass";
 import {useDispatch} from "../../Redux/Store";
 import {loginInfo} from "../../Type/types";
 import getData from "../../API/getData";
-import Register from "./Form/Register";
 import {useLocation, useNavigate} from "react-router-dom";
 import ItemEmail from "./Form/Item/ItemEmail";
 import {useForm} from "antd/es/form/Form";
 import {Api} from "../../API/api";
-import {findByRole} from "@testing-library/react";
+import {sha256} from "js-sha256";
 import md5 from "js-md5";
 
 type LoginType = 'SDUCAS' | 'account';
@@ -20,6 +19,7 @@ type LoginType = 'SDUCAS' | 'account';
 const Login = (props: any) => {
 
     const formRef = useRef<ProFormInstance>()
+    const [loading,setLoading] = useState<boolean|undefined>(undefined)
     const [loginType, setLoginType] = useState<LoginType>("account")
     const [first, setFirst] = useState(false);
     const [username,setUsername] = useState('');
@@ -45,6 +45,7 @@ const Login = (props: any) => {
                         () => {
                             dispatch({type: "userLogout"});
                             props.jump && navigate("/login?to=" + location.pathname, {replace: true});
+                            setLoading(false);
                         }
                     ))
                 } else {
@@ -53,7 +54,7 @@ const Login = (props: any) => {
                 }
             },
             (detail: any) => {
-
+                setLoading(false);
             }
         ))
     }
@@ -72,9 +73,10 @@ const Login = (props: any) => {
                     render: (prop: any, def: any) => {
                         if (loginType !== 'SDUCAS')
                             return <Button type={"primary"} block onClick={() => {
+                                setLoading(true);
                                 formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
                                     if (value.username && value.password){
-                                        // value.password = md5(value.password)
+                                        value.password = sha256(value.password+value.username)
                                         login(value);
                                     }
                                 }).catch((value) => {
@@ -94,7 +96,9 @@ const Login = (props: any) => {
                                     formRef.current?.setFields(sf);
                                 })
                             }
-                            }> Login </Button>
+                            }
+                            loading={loading}
+                            > Login </Button>
                     },
                 }}
             >

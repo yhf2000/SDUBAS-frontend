@@ -9,7 +9,7 @@ import {useDispatch} from "../../Redux/Store";
 const {Dragger} = Upload;
 const BatchImport = (props: any) => {
     const [visible, setVisible] = useState(false);
-    const {value,onChange} = props
+    const {value, onChange} = props
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
@@ -25,24 +25,24 @@ const BatchImport = (props: any) => {
             let arr = utils.sheet_to_json(sheet, {defval: ''});
             let newArr = arr.map((item: any) => {
                 delete item.__EMPTY
-                if(item.入学时间)
-                {
+                if (item.入学时间) {
                     item.入学时间 = moment(new Date((item.入学时间 - 25569) * 86400 * 1000)).format('YYYY-MM-DD');
                     item.毕业时间 = moment(new Date((item.毕业时间 - 25569) * 86400 * 1000)).format('YYYY-MM-DD');
                 }
                 return item
             })
-            if(props.item) {
-                onChange(newArr)
+            if (props.item) {
+                onChange(newArr[0])
                 setVisible(false)
-            }
-            else{
+            } else {
                 setTimeout(() => {
                     props.API(newArr).then(() => {
                             message.success('导入成功！');
                             setVisible(false);
                         }
-                    ).catch(()=>{message.error('导入失败')})
+                    ).catch(() => {
+                        // message.error('导入失败')
+                    })
                 }, 5000);
             }
         };
@@ -52,8 +52,8 @@ const BatchImport = (props: any) => {
         <>
             <Button onClick={() => {
                 setVisible(true)
-            }} type={props.btnType||'primary'}>{props.btnName}</Button>
-            {value&&<>已上传</>}
+            }} type={props.btnType || 'primary'}>{props.btnName}</Button>
+            {value && <>已上传</>}
             <Modal
                 title={props.btnName}
                 open={visible}

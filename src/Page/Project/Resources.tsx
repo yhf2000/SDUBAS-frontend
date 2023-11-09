@@ -1,12 +1,9 @@
-import Course from "./Course";
-import {Button, Card, Form, Input, List, Tabs} from "antd";
+import {Card, List} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import "../../Config/CSS/Resources.css";
-import React, {useState} from "react";
-import ItemTitle from "../../Component/Common/Form/Item/ItemTitle";
-import FileUpload from "../../Component/Common/FileUpload";
+import React from "react";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProCard from "../../Component/Project/ProCard";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
@@ -24,9 +21,11 @@ const Resources = () => {
         <div>
             <Card
                 title={'教学资源'}
+                style={{minWidth:'1500px'}}
+                headStyle={{textAlign:'left'}}
                 extra={(
                     <ModalFormUseForm
-                        titile={'新建资源'}
+                        title={'新建资源'}
                         type={'create'}
                         btnName={'新建资源'}
                         TableName={'ResourceProjectMainTable'}

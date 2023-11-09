@@ -1,6 +1,8 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {message} from "antd";
 import {getAddress} from "../config";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
 
 const baseUrl = getAddress().SERVER
 const service = axios.create({
@@ -8,7 +10,7 @@ const service = axios.create({
     timeout: 5000,
 })
 service.defaults.withCredentials = true
-
+let isLogin = false;
 
 const getZipFile: any = async (url: string, data: object, config?: AxiosRequestConfig, filename?: string) => {
     const response = await service.post(url, data, {
@@ -30,12 +32,12 @@ const getZipFile: any = async (url: string, data: object, config?: AxiosRequestC
 
 
 const messageDisabledList = [
-    "/user/getProfile",
-    "/submit/queryACProblem",
-    "/group/my"
+    "/users/getProfile",
+    "/projects/project/type"
 ]
 
-const dealResponse = async (resp: any, url: string) => {
+const DealResponse = async (resp: any, url: string) => {
+    // const isLogin = useSelector((state:IState)=>state.UserReducer.isLogin)
     try {
         const response = await resp;
         // console.log('response',response);
@@ -46,18 +48,23 @@ const dealResponse = async (resp: any, url: string) => {
         }
         switch (response.data.code) {
             case 0:
+                isLogin = true
                 return response.data.data
             default:
-                message.error(response.data.message);
+                // if(isLogin)
+                    message.error(response.data.message);
                 return Promise.reject(response.data.message)
         }
     } catch (e: any) {
         const response = e.response
         if (response === undefined) {
-            message.error("网络错误")
+            if(isLogin)
+                message.error("网络错误")
             return Promise.reject("网络错误")
         }
         switch (response.data.code) {
+            case 401:
+                return Promise.reject(response.data.message)
             default:
                 if (messageDisabledList.indexOf(url) === -1)
                     message.error(response.data.message);
@@ -67,24 +74,24 @@ const dealResponse = async (resp: any, url: string) => {
 }
 
 const get = async (url: string, params?: object, config?: AxiosRequestConfig) => {
-    return await dealResponse(service.get(url, {
+    return await DealResponse(service.get(url, {
         ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}}, params, ...config,
     }), url)
 }
 
 const post = async (url: string, data: object, config?: AxiosRequestConfig) => {
-    return await dealResponse(service.post(url, data, {
+    return await DealResponse(service.post(url, data, {
         ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}}, ...config
     }), url);
 }
 
 const put = async (url: string, data?: object, config?: AxiosRequestConfig) => {
-    return await dealResponse(service.put(url, data, {
+    return await DealResponse(service.put(url, data, {
         ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}, ...config}
     }), url);
 }
 const Delete = async (url: string, config?: AxiosRequestConfig) => {
-    return await dealResponse(service.delete(url, {
+    return await DealResponse(service.delete(url, {
         ...{headers: {"Cache-Control": "no-cache, no-store, must-revalidate","Access-Control-Allow-Origin":"*"}},
         ...config
     }), url);

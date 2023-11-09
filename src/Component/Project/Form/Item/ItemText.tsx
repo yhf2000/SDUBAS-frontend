@@ -6,6 +6,7 @@ const ItemText = (props: any) => {
         <>
             <Form.Item
                 {...props}
+                noStyle
             >
                 <Text {...props}/>
             </Form.Item>
@@ -25,6 +26,7 @@ const Text = (props: any) => {
                 open={visible}
                 onOk={() => {setDefaultValue(value);setVisible(false);}}
                 onCancel={()=>{onChange(defaultValue);setVisible(false);}}
+                title={'上传文本'}
             >
                 <Input.TextArea
                     onChange={onChange}
