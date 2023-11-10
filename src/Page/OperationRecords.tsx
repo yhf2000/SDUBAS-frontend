@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import ValidButton from "../Component/Record/ValidButton";
-import {Button, Card} from "antd";
+import {Button, Card, Descriptions} from "antd";
 import "../Config/CSS/Table.css";
 import {useSelector} from "react-redux";
 import {IState} from "../Type/base";
@@ -71,9 +71,23 @@ const OperationRecords = () => {
         <div
             className={"table-container"}
         >
+            <Descriptions
+                title={'区块链节点信息'}
+                bordered
+            >
+                <Descriptions.Item label={'节点id'}>{1}</Descriptions.Item>
+                <Descriptions.Item label={'版本信息'}>"p2p": "8",
+                    "block": "11",
+                    "app": "0"</Descriptions.Item>
+                <Descriptions.Item label={'节点名称'}>mytestnet</Descriptions.Item>
+                <Descriptions.Item label={'最新区块高度'}>{1}</Descriptions.Item>
+                <Descriptions.Item label={'最新区块时间戳'}>{1}</Descriptions.Item>
+                <Descriptions.Item label={'验证者地址'}>55A8C4E72E5CE4E6B692F9AFD4F182DC30E8F598</Descriptions.Item>
+            </Descriptions>
             <Card
                 title={'日志记录'}
                 headStyle={{textAlign:'left'}}
+                style={{top:'20px'}}
                 extra={
                     isPass === undefined ? <Button style={{
                         // // padding: '10px 20px',

@@ -1,4 +1,4 @@
-import {Card, List} from "antd";
+import {Card, Form, Input, List, Select, Space} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import { useLocation, useNavigate} from "react-router-dom";
@@ -8,7 +8,8 @@ import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProCard from "../../Component/Project/ProCard";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
-import {arraytostr} from "../../Utils/arraytostr"; // 导入自定义样式
+import {arraytostr} from "../../Utils/arraytostr";
+import {tagOptions} from "../../Config/Project/data"; // 导入自定义样式
 
 const Resources = () => {
     const location = useLocation();
@@ -28,10 +29,10 @@ const Resources = () => {
                         title={'新建资源'}
                         type={'create'}
                         btnName={'新建资源'}
-                        TableName={'ResourceProjectMainTable'}
+                        TableName={'ResourcesTable'}
                         subForm={[
                             {
-                                component: ProjectForm1,
+                                component: ProjectForm1({type:'教学资源'}),
                                 label: "",
                             },
                             {
@@ -52,7 +53,26 @@ const Resources = () => {
                     name={'ResourcesTable'}
                     useList={true}
                     API={async (data: any) => {
-                        return Api.getProListByType({data: {...data, projectType: "课程",tag:''}})
+                        if(data.tag)
+                            data.tag = arraytostr(data.tag);
+                        else data.tag = ''
+                        return Api.getProListByType({data: {...data, projectType: "教学资源"}})
+                    }}
+                    getForm={(onFinish: any) => {
+                        return (
+                            <Space size={30}>
+                                <Form.Item label={'标签'} name={'tag'}>
+                                    <Select onChange={onFinish} mode={'multiple'} style={{width: 120,height:'30px'}}  maxTagCount='responsive'>
+                                        {tagOptions.map((option:any)=>{
+                                            return(<Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>)
+                                        })}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item label={"名称"} name={"project_name"}>
+                                    <Input onPressEnter={onFinish}/>
+                                </Form.Item>
+                            </Space>
+                        );
                     }}
                     // initData={initData}
                     renderItem={(item: any) => {

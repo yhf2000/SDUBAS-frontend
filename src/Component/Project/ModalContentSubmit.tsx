@@ -57,7 +57,6 @@ const ModalContentSubmit = (props: any) => {
                         return Api.getPCSubmission({
                             pId:props.pId,
                             data: {
-
                                 // userId: props.userId ?? "1",
                                 contentId: props.cId,
                                 ...data

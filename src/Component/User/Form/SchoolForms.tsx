@@ -20,7 +20,8 @@ export const SchoolForm = () => {
 export const CollegeForm=(props:any)=>{
     return (
         <>
-            <ItemName label={'学院全称'} name={'name'}/>
+            <ItemName label={'学院全称'} name={'name'} required={true}/>
+            <ItemUpload name={'college_logo_id'} label={'学院logo'} accept={".png,.jpg"}/>
             {/*需要school_id*/}
             {/*<ItemPermission type={'1'}/>*/}
             <Form.Item name={'school_id'} initialValue={props.school_id} style={{display:'none'}}>
@@ -29,7 +30,6 @@ export const CollegeForm=(props:any)=>{
             <Form.Item name={'college_id'} initialValue={props.college_id??undefined} style={{display:'none'}}>
                 {/*<Input type={'hidden'} />*/}
             </Form.Item>
-            <ItemUpload name={'college_logo_id'} label={'学院logo'} accept={".png,.jpg"}/>
         </>
     )
 }

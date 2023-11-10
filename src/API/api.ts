@@ -357,6 +357,9 @@ export const Api: { [key: string]: any } = {
         return request.get('/users/verify_hash',data.data);
     },
     getOperationLogs:async (data:any)=>{
-        return request.get("/users/get_operation",data.data)
+        return request.get("/users/get_operation",data.data)//获得所有操作日志
+    },
+    getBlockInfo:async (data:any)=>{
+
     }
 }

@@ -60,43 +60,43 @@ const ManageUsers = () => {
                                 )
                             }
                         },
-                        {
-                            title: '操作',
-                            key: 'operator',
-                            render: (_: any, row: any) => {
-                                return (
-                                    <>
-                                        <ModalFormUseForm
-                                            title={'编辑角色'}
-                                            TableName={'RolesMainTable'}
-                                            btnName={'编辑'}
-                                            type={'update'}
-                                            subForm={[
-                                                {
-                                                    component: (
-                                                        <>
-                                                            <Form.Item name={'role_id'} style={{display:'none'}} initialValue={row.role_id}>
-                                                            </Form.Item>
-                                                            <Form.Item name={'role_name'}>
-                                                                <Input/>
-                                                            </Form.Item>
-                                                            <Form.Item name={'privilege'}>
-                                                                <ItemPermission service_type = {0}/>
-                                                            </Form.Item>
-                                                        </>
-                                                    ),
-                                                    label: ''
-                                                },
-                                            ]}
-                                            dataSubmitter={async (values: any) => {
-                                                return Api.updateRole({role_id: row.id, data: values})
-                                            }}
-                                            initData={row}//还需要有权限,或者使用dataLoader
-                                        />
-                                    </>
-                                )
-                            }
-                        }
+                        // {
+                        //     title: '操作',
+                        //     key: 'operator',
+                        //     render: (_: any, row: any) => {
+                        //         return (
+                        //             <>
+                        //                 <ModalFormUseForm
+                        //                     title={'编辑角色'}
+                        //                     TableName={'RolesMainTable'}
+                        //                     btnName={'编辑'}
+                        //                     type={'update'}
+                        //                     subForm={[
+                        //                         {
+                        //                             component: (
+                        //                                 <>
+                        //                                     <Form.Item name={'role_id'} style={{display:'none'}} initialValue={row.role_id}>
+                        //                                     </Form.Item>
+                        //                                     <Form.Item name={'role_name'}>
+                        //                                         <Input/>
+                        //                                     </Form.Item>
+                        //                                     <Form.Item name={'privilege'}>
+                        //                                         <ItemPermission service_type = {0}/>
+                        //                                     </Form.Item>
+                        //                                 </>
+                        //                             ),
+                        //                             label: ''
+                        //                         },
+                        //                     ]}
+                        //                     dataSubmitter={async (values: any) => {
+                        //                         return Api.updateRole({role_id: row.id, data: values})
+                        //                     }}
+                        //                     initData={row}//还需要有权限,或者使用dataLoader
+                        //                 />
+                        //             </>
+                        //         )
+                        //     }
+                        // }
                     ]}
                 />
             </Card>

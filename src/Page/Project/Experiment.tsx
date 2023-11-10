@@ -13,7 +13,7 @@ import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
-import Title from "antd/es/typography/Title";
+import {tagOptions} from "../../Config/Project/data";
 
 
 const Experiment = () => {
@@ -35,7 +35,7 @@ const Experiment = () => {
                     TableName={'ExperimentMainTable'}
                     subForm={[
                         {
-                            component: ProjectForm1,
+                            component: ProjectForm1({type:'实验'}),
                             label: "",
                         },
                         {
@@ -44,7 +44,7 @@ const Experiment = () => {
                         }
                     ]}
                     dataSubmitter={(value: any) => {
-                        console.log('up', value);
+                        // console.log('up', value);
                         value.tag = arraytostr(value.tag);
                         value.contents.forEach((e: any) => {
                             e.feature = JSON.stringify(e.feature);
@@ -62,23 +62,26 @@ const Experiment = () => {
                         name={'ExperimentMainTable'}
                         useList={true}
                         API={async (data: any) => {
-                            return Api.getProListByType({data: {projectType: '实验', tag: '', ...data}})
+                            console.log(data)
+                            if(data.tag)
+                                data.tag = arraytostr(data.tag);
+                            else data.tag = ''
+                            return Api.getProListByType({data: {projectType: '实验', ...data}})
                         }}
                         // initData={initData}
                         size={'small'}
                         getForm={(onFinish: any) => {
                             return (
                                 <Space size={30}>
-                                    <Form.Item label={'标签'}>
-                                        <Select onChange={onFinish} mode={'multiple'} style={{width: 120}}>
-                                            <Select.Option value={'国家'}>国家</Select.Option>
-                                            <Select.Option value={'省级'}>省级</Select.Option>
+                                    <Form.Item label={'标签'} name={'tag'}>
+                                        <Select onChange={onFinish} mode={'multiple'} style={{width: 120,height:'30px'}}  maxTagCount='responsive'>
+                                            {tagOptions.map((option:any)=>{
+                                                return(<Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>)
+                                            })}
                                         </Select>
                                     </Form.Item>
-                                    <Form.Item label={"名称"} name={"title"}>
-                                        <Input onPressEnter={() => {
-                                            onFinish();
-                                        }}/>
+                                    <Form.Item label={"名称"} name={"project_name"}>
+                                        <Input onPressEnter={onFinish}/>
                                     </Form.Item>
                                 </Space>
                             );

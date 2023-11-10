@@ -62,7 +62,7 @@ export default function ProCard({item, TableName, pathname}: any) {
                         width={1000}
                         subForm={[
                             {
-                                component: ProjectForm1,
+                                component: ProjectForm1({}),
                                 label: '',
                             },
                             {

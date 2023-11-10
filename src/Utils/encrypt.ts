@@ -16,12 +16,14 @@ export function encrypt(file:any,AESKey:any){
         reader.onload = (event) => {
             // @ts-ignore
             const fileData = event.target.result;
+            console.log(AESKey);
             // @ts-ignore
             const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey,{
                 iv: AESKey, //偏移量
                 mode: CryptoJS.mode.ECB,//加密模式
                 padding: CryptoJS.pad.Pkcs7 //填充
             });
+            // console.log('what');
             // @ts-ignore
             const encryptedFile = new Blob([encryptedData],{name:file.name},{ type: file.type });
             resolve(encryptedFile);

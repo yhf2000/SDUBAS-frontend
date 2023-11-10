@@ -81,6 +81,7 @@ const StudentScore = (props: any) => {
                     return Api.getPCSubmission({
                         pId: props.pId,
                         data: {
+                            userId:props.uId,
                             contentId:props.cId,
                             ...data
                         }
@@ -104,7 +105,7 @@ const StudentScore = (props: any) => {
                     }
                 ]}
                 dataSubmitter = {async (data:any)=>{
-                    console.log('sub',data);
+                    // console.log('sub',data);
                     return Api.scoreProCon({cId:props.cId,pId:props.pId,data:data});
                 }}
             />

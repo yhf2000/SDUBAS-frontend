@@ -48,14 +48,16 @@ const ItemContent = (props: any) => {
                                 noStyle
                             >
                             </Form.Item>
-                            <Form.Item
-                                {...field}
-                                name={[field.name, 'weight']}
-                                label={'权重'}
-                                noStyle
-                            >
-                                <Input placeholder="内容权重"/>
-                            </Form.Item>
+                            {
+                                <Form.Item
+                                    {...field}
+                                    name={[field.name, 'weight']}
+                                    label={'权重'}
+                                    noStyle
+                                >
+                                    <Input placeholder="内容权重"/>
+                                </Form.Item>
+                            }
                             <Form.Item
                                 {...field}
                                 name={[field.name, 'type']}
@@ -77,9 +79,12 @@ const ItemContent = (props: any) => {
                             <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
                                         accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname === '/c/resources'}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
-                            <Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'feature']} noStyle>
-                                <ConditionLimitItem />
-                            </Form.Item>
+                            {
+                                <Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'feature']} noStyle>
+                                    <ConditionLimitItem />
+                                </Form.Item>
+                            }
+
                             <Button
                                 key={field.name+'btn'}
                                 type={'link'}

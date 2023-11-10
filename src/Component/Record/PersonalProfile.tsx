@@ -37,7 +37,7 @@ const PersonalProfile = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {record?.username === undefined ? "请选择" : `当前用户为:${record?.user_name??userinfo.userInfo?.username}`}
+                        {record?.username === undefined ? `当前用户为${userinfo.userInfo?.username}` : `当前用户为:${record?.user_name}`}
                 </span>
                 </>
             }>

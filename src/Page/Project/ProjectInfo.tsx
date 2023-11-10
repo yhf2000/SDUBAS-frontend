@@ -25,7 +25,7 @@ import {creditsTypeColumn} from "../../Config/Project/columns";
 const {Sider, Content} = Layout;
 
 
-type IProjectContentType = "file-video" | "office" | "markdown"
+type IProjectContentType = "video" | "office_word" | "markdown" | "office_ppt"
 
 
 interface keyIdMap {
@@ -36,7 +36,7 @@ const keyIdMap: keyIdMap = {}//key和id的字典
 const IdConMap: keyIdMap = {}
 const ProjectInfo: React.FC = () => {
     const [selectedMenuKey, setSelectedMenuKey] = useState<number | null>(null);
-    const [type, setType] = useState<IProjectContentType>("office")//原本的数据
+    const [type, setType] = useState<IProjectContentType>("office_word")//原本的数据
     const [treeData, setTreeData] = useState<DataNode[]>([]);//树形数据
     const {pId} = useParams();
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
@@ -211,7 +211,7 @@ const ContentPlay = (props: any) => {
     return (
         <>
             {
-                props.type === "file-video" && (
+                props.type === "video" && (
                     <PlayerWithDuration
                         url={props.url}
                         pId={props.pId}
@@ -220,7 +220,7 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                (props.type === "application/docx" || props.type === 'application/doc') && (
+                (props.type === "office_word") && (
                     <iframe
                         title="demo.docx"
                         src={"https://view.officeapps.live.com/op/view.aspx?src=" + props.url}

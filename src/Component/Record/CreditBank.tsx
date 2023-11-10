@@ -10,7 +10,7 @@ import {IState} from "../../Type/base";
 
 const CreditBank = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer)
-    const [credits, setCredits] = useState<any>();
+    const [credits, setCredits] = useState<any>(0);
     const [User, setUser] = useState<any>({user_name:userinfo.userInfo?.username});
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
@@ -46,7 +46,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {User?.user_name === undefined ? "请选择" : `${User.user_name} 已修学分:${credits}`}
+                        {User?.user_name === undefined ? `当前用户：${userinfo.userInfo?.username}` : `${User.user_name} 已修学分:${credits}`}
                     </span>
                 </>
             }>

@@ -18,7 +18,7 @@ const Score = (props: any) => {
             key: 'score',
             dataIndex: 'score',
             render: (score: any, row: any) => {
-                console.log('row',row);
+                // console.log('row',row);
                 return (
                     <>
                         {

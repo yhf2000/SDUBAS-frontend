@@ -15,7 +15,7 @@ const {Dragger} = Upload;
 const UploadFile = (props: any) => {
     const {value, onChange} = props;
     const [visible, setVisible] = useState(false);
-    console.log(value)
+    // console.log(value)
     const [fileName, setFileName] = useState(value?.name);
     const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
     const [AESKey,setAESKey] = useState<any>();
@@ -60,9 +60,9 @@ const UploadFile = (props: any) => {
         //如果需要加密则加密
         if(props.aes)
         {
-            setAESKey(generateAESKey());
-            // console.log(file)
-            file = await encrypt(file,AESKey);
+            const k = generateAESKey();
+            setAESKey(k);
+            file = await encrypt(file,k);
         }
         const code = await calculateHash(file);
         // console.log(code);
@@ -109,7 +109,7 @@ const UploadFile = (props: any) => {
                 callback(res);
             })
             .catch(() => {
-                message.error('上传失败，请重新上传')
+                // message.error('上传失败，请重新上传')
             })
     }
     return (
@@ -165,9 +165,13 @@ const ItemUpload = (props: any) => {
     return (
         <Form.Item
             name={props.name ?? 'file_id'}
-            // label={props.label ?? '上传文件 '}
+            label={props.label || undefined}
             {...props}
-            noStyle
+            required={props.required}
+            rules={[{
+                required:props.required,
+            }]}
+            noStyle={props.label===undefined}
         >
             <UploadFile {...props} />
         </Form.Item>
