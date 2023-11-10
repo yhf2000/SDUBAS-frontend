@@ -26,7 +26,7 @@ const Experiment = () => {
             <Card
                 title={'实验平台'}
                 headStyle={{textAlign: 'left'}}
-                style={{minWidth:'1500px'}}
+                style={{minWidth:'1200px'}}
                 bordered={false}
                 extra={<ModalFormUseForm
                     title={'新建实验'}
@@ -76,7 +76,7 @@ const Experiment = () => {
                                     <Form.Item label={'标签'} name={'tag'}>
                                         <Select onChange={onFinish} mode={'multiple'} style={{width: 120,height:'30px'}}  maxTagCount='responsive'>
                                             {tagOptions.map((option:any)=>{
-                                                return(<Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>)
+                                                return(<Select.Option key={option.key} value={option.key}>{option.value}</Select.Option>)
                                             })}
                                         </Select>
                                     </Form.Item>
