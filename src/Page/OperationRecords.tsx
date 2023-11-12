@@ -38,7 +38,8 @@ const Reject = () => (
 const OperationRecords = () => {
     const dataSource = useSelector((state: IState) => state.TableReducer.tableData['OperationsTable'])
     const [isPass, setIsPass] = useState<any>(undefined);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [blockInfo,setBlockInfo] = useState<any|undefined>(undefined);
     const dispatch = useDispatch();
     const setDataSource = (data: any, name: string) => {
         return dispatch({type: 'setDataSource', data: data, name: name, add: true})
@@ -46,6 +47,11 @@ const OperationRecords = () => {
     useEffect(() => {
         setIsPass(undefined);
     }, [dataSource?.tablePageInfo?.pageNow])
+    useEffect(()=>{
+        Api.getBlockInfo().then((res:any)=>{
+            setBlockInfo(res);
+        }).catch()
+    },[])
     const onClick = () => {
         if (dataSource) {
             setLoading(true)
@@ -75,14 +81,12 @@ const OperationRecords = () => {
                 title={'区块链节点信息'}
                 bordered
             >
-                <Descriptions.Item label={'节点id'}>{1}</Descriptions.Item>
-                <Descriptions.Item label={'版本信息'}>"p2p": "8",
-                    "block": "11",
-                    "app": "0"</Descriptions.Item>
-                <Descriptions.Item label={'节点名称'}>mytestnet</Descriptions.Item>
-                <Descriptions.Item label={'最新区块高度'}>{1}</Descriptions.Item>
-                <Descriptions.Item label={'最新区块时间戳'}>{1}</Descriptions.Item>
-                <Descriptions.Item label={'验证者地址'}>55A8C4E72E5CE4E6B692F9AFD4F182DC30E8F598</Descriptions.Item>
+                <Descriptions.Item label={'节点id'}>{blockInfo?.id}</Descriptions.Item>
+                <Descriptions.Item label={'版本信息'}>{blockInfo?.protocol_version}</Descriptions.Item>
+                <Descriptions.Item label={'节点名称'}>{blockInfo?.moniker}</Descriptions.Item>
+                <Descriptions.Item label={'最新区块高度'}>{blockInfo?.latest_block_height}</Descriptions.Item>
+                <Descriptions.Item label={'最新区块时间戳'}>{blockInfo?.latest_block_time}</Descriptions.Item>
+                <Descriptions.Item label={'验证者地址'}>{blockInfo?.address}</Descriptions.Item>
             </Descriptions>
             <Card
                 title={'日志记录'}

@@ -2,11 +2,10 @@ import ItemName from "../../Common/Form/Item/ItemName";
 import ItemType from "../../Common/Form/Item/ItemType";
 import ItemUpload from "../../Common/Form/Item/ItemUpload";
 import {activeType, ProOptions, tagOptions} from "../../../Config/Project/data";
-const roles = ['student', 'teacher']
 
 const ProjectForm1 =(props:any)=> (
     <>
-        <ItemUpload accept={'.jpg'} name={'img_id'} label={'上传图片'} aes={false} required={true}/>
+        <ItemUpload accept={'.jpg'} name={'img_id'} label={'上传图片'} aes={false} required={true} type={'image'}/>
         <ItemName label={'项目名称'} name={'name'} required={true}/>
         <ItemType label={'项目类型'} name={'type'} options={ProOptions} default={props.type||undefined} required={true} disabled={true}/>
         <ItemType label={'项目状态'} name={'active'} options={activeType} required={true}/>

@@ -9,24 +9,38 @@ import {useSelector} from "react-redux";
 import {IState} from "../../../../Type/base";
 import {encrypt, generateAESKey} from "../../../../Utils/encrypt";
 import JSEncrypt from 'jsencrypt';
-import {setState} from "@antv/s2";
+import {getBase64} from "../../../../Utils/fileUpload";
+import {RcFile} from "antd/es/upload";
 
 const {Dragger} = Upload;
+
+
 const UploadFile = (props: any) => {
     const {value, onChange} = props;
     const [visible, setVisible] = useState(false);
     // console.log(value)
     const [fileName, setFileName] = useState(value?.name);
+    const [previewImg,setPreviewImg] = useState('')
+    const [fileDd,setFileDd] = useState<any|undefined>(undefined);
     const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
     const [AESKey,setAESKey] = useState<any>();
     const dispatch = useDispatch();
     const setRSAPbKey = (data: any) => {
         dispatch({type: 'setRSAPbKey', data: data})
     }
+    //初始传入的参数
     useEffect(() => {
         if(props.value?.name)
         {
             setFileName(value?.name)
+            //如果是图片需要预览
+            if(props.type === 'image')
+            {
+                setPreviewImg(value.url);
+            }else{
+                setFileDd(value.url);
+            }
+            //将其变为file_id
             onChange(value?.file_id);
         }
     }, [props.value])
@@ -35,17 +49,26 @@ const UploadFile = (props: any) => {
     for (let nm of props.accept.split(",")) {
         nameList.push("*" + nm)
     }
+
+    //始终使用file_id作为返回值
     const callback = (value: any) => {
         onChange(value.file_id)
     }
 
     const preUpload = async (file: any) => {
+        //大小判断
         if(props.sizeLimit)
         {
             if(file.size/(1024*1024) > props.sizeLimit)//MB
             {
                 return new Promise<void>((resolve,reject)=>{message.error('文件大小超过限制');return reject();})
             }
+        }
+        //如果是图片需要预览
+        if(props.type === 'image')
+        {
+            const img = await getBase64(file as RcFile);
+            setPreviewImg(img);
         }
         //先计算时长
         const fileType = file.type;
@@ -116,11 +139,10 @@ const UploadFile = (props: any) => {
         <>
             {!isValueEmpty(value) ? (
                 <>
+                    {props.type === 'image' ?(<img alt='图片' src={previewImg} style={{height:'80px',marginRight:'20px',marginTop:'10px'}} />):(
                     <Button type={'link'} onClick={() => {
-                        Api.getDownLoadUrl({data: {id: value.file_id ? value.file_id : value}}).then((data: any) => {
-                            window.open(data.url);
-                        })
-                    }}>{fileName||value?.name}</Button>
+                       if(fileDd !== undefined) window.open(fileDd);
+                    }}>{fileName||value?.name}</Button>)}
                     <Button danger onClick={() => {
                         setVisible(true);
                         onChange(null);

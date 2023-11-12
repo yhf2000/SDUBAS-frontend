@@ -338,6 +338,15 @@ export const Api: { [key: string]: any } = {
     getCreatedUsers:async (data:any)=>{
         return request.get('/permissions/search_created_user',data.data);
     },
+    addSchoolRole:async (data:any)=>{
+      return request.get('/permissions/educations/schools/add_school_role',data.data)
+    },
+    addCollegeRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_college_role',data.data)
+    },
+    addMajorRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_major_role',data.data)
+    },
 
 
     //个人档案
@@ -361,5 +370,8 @@ export const Api: { [key: string]: any } = {
     },
     getBlockInfo:async (data:any)=>{
 
+    },
+    download:async (data:any)=>{
+        return request.get(`/files/download/${data.token}`)
     }
 }

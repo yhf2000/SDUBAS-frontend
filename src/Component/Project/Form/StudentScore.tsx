@@ -3,7 +3,6 @@ import ModalFormUseForm from "../../Common/Form/ModalFormUseForm";
 import ItemNumber from "../../Record/Form/Item/ItemNumber";
 import TableWithPagination from "../../Common/Table/TableWithPagination";
 import {Api} from "../../../API/api";
-import SubmissionSForm from "./SubmissionSForm";
 import ItemType from "../../Common/Form/Item/ItemType";
 import ItemText from "../../Common/Form/Item/ItemText";
 import TextArea from "antd/es/input/TextArea";
@@ -13,7 +12,7 @@ import {useState} from "react";
 const MyRender = (props:any)=>{
     const [visible,setVisible] = useState(false);
     const {rows} = props;
-    if(rows.type === 0)//如果是文本的话
+    if(rows.content)//如果是文本的话
     {
         return (
             <>
@@ -22,6 +21,7 @@ const MyRender = (props:any)=>{
                     onCancel={()=>{setVisible(false)}}
                 >
                     <TextArea
+                        title={'文本'}
                         disabled={true}
                         value={rows.content}
                     />
@@ -30,7 +30,7 @@ const MyRender = (props:any)=>{
             </>
         )
     }
-    return <Button type={'link'} href={rows.url} download>下载</Button>
+    return <Button type={'link'} onClick={()=>{window.open(rows.url)}}>下载</Button>
 }
 const columns = [
     {
@@ -40,9 +40,9 @@ const columns = [
     },
     {
         title: "提交类型",
-        dataIndex: "type",
+        dataIndex: "content",
         key: "type",
-        render:(type:any)=>(type===0?<span>文本</span>:<span>文件</span>)
+        render:(type:any)=>(type!==undefined?<span>文本</span>:<span>文件</span>)
     },
     {
         title: "查看提交",
@@ -78,11 +78,11 @@ const StudentScore = (props: any) => {
             <TableWithPagination
                 name={`StudentSubmissionTable`}
                 API={async (data: any) => {//该API获得学生在该内容的所有提交包括url
-                    return Api.getPCSubmission({
+                    return Api.getUserSubmission({
                         pId: props.pId,
+                        cId:props.cId,
                         data: {
                             userId:props.uId,
-                            contentId:props.cId,
                             ...data
                         }
                     })

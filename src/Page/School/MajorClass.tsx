@@ -86,7 +86,7 @@ const MajorClass = () => {
                                                 btnName={'编辑'}
                                                 subForm={[
                                                     {
-                                                        component: () => MajorForm({college_id: college.id}),
+                                                        component: () => MajorForm({college_id: college.id,create:0}),
                                                         label: ''
                                                     }
                                                 ]}
@@ -102,6 +102,7 @@ const MajorClass = () => {
                                                 newRole={true} btnType={'link'}
                                                 TableName={'MajorRolesTable' + college.college_id}
                                                 service_type={3} service_id={item.id}
+                                                API={async (data:any)=>{return Api.addMajoreRole({data:data})}}
                                             />
                                         </Col>
                                         <Col>
@@ -194,13 +195,13 @@ const MajorClass = () => {
                                                 }}
                                             />
                                         </Col>
-                                        <Col>
-                                            <ModalRoleManage
-                                                newRole={true}
-                                                editable={true}
-                                                btnType={'link'}
-                                                TableName={'ClassRolesTable' + college.college_id}/>
-                                        </Col>
+                                        {/*<Col>*/}
+                                        {/*    <ModalRoleManage*/}
+                                        {/*        newRole={true}*/}
+                                        {/*        editable={true}*/}
+                                        {/*        btnType={'link'}*/}
+                                        {/*        TableName={'ClassRolesTable' + college.college_id}/>*/}
+                                        {/*</Col>*/}
                                         <Col>
                                             <DeleteConfirm
                                                 onConfirm={() => {

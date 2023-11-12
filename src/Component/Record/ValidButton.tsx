@@ -11,9 +11,9 @@ const ValidButton = (props: any) => {
     }, [props.isPass])
     const enterLoading = () => {
         setLoadings(true);
-        Api.getValid({id: props.record.id})
+        Api.getValidAll({data:{id_list: [props.record.id]}})
             .then((data: any) => {
-                setRes(data.data);
+                setRes(data[0].verify);
             }).catch(() => {
             setLoadings(false)
         })

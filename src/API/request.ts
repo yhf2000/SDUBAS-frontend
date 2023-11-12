@@ -51,7 +51,7 @@ const DealResponse = async (resp: any, url: string) => {
                 isLogin = true
                 return response.data.data
             default:
-                // if(isLogin)
+                if(isLogin)
                     message.error(response.data.message);
                 return Promise.reject(response.data.message)
         }

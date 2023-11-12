@@ -1,6 +1,7 @@
 import {Api} from "../API/api";
 import md5 from "js-md5";
 import {sha256} from "js-sha256";
+import {RcFile} from "antd/es/upload";
 
 function splitIntoChunks(array: Uint8Array, chunkSize: number) {
     const chunks = [];
@@ -41,3 +42,11 @@ export const calculateHash =async (file: File) => {
         }).then(()=>{resolve({hash_md5:md5code,hash_sha256:sha256Hash})})
     })
 }
+
+export const getBase64 = (file: RcFile): Promise<string> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+    });

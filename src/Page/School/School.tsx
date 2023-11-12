@@ -37,7 +37,7 @@ const School = () => {
                                     }
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    console.log(data)
+                                    // console.log(data)
                                     return Api.newSchool({data: data})
                                 }}
                             />
@@ -56,9 +56,9 @@ const School = () => {
                             return (
                                 <>
                                     <List.Item>
-                                        <Row>
+                                        <Row gutter={16} style={{minWidth:'800px'}}>
                                             <Col>
-                                                <Image src={row.image} alt={'学校校徽'} style={{width:'125px'}}/>
+                                                <Image src={row.image} alt={'学校校徽'} style={{height:'80px'}}/>
                                             </Col>
                                             <Col flex={'auto'}>
                                                 <Button type={'link'} onClick={() => {
@@ -80,7 +80,7 @@ const School = () => {
                                                     dataSubmitter={async (values: any) => {
                                                         return Api.updateSchool({sId: row.id, data: values})
                                                     }}
-                                                    initData={row}//还需要有权限,或者使用dataLoader
+                                                    initData={{name:row.name,school_abbreviation:row.school_abbreviation,school_logo_id:{url:row.image,file_id:row.id}}}//还需要有权限,或者使用dataLoader
                                                 />
                                             </Col>
                                             <Col>

@@ -71,12 +71,13 @@ export default function ProCard({item, TableName, pathname}: any) {
                             }
                         ]}
                         dataLoader={async () => {
-                            return Api.getProInfo({pId: item.id})
+                            return Api.getProInfo({pId: item.id}).then((res:any)=>{
+                                return res;
+                            })
                         }}
                         // initData={{img_id:{name:'what',file_id:19}}}
                         dataSubmitter={(value: any) => {
                             value.tag = arraytostr(value.tag);
-                            // console.log('va',value)
                             return Api.updatePro({pId: item.id, data: value});
                         }}
                     />
