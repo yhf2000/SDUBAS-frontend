@@ -82,7 +82,7 @@ const StudentScore = (props: any) => {
                         pId: props.pId,
                         cId:props.cId,
                         data: {
-                            userId:props.uId,
+                            user_id:props.uId,
                             ...data
                         }
                     })

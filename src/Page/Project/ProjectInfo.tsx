@@ -187,7 +187,7 @@ const ProjectInfo: React.FC = () => {
                     <Content style={{padding: '24px'}}>
                         {
                             selectedMenuKey ? selectedMenuKey in IdConMap &&
-                                <ContentPlay url={IdConMap[selectedMenuKey].file_id.url}
+                                <ContentPlay url={IdConMap[selectedMenuKey].file_id?.url}
                                              type={IdConMap[selectedMenuKey].file_type} pId={pId}
                                              cId={selectedMenuKey}/>
                                 : (
