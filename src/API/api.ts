@@ -194,7 +194,7 @@ export const Api: { [key: string]: any } = {
         return request.get(`/resources/financial/${data.fId}/accountbook`, data?.data);//查看账单
     },
     deleteFund: async (data: any) => {
-        return request.delete(`/resources/financial/${data.fId}`, data?.data);//删除资金项目
+        return request.delete(`/resources/financial/${data.fId}/delete`, data?.data);//删除资金项目
     },
     updateFund: async (data: any) => {
         return request.put(`/resources/financial/${data.fId}`, data?.data);//修改资金项目
@@ -369,7 +369,7 @@ export const Api: { [key: string]: any } = {
         return request.get("/users/get_operation",data.data)//获得所有操作日志
     },
     getBlockInfo:async (data:any)=>{
-
+        return request.get('/users/block_chain_information')//获取区块链信息
     },
     download:async (data:any)=>{
         return request.get(`/files/download/${data.token}`)

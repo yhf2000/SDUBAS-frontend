@@ -15,6 +15,9 @@ export interface IUserInfo {
     status: any
     card_id:string
     roles: Role
+    enrollment_dt:string
+    graduation_dt:string
+    realname:string
 }
 
 export interface IUserState {

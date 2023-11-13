@@ -12,11 +12,12 @@ const PersonalProfile = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer)
     const [record, setRecord] = useState<any>({user_name:userinfo.userInfo?.username});
     const dispatch = useDispatch()
+    // console.log(userinfo)
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
     useEffect(() => {
-        // console.log(record)
+        console.log(record)
         AddTableVersion('PersonalTable')
     }, [record])
     return (
@@ -37,18 +38,18 @@ const PersonalProfile = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {record?.username === undefined ? `当前用户为${userinfo.userInfo?.username}` : `当前用户为:${record?.user_name}`}
+                        {record?.user_name === undefined ? `当前用户为${userinfo.userInfo?.username}` : `当前用户为:${record?.user_name}`}
                 </span>
                 </>
             }>
-                <Descriptions
-                    title={"用户信息"}
-                >
-                    <Descriptions.Item label={'姓名'}>{record?.user_name}</Descriptions.Item>
-                    <Descriptions.Item label={'入学时间'}>{record?.enrollment_dt}</Descriptions.Item>
-                    <Descriptions.Item label={'毕业时间'}>/</Descriptions.Item>
-                    <Descriptions.Item label={'学号'}>{record?.card_id}</Descriptions.Item>
-                </Descriptions>
+                {/*<Descriptions*/}
+                {/*    title={"用户信息"}*/}
+                {/*>*/}
+                {/*    <Descriptions.Item label={'姓名'}>{record?.user_name}</Descriptions.Item>*/}
+                {/*    <Descriptions.Item label={'入学时间'}>{record?.enrollment_dt}</Descriptions.Item>*/}
+                {/*    <Descriptions.Item label={'毕业时间'}>{record?.graduation_dt}</Descriptions.Item>*/}
+                {/*    <Descriptions.Item label={'学号'}>{record?.card_id}</Descriptions.Item>*/}
+                {/*</Descriptions>*/}
                 <TableWithPagination
                         name={'PersonalTable'}
                         columns={PersonalProfileColumns}

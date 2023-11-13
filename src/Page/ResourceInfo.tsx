@@ -3,7 +3,7 @@ import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import '../Config/CSS/ResourceInfo.css'
 import {Api} from "../API/api";
 import RequestResource from "../Component/Record/Form/Request";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useLocation, useParams} from "react-router-dom";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {ResourceForm} from "../Component/Record/ResourceProfile";
@@ -25,13 +25,13 @@ const ResourceInfo = () => {
                 headStyle={{textAlign: 'left'}}
                 extra={(
                     <Space>
-                        <Approval
-                            API={async (data: any) => {
-                                return Api.getApplyInfo()
-                            }}
-                            columns={ApprovalColumns({API: 'null'})}
-                            TableName={'Resource' + rId + 'ApplyTable'}
-                        />
+                        {/*<Approval*/}
+                        {/*    API={async (data: any) => {*/}
+                        {/*        return Api.getApplyInfo()*/}
+                        {/*    }}*/}
+                        {/*    columns={ApprovalColumns({API: 'null'})}*/}
+                        {/*    TableName={'Resource' + rId + 'ApplyTable'}*/}
+                        {/*/>*/}
                         <RequestResource rId={rId}
                                          button={<Button type={'primary'} size={'small'}
                                                          style={{marginTop: '20px'}}>申请</Button>}

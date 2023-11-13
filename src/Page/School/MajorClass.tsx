@@ -86,13 +86,14 @@ const MajorClass = () => {
                                                 btnName={'编辑'}
                                                 subForm={[
                                                     {
-                                                        component: () => MajorForm({college_id: college.id,create:0}),
+                                                        component: () => MajorForm({college_id: college.id,create:0,school_id:school.id,major_id:item.id}),
                                                         label: ''
                                                     }
                                                 ]}
                                                 // dataLoader={async ()=>{return }}
                                                 initData={item}
                                                 dataSubmitter={async (data: any) => {
+                                                    console.log(data)
                                                     return Api.updateMajor({mId: item.id, data: data})
                                                 }}
                                             />

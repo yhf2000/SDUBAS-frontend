@@ -1,5 +1,4 @@
 import {AESKey} from "../Action/key";
-import {IUserState} from "../../Type/user";
 import deepClone from "../../Utils/deepClone";
 import {IKeyState} from "../../Type/key";
 

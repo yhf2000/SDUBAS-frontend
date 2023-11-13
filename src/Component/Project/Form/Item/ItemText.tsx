@@ -6,7 +6,6 @@ const ItemText = (props: any) => {
         <>
             <Form.Item
                 {...props}
-                noStyle
             >
                 <Text {...props}/>
             </Form.Item>

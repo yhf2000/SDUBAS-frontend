@@ -49,8 +49,9 @@ const OperationRecords = () => {
     }, [dataSource?.tablePageInfo?.pageNow])
     useEffect(()=>{
         Api.getBlockInfo().then((res:any)=>{
+            console.log(res);
             setBlockInfo(res);
-        }).catch()
+        }).catch(()=>{})
     },[])
     const onClick = () => {
         if (dataSource) {
@@ -82,7 +83,7 @@ const OperationRecords = () => {
                 bordered
             >
                 <Descriptions.Item label={'节点id'}>{blockInfo?.id}</Descriptions.Item>
-                <Descriptions.Item label={'版本信息'}>{blockInfo?.protocol_version}</Descriptions.Item>
+                <Descriptions.Item label={'版本信息'}>{JSON.stringify(blockInfo?.protocol_version)}</Descriptions.Item>
                 <Descriptions.Item label={'节点名称'}>{blockInfo?.moniker}</Descriptions.Item>
                 <Descriptions.Item label={'最新区块高度'}>{blockInfo?.latest_block_height}</Descriptions.Item>
                 <Descriptions.Item label={'最新区块时间戳'}>{blockInfo?.latest_block_time}</Descriptions.Item>
