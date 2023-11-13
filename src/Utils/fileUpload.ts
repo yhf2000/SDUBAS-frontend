@@ -50,3 +50,4 @@ export const getBase64 = (file: RcFile): Promise<string> =>
         reader.onload = () => resolve(reader.result as string);
         reader.onerror = (error) => reject(error);
     });
+

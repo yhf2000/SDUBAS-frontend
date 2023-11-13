@@ -8,6 +8,12 @@ export const generateAESKey = () => {
     return key
 };
 
+function generateRandomAESKey() {
+    var aesKey = new Uint8Array(16);
+    crypto.getRandomValues(aesKey);
+    return aesKey;
+}
+
 function convertWordArrayToUint8Array(wordArray:any) {
     var arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];
     var length = wordArray.hasOwnProperty("sigBytes") ? wordArray.sigBytes : arrayOfWords.length * 4;
@@ -61,7 +67,7 @@ export function decrypt(file:any,AESKey:any){
             })
             const typedArray = convertWordArrayToUint8Array(decrypted);
             var fileDec = new Blob([typedArray],{type:file.type});
-            console.log(AESKey);
+            // console.log(AESKey);
             // @ts-ignore
             // console.log('what');
             // @ts-ignore

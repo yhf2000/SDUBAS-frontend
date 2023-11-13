@@ -84,9 +84,9 @@ const UploadFile = (props: any) => {
         if(props.aes)
         {
             const k = generateAESKey();
-            setAESKey(k);
-            file = await encrypt(file,k);
-            // const file2 = await decrypt(file,k);
+            setAESKey(k.toString());
+            file = await encrypt(file,k.toString());
+            // const file2 = await decrypt(file,k.toString());
         }
         const code = await calculateHash(file);
         // console.log(code);
