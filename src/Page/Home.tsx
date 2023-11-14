@@ -8,13 +8,13 @@ import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
 import Information from "../Component/Record/Information";
 import {Api} from "../API/api";
-import {generateAESKey} from "../Utils/encrypt";
-import CryptoJS from "crypto-js";
+import ItemUpload from "../Component/Common/Form/Item/ItemUpload";
 
 const Home = () => {
     // Api.logout()
     return (
         <>
+            <ItemUpload accept={'.*'} aes={true}/>
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>

@@ -7,10 +7,11 @@ import {isValueEmpty} from "../../../../Utils/isValueEmpty";
 import {useDispatch} from "../../../../Redux/Store";
 import {useSelector} from "react-redux";
 import {IState} from "../../../../Type/base";
-import {decrypt, encrypt, generateAESKey} from "../../../../Utils/encrypt";
+import {encrypt, generateAESKey} from "../../../../Utils/encrypt";
 import JSEncrypt from 'jsencrypt';
 import {getBase64} from "../../../../Utils/fileUpload";
 import {RcFile} from "antd/es/upload";
+import CryptoJS from "crypto-js";
 
 const {Dragger} = Upload;
 
@@ -84,8 +85,8 @@ const UploadFile = (props: any) => {
         if(props.aes)
         {
             const k = generateAESKey();
-            setAESKey(k.toString());
-            file = await encrypt(file,k.toString());
+            setAESKey(k);
+            file = await encrypt(file,k);
             // const file2 = await decrypt(file,k.toString());
         }
         const code = await calculateHash(file);
