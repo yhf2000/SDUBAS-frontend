@@ -41,7 +41,7 @@ export const mainRouter: IBaseRouter[] = [
 
 export const CLayoutRouter: IBaseRouter[] = [
     {id: 0, path: "/home", component: <Home/>},
-    {id: 1, path: "/profile", component: <></>},
+    // {id: 1, path: "/profile", component: <></>},
     {id: 2, path: "/login", component: <CLogin/>},
     {id: 3, path: "/register", component: <></>},
     {id: 4, path: "/Project-info/:pId", component: <ProjectInfo/>},
@@ -56,7 +56,7 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 14, path: "/record_resource", component: <ResourceProfile/>},
     {id: 15, path: "/creditBank", component: <CreditBank/>},
     {id: 16, path: '/record_personal', component: <PersonalProfile/>},
-    {id: 17, path: '/set_password/:token', component: <NewPwd/>},
+    {id: 17, path: '/set_password/:username/:token', component: <NewPwd/>},
     {id: 18, path: '/school', component: <School/>},
     {id: 19, path: 'school/:school_id/college', component: <College/>},
     {id: 20, path: 'school/:school_id/college/:college_id/MajorClass', component: <MajorClass/>},

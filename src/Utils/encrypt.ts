@@ -11,6 +11,18 @@ export const generateAESKey = () => {
         let randomChar = characters.charAt(randomIndex);
         result += randomChar;
     }
+    console.log('result',result);
+    // console.log('64re',btoa(result))
+    const te =CryptoJS.AES.encrypt(result,result,{
+        mode: CryptoJS.mode.ECB,//加密模式
+        padding: CryptoJS.pad.Pkcs7 //填充
+    }).toString()
+    console.log(te)
+    const de = CryptoJS.AES.decrypt(te,result,{
+        mode: CryptoJS.mode.ECB,//加密模式
+        padding: CryptoJS.pad.Pkcs7 //填充
+    })
+    console.log(CryptoJS.enc.Utf8.stringify(de))
     return result;
 };
 
@@ -19,6 +31,8 @@ function generateRandomAESKey() {
     crypto.getRandomValues(aesKey);
     return aesKey;
 }
+
+
 
 function convertWordArrayToUint8Array(wordArray:any) {
     let arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];
@@ -42,7 +56,7 @@ export function encrypt(file:any,AESKey:string){
             const fileData = CryptoJS.lib.WordArray.create(event.target.result);
             console.log(AESKey);
             const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey,{
-                iv: CryptoJS.enc.Utf8.parse(AESKey), //偏移量
+                // iv: CryptoJS.enc.Utf8.parse(AESKey), //偏移量
                 mode: CryptoJS.mode.ECB,//加密模式
                 padding: CryptoJS.pad.Pkcs7 //填充
             }).toString();

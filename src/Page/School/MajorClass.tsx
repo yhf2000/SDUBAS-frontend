@@ -103,7 +103,7 @@ const MajorClass = () => {
                                                 newRole={true} btnType={'link'}
                                                 TableName={'MajorRolesTable' + college.college_id}
                                                 service_type={3} service_id={item.id}
-                                                API={async (data:any)=>{return Api.addMajoreRole({data:data})}}
+                                                API={async (data:any)=>{return Api.addMajorRole({data:data})}}
                                             />
                                         </Col>
                                         <Col>

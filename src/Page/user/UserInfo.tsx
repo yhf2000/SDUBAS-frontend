@@ -12,6 +12,7 @@ import {useNavigate} from "react-router-dom";
 import EditableInput from "../../Component/User/EditableInput";
 import {useForm} from "antd/es/form/Form";
 import ItemEmail from "../../Component/User/Form/Item/ItemEmail";
+import {sha256} from "js-sha256";
 
 
 const UserInfo = () => {
@@ -43,6 +44,9 @@ const UserInfo = () => {
                         okText: "提交"
                     }}
                     onFinish={(values) => {
+                        //将密码+用户名加密发送到后端
+                        values.old_password = sha256(values.old_password+username);
+                        values.new_password = sha256(values.new_password+username);
                         return Api.updatePwd({data:values}).then((res: any) => {
                             dispatch(getData(
                                 'logout',
@@ -123,6 +127,7 @@ const UserInfo = () => {
                             <ItemEmail
                                 name={'token_s6'}
                                 needVerify={true}
+                                exist={true}
                                 getEmail={() => {
                                     return form.validateFields(["email"]).then((data: any) => {
                                         return Promise.resolve(data.email)

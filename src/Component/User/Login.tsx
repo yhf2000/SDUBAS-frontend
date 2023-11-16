@@ -40,6 +40,7 @@ const Login = (props: any) => {
                         (res: any) => {
                             dispatch({type: "setUserInfo", data: res});
                             dispatch({type: "userLogin"});
+                            console.log('what')
                             navigate("/c/home", {replace: true});
                         },
                         () => {

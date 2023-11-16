@@ -65,7 +65,7 @@ const ModalRoleManage = (props: any) => {
                             // console.log('id',props.service_id)
                             // console.log('type',props.service_type)
                             data = {...data,service_type:props.service_type,service_id:props.service_id}
-                            console.log(data)
+                            // console.log(data)
                             return Api.getWorkRole({data: data})//可能需要请求对象的id,type;
                         }}
                         name={props.TableName}

@@ -10,7 +10,7 @@ const ItemPassword = (props: any) => {
         <>
             <Form.Item {...firstPassProps}
                        rules={[
-                           {required: true, message: props.t("passwordEmpty")},
+                           {required: true, message: props.t("密码为空")},
                        ]}
                        hasFeedback>
                 <Input.Password onChange={(e)=>{if (props.onChange)props.onChange(e.target.value)}}/>

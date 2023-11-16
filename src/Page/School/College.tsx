@@ -34,7 +34,7 @@ const College = () => {
                     extra={
                         (
                             <Space>
-                                <ModalRoleManage newRole={true} TableName={'SchoolRolesTable' + row.id} service_type={1} service_id={row.id} API={async (data:any)=>{return Api.addCollegeRole({data:data})}}/>
+                                <ModalRoleManage newRole={true} TableName={'SchoolRolesTable' + row.id} service_type={2} service_id={row.id} API={async (data:any)=>{return Api.addCollegeRole({data:data})}}/>
                                 <ModalFormUseForm
                                     title={'添加学院'}
                                     TableName={row.id + 'CollegeTable'}
@@ -47,7 +47,6 @@ const College = () => {
                                         }
                                     ]}
                                     dataSubmitter={async (data: any) => {
-                                        console.log(data);
                                         return Api.newCollege({data: data})
                                     }}
                                 />

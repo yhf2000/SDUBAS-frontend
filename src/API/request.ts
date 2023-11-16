@@ -1,8 +1,6 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {message} from "antd";
 import {getAddress} from "../config";
-import {useSelector} from "react-redux";
-import {IState} from "../Type/base";
 
 const baseUrl = getAddress().SERVER
 const service = axios.create({
@@ -51,8 +49,8 @@ const DealResponse = async (resp: any, url: string) => {
                 isLogin = true
                 return response.data.data
             default:
-                if(isLogin)
-                    message.error(response.data.message);
+                // if(isLogin)
+                message.error(response.data.message);
                 return Promise.reject(response.data.message)
         }
     } catch (e: any) {
