@@ -8,7 +8,7 @@ import {IState} from "../../Type/base";
 import {sha256} from "js-sha256";
 
 const NewPwd = () => {
-    const {token,userName} = useParams();
+    const {token,username} = useParams();
     const navigate = useNavigate();
     return (
         <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -17,7 +17,7 @@ const NewPwd = () => {
                     title={'设置新密码'}
                     autoFocus
                     onFinish={(data: any) => {
-                        data.new_password = sha256(data.new_password + userName)
+                        data.new_password = sha256(data.new_password + username)
                         data.confirm = data.new_password;
                         Api.setPass({token: token, data: data}).then(
                             (res: any) => {

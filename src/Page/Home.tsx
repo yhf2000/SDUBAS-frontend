@@ -13,7 +13,7 @@ const Home = () => {
     // Api.logout()
     return (
         <>
-            <ItemUpload accept={'.*'} aes={true}/>
+            {/*<ItemUpload accept={'.*'} aes={true}/>*/}
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>
