@@ -54,17 +54,16 @@ const columns = [
 const StudentScore = (props: any) => {
     const scoreForm = (
         <>
-            <Form.Item name={'honesty'} label={'诚信度'}>
+            <Form.Item name={'honesty'} label={'诚信度'} required={true}>
                 <Input/>
             </Form.Item>
-            <Form.Item name={'honesty_weight'} label={'诚实度占比'}>
+            <Form.Item name={'honesty_weight'} label={'诚实度占比'} required={true}>
                 <Input />
             </Form.Item>
-            <Form.Item name={'user_id'} initialValue={props.uId} style={{display:'none'}}>
+            <Form.Item name={'user_id'} initialValue={props.uId} style={{display:'none'}} required={true}>
             </Form.Item>
-            <ItemNumber name={'score'} label={'成绩'} max={100}/>
-
-            <ItemType name={'is_pass'} label={'通过'} options={[
+            <ItemNumber name={'score'} label={'成绩'} max={100} required={true}/>
+            <ItemType required={true} name={'is_pass'} label={'通过'} options={[
                 {
                     key:1,
                     value:"通过"

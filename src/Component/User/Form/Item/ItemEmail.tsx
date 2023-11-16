@@ -78,9 +78,9 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                             cap={captchaV}//填写失败时通知组件刷新
                         />
                     </Modal>
-                    <Form.Item name="email" label={props.t("email")}
+                    <Form.Item name="email" label={"邮箱"}
                                rules={[
-                                   {type: 'email', message: props.t('emailError'),},
+                                   {type: 'email', message: "邮箱错误",},
                                    {required: true},
                                    ({getFieldValue}) => (props.exist&&{
                                        validator(_, value) {
@@ -108,11 +108,11 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                         })
                                     }}
                                 >
-                                    {(canSend !== 0 ? canSend + "s" : props.t("Verify"))}
+                                    {(canSend !== 0 ? canSend + "s" : "验证")}
                                 </Button>
                             }/>
                     </Form.Item>
-                    <Form.Item name={props.name?props.name:"captcha"} label={props.t("emailCode")}
+                    <Form.Item name={props.name?props.name:"captcha"} label={"邮箱验证码"}
                                rules={[{required: true}]}>
                         <Input/>
                     </Form.Item>

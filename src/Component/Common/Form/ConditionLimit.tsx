@@ -14,11 +14,13 @@ const ConditionLimitItem = (props:any) => {
     // console.log('what',value)
     return (
         <ModalForm
+            title={'置换'}
             name={'set_list'}
-            trigger={<Button type={'ghost'}>置换</Button>}
+            trigger={<Button type={'link'}>置换</Button>}
             initialValues={value}
             onFinish={(value)=>{onChange({set_list:value.set_list});return Promise.resolve(true)}}
         >
+            <div>置换列表(完成列表中最低限制数目视为该项内容完成)</div>
             <Form.List name={'set_list'}>
                 {(fields, {add, remove}) => (
                     <div style={{display:'flex',flexDirection:'column'}}>
@@ -30,7 +32,7 @@ const ConditionLimitItem = (props:any) => {
                                     key={field.name + 'projects'}
                                     noStyle
                                 >
-                                        <Select mode={'multiple'} style={{width:'200px'}} placeholder={'请选择目标课程'}>
+                                        <Select mode={'multiple'} style={{width:'550px'}} placeholder={'请选择目标课程'}>
                                             {
                                                 options.map((option:any)=>{return(<Select.Option key={option.id} value={option.id}>{option.name+option.id}</Select.Option>)})
                                             }
@@ -48,13 +50,13 @@ const ConditionLimitItem = (props:any) => {
                                     type={'link'}
                                     style={{width: 50}}
                                     onClick={() => remove(field.name)}>
-                                    Remove
+                                    移除
                                 </Button>
                             </Space>
                         ))
                         }
                         <Form.Item
-                            noStyle
+                            style={{marginTop:'20px'}}
                         >
                             <Button type="dashed" onClick={() => add()} style={{width:'200px'}} block>
                                 添加置换条件

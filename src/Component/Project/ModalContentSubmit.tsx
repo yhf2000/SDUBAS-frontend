@@ -17,13 +17,13 @@ const ModalContentSubmit = (props: any) => {
             title: "提交类型",
             dataIndex: "type",
             key: "type",
-            render:(type:any)=>(type===0?<span>文本</span>:<span>文件</span>)
+            render: (type: any) => (type === 0 ? <span>文本</span> : <span>文件</span>)
         },
         {
             title: "提交",
             key: "submit",
             render: (_: any, rows: any) => {
-                return (<SubmissionSForm pId={props.pId} cId={props.cId} rows={rows} />//如果需要，可以重新提交
+                return (<SubmissionSForm pId={props.pId} cId={props.cId} rows={rows}/>//如果需要，可以重新提交
                 )
             }
         },
@@ -37,16 +37,14 @@ const ModalContentSubmit = (props: any) => {
     const handleModalClose = () => {
         setModalVisible(false);
     };
-    useEffect(()=>{},[props.cId])
+    useEffect(() => {
+    }, [props.cId])
     // console.log('contentId',props.cId);
     return (
         <div>
-            <div style={{float: "right", marginRight: 6}}>
-                <Button onClick={handleViewSubmission}>查看需提交内容</Button>
-            </div>
-
+            <Button onClick={handleViewSubmission} type={'ghost'}>查看需提交内容</Button>
             <Modal
-                title="Submission List"
+                title="提交列表"
                 open={modalVisible}
                 onCancel={handleModalClose}
                 footer={null}
@@ -55,7 +53,7 @@ const ModalContentSubmit = (props: any) => {
                     name={`SubmitContentTable-${props.cId}`}
                     API={async (data: any) => {
                         return Api.getPCSubmission({
-                            pId:props.pId,
+                            pId: props.pId,
                             data: {
                                 // userId: props.userId ?? "1",
                                 contentId: props.cId,

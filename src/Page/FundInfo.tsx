@@ -4,9 +4,8 @@ import AddBill from "../Component/Record/Form/AddBill";
 import '../Config/CSS/FundInfo.css'
 import {Api} from "../API/api";
 import {useLocation, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import getData from "../API/getData";
-import EditCard from "../Component/Common/EditCard";
 import DeleteConfirm from "../Component/Common/DeleteConfirm";
 import {useDispatch} from "../Redux/Store";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";

@@ -101,13 +101,12 @@ const ItemContent = (props: any) => {
                                     <ConditionLimitItem />
                                 </Form.Item>
                             }
-
                             <Button
                                 key={field.name+'btn'}
                                 type={'link'}
                                 style={{bottom:'12px'}}
                                 onClick={() => remove(field.name)}>
-                                Remove
+                                移除
                             </Button>
                         </Space>
                     ))}

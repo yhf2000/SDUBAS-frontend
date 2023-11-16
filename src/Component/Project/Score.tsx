@@ -22,7 +22,8 @@ const Score = (props: any) => {
                 return (
                     <>
                         {
-                            score !== null ? <span>{score}</span> : <StudentScore uId={row.user_id} cId={props.cId} pId={props.pId}/>
+                            score !== null ? <span>{score}</span> :
+                                <StudentScore uId={row.user_id} cId={props.cId} pId={props.pId}/>
                         }
                     </>
                 )
@@ -38,19 +39,17 @@ const Score = (props: any) => {
     };
     return (
         <>
-            <div style={{float: "right", marginRight: 6}}>
-                <Button onClick={handleViewSubmission}>评分</Button>
-            </div>
+            <Button onClick={handleViewSubmission} type={'ghost'}>评分</Button>
             <Modal
-                title="ScoreList"
+                title="得分情况"
                 open={modalVisible}
                 onCancel={handleModalClose}
                 footer={null}
             >
                 <TableWithPagination
                     name={`Student${props.cId}ScoreTable`}//某一内容所有学生成绩表
-                    API={async (data:any) => {
-                        return Api.getStuConScore({pId: props.pId, cId: props.cId,data:data})
+                    API={async (data: any) => {
+                        return Api.getStuConScore({pId: props.pId, cId: props.cId, data: data})
                     }}
                     columns={columns}
                 />

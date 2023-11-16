@@ -150,3 +150,15 @@ export const activeType = [
         value: '归档'
     }
 ]
+
+
+export const creditsType = [
+    {
+        key:0,
+        value:'国学修养'
+    },
+    {
+        key:1,
+        value:'大学英语'
+    }
+]

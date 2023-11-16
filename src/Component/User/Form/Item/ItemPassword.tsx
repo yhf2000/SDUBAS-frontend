@@ -3,7 +3,7 @@ import React from "react";
 import {withTranslation} from "react-i18next";
 
 const ItemPassword = (props: any) => {
-    let firstPassProps = {name: "password", label: props.t("password")}
+    let firstPassProps = {name: "password", label: "密码"}
     if (props.newpass === true) firstPassProps = {name: "new_password", label: '新密码'}
     if (props.oldpass === true) firstPassProps = {name: "old_password", label: props.t("旧密码")}
     return (

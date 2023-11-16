@@ -20,9 +20,6 @@ const Home = () => {
             <Title level={2}> 区块链驱动的综合教育平台 </Title>
             <div style={{maxWidth: "1500px", margin: "0 auto", marginTop: 60, textAlign: "left"}}>
                 <div style={{padding: '20px', background: '#f5f5f5', borderRadius: '10px'}}>
-                    <h2 style={{textAlign: 'center', marginBottom: '20px'}}>通知</h2>
-                    <Information/>
-
                     <h2 style={{textAlign: 'center', marginBottom: '20px'}}>快速跳转</h2>
                     <Row gutter={[16, 16]} justify="center">
                         <Col xs={24} sm={12} md={8} lg={6}>

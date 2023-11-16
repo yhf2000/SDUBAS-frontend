@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Space, Tree, Image, Tag, Button} from 'antd';
+import {Layout, Space, Tree, Image, Tag, Button, Menu, Dropdown, MenuProps, Divider} from 'antd';
 import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import ReactMarkdown from "react-markdown";
 import {useLocation, useParams} from "react-router-dom";
-import {md_str} from "../../Config/Project/data";
+import {md_str, tagOptions} from "../../Config/Project/data";
 import ModalContentSubmit from "../../Component/Project/ModalContentSubmit";
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
@@ -18,9 +18,11 @@ import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
-import {DownOutlined} from "@ant-design/icons";
+import {DownOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {creditsTypeColumn} from "../../Config/Project/columns";
+import UserAvatarByEmail from "../../Component/User/UserAvatarByEmail";
+
 
 const {Sider, Content} = Layout;
 
@@ -37,7 +39,7 @@ const IdConMap: keyIdMap = {}
 const ProjectInfo: React.FC = () => {
     const [selectedMenuKey, setSelectedMenuKey] = useState<number | null>(null);
     const [type, setType] = useState<IProjectContentType>("office_word")//原本的数据
-    const [treeData, setTreeData] = useState<DataNode[]>([]);//树形数据
+    const [treeData, setTreeData] = useState<DataNode[] | undefined>(undefined);//树形数据
     const {pId} = useParams();
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const location = useLocation();
@@ -59,13 +61,14 @@ const ProjectInfo: React.FC = () => {
     useEffect(() => {
         Api.getProContent({pId: pId})
             .then(async (data: any) => {
+                setSelectedMenuKey(data[0].id)
                 data.map((d: any) => {
                     const {id} = d;
                     IdConMap[id] = d;
                 })
-                console.log(IdConMap);
+                // console.log(IdConMap);
                 const Tree = buildTree(data);
-                await setTreeData(() => {
+                setTreeData(() => {
                     return [...Tree]
                 });
             })
@@ -73,8 +76,120 @@ const ProjectInfo: React.FC = () => {
             })
     }, [])
     useEffect(() => {
+        // console.log(treeData)
+        if(treeData)
         generateTreeData(treeData);
     }, [treeData])
+
+    let items: MenuProps['items'] = []
+    let manageitems: MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <ApplyPermission/>
+            )
+        },
+        {
+            key: '2',
+            label: (
+                <CreateTemplate/>
+            )
+        }
+    ]
+    if (item.type !== '教学资源') {
+        manageitems.push({
+            key: '3', label: (<ModalFormUseForm
+                btnName={'学分认定'}
+                btnType={'text'}
+                title={'学分认定'}
+                subForm={[
+                    {
+                        component: AddCreditByRole({pId: pId}),
+                        label: ''
+                    }
+                ]}
+                // dataLoader
+                dataSubmitter={async (value: any) => {
+                    return Api.addProCredit({pId: pId, data: value})
+                }}
+                otherContent={
+                    <TableWithPagination
+                        name={'CreditsTypeTable'}
+                        API={async (data: any) => {
+                            return Api.getTypeCredits({pId: pId, data: data})
+                        }}
+                        columns={creditsTypeColumn}
+                    />
+                }
+            />)
+        })
+    }
+    if (selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf) {
+        items = [
+            {
+                key: '1',
+                label: (
+                    <UserContentScore pId={pId}/>
+                )
+            },
+            {
+                key: '2',
+                label: (
+                    <ModalContentSubmit
+                        pId={pId} // @ts-ignore
+                        cId={keyIdMap[selectedMenuKey].key}
+                        username={userinfo?.username}//这里可能会替换成userid
+                    />
+                )
+            },
+            {
+                key: '3',
+                label: (
+                    // @ts-ignore
+                    <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
+                )
+            },
+            {
+                key: '4',
+                label: (
+                    <Button type={'ghost'} onClick={() => {
+                        // @ts-ignore
+                        Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                    }}>更新我的</Button>
+                )
+            }
+        ]
+        if (item.type !== '教学资源') {
+            manageitems.push({
+                key: '', label: (<ModalFormUseForm
+                    title={'添加提交任务'}
+                    btnName={'添加提交'}
+                    btnType={'text'}
+                    TableName={`SubmitContentTable-${keyIdMap[selectedMenuKey].key}`}
+                    subForm={[
+                        {
+                            component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
+                            label: '',
+                        }
+                    ]}
+                    dataSubmitter={async (data: any) => {
+                        // console.log('data',data);
+                        return Api.submitProContent({
+                            pId: pId,
+                            cId: keyIdMap[selectedMenuKey].key,
+                            data: data
+                        })
+                    }}
+                />)
+            })
+            manageitems.push({
+                key: '5', label: (<Button type={'text'} onClick={() => {
+                    Api.getRefreshAll({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                }}>更新全部</Button>)
+            })
+        }
+    }
+
     return (
         <div style={{minWidth: 800}}>
             <div style={{textAlign: "left", marginBottom: 12, marginLeft: 6}}>
@@ -84,12 +199,18 @@ const ProjectInfo: React.FC = () => {
                         width={80}
                         height={45}
                         src={item.url}
-                        alt="数据结构"
+                        alt={item.name}
                     />
                     <Space direction="vertical" size={0}>
                         <Space>
                             <Title level={4} style={{margin: 0}}>{item.name}</Title>
-                            <Tag color="#CBA265">国家精品</Tag>
+                            {
+                                item.tag.split(',').map((t: string) => {
+                                    for (const tag of tagOptions)
+                                        if (tag.key === t)
+                                            return (<Tag color="#CBA265">{tag.value}</Tag>)
+                                })
+                            }
                         </Space>
                     </Space>
                 </Space>
@@ -99,38 +220,18 @@ const ProjectInfo: React.FC = () => {
                         {
                             selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && (
                                 <>
-                                    <ModalFormUseForm
-                                        title={'添加提交任务'}
-                                        btnName={'添加提交'}
-                                        btnType={'primary'}
-                                        TableName={`SubmitContentTable-${keyIdMap[selectedMenuKey].key}`}
-                                        subForm={[
-                                            {
-                                                component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
-                                                label: '',
-                                            }
-                                        ]}
-                                        dataSubmitter={async (data: any) => {
-                                            // console.log('data',data);
-                                            return Api.submitProContent({
-                                                pId: pId,
-                                                cId: keyIdMap[selectedMenuKey].key,
-                                                data: data
-                                            })
-                                        }}
-                                    />
-                                    <ModalContentSubmit
-                                        pId={pId}
-                                        cId={keyIdMap[selectedMenuKey].key}
-                                        username={userinfo?.username}//这里可能会替换成userid
-                                    />
-                                    <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
-                                    <Button onClick={() => {
-                                        Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
-                                    }}>更新我的</Button>
-                                    <Button onClick={() => {
-                                        Api.getRefreshAll({pId: pId, cId: keyIdMap[selectedMenuKey].key})
-                                    }}>更新全部</Button>
+                                    <Dropdown
+                                        menu={{items}}
+                                    >
+                                        <Button type="text" size={"large"}>
+                                            <Space>
+                                                <div style={{marginTop: -10}}>
+                                                    菜单
+                                                </div>
+                                                <DownOutlined style={{fontSize: 10, marginBottom: 20}}/>
+                                            </Space>
+                                        </Button>
+                                    </Dropdown>
                                 </>
                             )
                         }
@@ -139,48 +240,32 @@ const ProjectInfo: React.FC = () => {
             </div>
             <Layout style={{minHeight: 600}}>
                 <Sider width={250} style={{background: '#f0f2f5'}}>
-                    <Tree
-                        showLine
-                        autoExpandParent={true}
-                        // defaultExpandAll={true}
-                        switcherIcon={<DownOutlined/>}
-                        onSelect={handleMenuSelect}
-                        selectedKeys={selectedMenuKey !== null ? [selectedMenuKey] : []}
-                        treeData={treeData}
-                        style={{background: '#f0f2f5', paddingTop: 8, paddingLeft: 4, paddingBottom: 8}}
-                    />
+                    {
+                        treeData !== undefined && <Tree
+                            showLine
+                            autoExpandParent={true}
+                            switcherIcon={<DownOutlined/>}
+                            defaultExpandedKeys={selectedMenuKey?[selectedMenuKey]:[]}
+                            onSelect={handleMenuSelect}
+                            // selectedKeys={selectedMenuKey !== null ? [selectedMenuKey] : []}
+                            treeData={treeData}
+                            style={{background: '#f0f2f5', paddingTop: 8, paddingLeft: 4, paddingBottom: 8}}
+                        />
+                    }
+
                     <div style={{left: '0%', width: '100px'}}>
-                        {item.type != '教学资源' && (
-                            <><ModalFormUseForm
-                                btnName={'学分认定'}
-                                btnType={'text'}
-                                title={'学分认定'}
-                                subForm={[
-                                    {
-                                        component: AddCreditByRole({pId: pId}),
-                                        label: ''
-                                    }
-                                ]}
-                                // dataLoader
-                                dataSubmitter={async (value: any) => {
-                                    return Api.addProCredit({pId: pId, data: value})
-                                }}
-                                otherContent={
-                                    <TableWithPagination
-                                        name={'CreditsTypeTable'}
-                                        API={async (data: any) => {
-                                            return Api.getTypeCredits({pId: pId, data: data})
-                                        }}
-                                        columns={creditsTypeColumn}
-                                    />
-                                }
-                            />
-                                <UserContentScore pId={pId}/>
-                            </>
-                        )
-                        }
-                        <ApplyPermission/>
-                        <CreateTemplate/>
+                        <Dropdown
+                            menu={{items: manageitems}}
+                        >
+                            <Button type="text" size={"large"}>
+                                <Space>
+                                    <div style={{marginTop: -10}}>
+                                        管理项目
+                                    </div>
+                                    <DownOutlined style={{fontSize: 10, marginBottom: 20}}/>
+                                </Space>
+                            </Button>
+                        </Dropdown>
                     </div>
                 </Sider>
                 <Layout>
@@ -189,12 +274,12 @@ const ProjectInfo: React.FC = () => {
                             selectedMenuKey ? selectedMenuKey in IdConMap &&
                                 <ContentPlay url={IdConMap[selectedMenuKey].file_id?.url}
                                              type={IdConMap[selectedMenuKey].file_type} pId={pId}
+                                             content={IdConMap[selectedMenuKey].content}
                                              cId={selectedMenuKey}/>
                                 : (
                                     <div
                                         style={{textAlign: "left"}}
                                     >
-                                        <ReactMarkdown children={md_str}/>
                                     </div>
                                 )
                         }
@@ -220,7 +305,7 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                (props.type === "office_word" || props.type==="office_ppt") && (
+                (props.type === "office_word" || props.type === "office_ppt") && (
                     <iframe
                         title="demo.docx"
                         src={"https://view.xdocin.com/view?src=" + props.url}
@@ -240,9 +325,9 @@ const ContentPlay = (props: any) => {
                 )
             }
             {
-                props.type === "markdown" && (
+                props.content && (
                     <div style={{textAlign: "left"}}>
-                        <ReactMarkdown children={md_str}/>
+                        <ReactMarkdown children={props.content}/>
                     </div>
                 )
             }
