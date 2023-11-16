@@ -225,6 +225,7 @@ export const Api: { [key: string]: any } = {
     },
     getProListByType: async (data: any) => {
         return request.get('/projects/project/type', data.data);
+        // return {rows:[{}]}
     },
     getProInfo: async (data: any) => {
         return request.get(`/projects/get/${data.pId}`, data?.data);//查询项目详情

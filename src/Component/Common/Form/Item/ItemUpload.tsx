@@ -20,7 +20,7 @@ const UploadFile = (props: any) => {
     const {value, onChange} = props;
     const [visible, setVisible] = useState(false);
     // console.log(value)
-    const [fileName, setFileName] = useState(value?.name);
+    const [fileName, setFileName] = useState(value?.file_name);
     const [previewImg,setPreviewImg] = useState('')
     const [fileDd,setFileDd] = useState<any|undefined>(undefined);
     const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
@@ -31,9 +31,9 @@ const UploadFile = (props: any) => {
     }
     //初始传入的参数
     useEffect(() => {
-        if(props.value?.name)
+        if(props.value?.file_name)
         {
-            setFileName(value?.name)
+            setFileName(value?.file_name)
             //如果是图片需要预览
             if(props.type === 'image')
             {
@@ -120,17 +120,6 @@ const UploadFile = (props: any) => {
             const rsaEncrypt = new JSEncrypt();
             rsaEncrypt.setPublicKey(RSAPbKey);
             const encryptedAESKey = rsaEncrypt.encrypt(AESKey);
-            // const rsaDecrypt = new JSEncrypt();
-            // rsaDecrypt.setPrivateKey("-----BEGIN PRIVATE KEY----- MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGDXGYbmEro5dN 6Ja/co12cyop250rQ3qHeFSjIom0l576zmci9b6u25EvzDAMcm0zQMOhkZ6k1zZQ agZkut7kVLLGxWOrGAELS9YrrXpd5z+SJ6Vka2oq0c8alxfGJWIQkrSVw2h9EZeI dND2bWB9SIB1a7qCkaoGVfDEKyBaQZI6eQvoKizSM17324I/V3strBS8GXy4xWoq pBvnqQj+s1uP6hHPq8hlHrgzFfcwLVSjUKqLvADzHJkuasqrgPWKMVhDG+Scsxsn w7S96JwJyjFPpsDXvN/TTtiMTXROIi5BhcqyNoOOWn+xKyc7IWjiBSK7uaE0J1VA wEs96tuVAgMBAAECggEABMBn0Z9m/L61BO0n82SSg51UYqKz4kjWf2TiAElLgntX bhmrnHQcOg0R2P1jcw5VE7NhviuZ4cc5X16Gfr4uViNjZ/oZCmQjX5usghRsaM+r 1RwsZKdgabHqRRoLkPkZTDUo2KWn3nBLRr5+u5rOLiiiJFm2+iZNLPpnh11S2QzK Lcb1w5aAbWoaw4rw2GR1SOa/Ww65/U0zE2ltnajoovdeom0uirqn+wGBBiNRbWV5 8ZYBjHwqiaPyrSvhgiRJKZMMUTm/juzd1vPk66jgNutF6haRwb1G1RYGBCQaXkoo 63ZSvvvjKyP9PpRqVqMTB4aO+CSP0AOPdE0Xf9Y69QKBgQDzpQbq2HR0kaUziI86 s5WjxYYte7MkbkCWDYovaodnLSGY+Ti0EZ4FkJp1nAeLwsw9EFGBVqH+3369TOrf QjdI0QjB0teDHZ3vn1njEt6QIUJcfyzFO7Om0ALIdm402r3t01xS/Jw4WK+lmmYv wG5/Y8TELJ6EwvpwwRDOg4YlNwKBgQDQGIs5H4OR8y+Lf7xzSfwSxqFGh8D4mvkg NjOJGlNZ3+VnVjGPr9tIA4uwxAvUwtGYrTfaYQ3LE5eDBL1oSXa5m8NjbsqFiCGV EQ8K/1tB8TBfT7gmN4TsbjxqebZ2CdsEvRZ+LAd2uyZ5gEZdLRPJibcywYvlJ2nf QcfxJxbrkwKBgEE665Ewhm03GS2k4APtVKDWH0hKF/om8m+6DEcJlFrRQG9+Oeor 1UzUHCZksbh/XML0fX3NPe3I1FvGHhPL3JVIMboCwuQ9p60h0qTyxld8MBInkkrz 4vNEOZqF6peIANWNguhM7V5AkDYcEkOyl2LPyTxkXcRZl0dcyS0hFWcdAoGAUM9X MWWliEXxzrBaFENE2l28P1F0hJZZ7EJgHPvWJm6l/U0hjfTyqLKHyqs3FPZawnlx 2SIbYyNGkSCEFT2CF23/oFtj1hsZP3QSbWjgnWj2Ke0hS+X/fnkIiSiezJPjM6Hi XDjo5RikRkakDIb2yirqs5EprGFz4bj/1gwiAHUCgYEA05FiiOLzoX3mfB3urTMB fvKEQOKM5hN7phUEocWOTg7buhvuWutYSBcAxzGWcvyySb8Tk6gKtcXebVOttv7w Vl2ww2lJ3DKRaiuJMkjBrGMJ1nufuHNd3bgRYHhdM2TPAraUI2pltC4RWVrdO12N 7P+JRiKnCtgaz3NDRaxwx7A= -----END PRIVATE KEY-----")
-            // let de;
-            // if(encryptedAESKey)
-            // {
-            //     console.log(rsaDecrypt.getPrivateKey())
-            //     console.log(rsaEncrypt.getPublicKey())
-            //     console.log(encryptedAESKey)
-            //     de = rsaDecrypt.decrypt(encryptedAESKey);
-            //     console.log('解密',de);
-            // }
             if(encryptedAESKey)
                 formData.append('ase_key', encryptedAESKey);
         }
@@ -154,8 +143,9 @@ const UploadFile = (props: any) => {
                 <>
                     {props.type === 'image' ?(<img alt='图片' src={previewImg} style={{height:'80px',marginRight:'20px',marginTop:'10px'}} />):(
                     <Button type={'link'} onClick={() => {
+                        console.log(fileDd)
                        if(fileDd !== undefined) window.open(fileDd);
-                    }}>{fileName||value?.name}</Button>)}
+                    }}>{fileName||value?.file_name}</Button>)}
                     <Button danger onClick={() => {
                         setVisible(true);
                         onChange(null);

@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 
 // 生成随机的AES密钥
 export const generateAESKey = () => {
-    let result = '';
+    let result= '';
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 可包含的字符范围
 
     for (let i = 0; i < 16; i++) {
@@ -11,18 +11,6 @@ export const generateAESKey = () => {
         let randomChar = characters.charAt(randomIndex);
         result += randomChar;
     }
-    console.log('result',result);
-    // console.log('64re',btoa(result))
-    const te =CryptoJS.AES.encrypt(result,result,{
-        mode: CryptoJS.mode.ECB,//加密模式
-        padding: CryptoJS.pad.Pkcs7 //填充
-    }).toString()
-    console.log(te)
-    const de = CryptoJS.AES.decrypt(te,result,{
-        mode: CryptoJS.mode.ECB,//加密模式
-        padding: CryptoJS.pad.Pkcs7 //填充
-    })
-    console.log(CryptoJS.enc.Utf8.stringify(de))
     return result;
 };
 
@@ -33,12 +21,11 @@ function generateRandomAESKey() {
 }
 
 
-
-function convertWordArrayToUint8Array(wordArray:any) {
+function convertWordArrayToUint8Array(wordArray: any) {
     let arrayOfWords = wordArray.hasOwnProperty("words") ? wordArray.words : [];
     let length = wordArray.hasOwnProperty("sigBytes") ? wordArray.sigBytes : arrayOfWords.length * 4;
-    let uInt8Array = new Uint8Array(length), index=0, word, i;
-    for (i=0; i<length; i++) {
+    let uInt8Array = new Uint8Array(length), index = 0, word, i;
+    for (i = 0; i < length; i++) {
         word = arrayOfWords[i];
         uInt8Array[index++] = word >> 24;
         uInt8Array[index++] = (word >> 16) & 0xff;
@@ -47,21 +34,22 @@ function convertWordArrayToUint8Array(wordArray:any) {
     }
     return uInt8Array;
 }
-export function encrypt(file:any,AESKey:string){
+
+export function encrypt(file: any, AESKey: any) {
     //生成aes密钥
     return new Promise<Blob>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             // @ts-ignore
             const fileData = CryptoJS.lib.WordArray.create(event.target.result);
-            console.log(AESKey);
-            const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey,{
+            AESKey = CryptoJS.enc.Utf8.parse(AESKey);
+            const encryptedData = CryptoJS.AES.encrypt(fileData, AESKey, {
                 // iv: CryptoJS.enc.Utf8.parse(AESKey), //偏移量
                 mode: CryptoJS.mode.ECB,//加密模式
                 padding: CryptoJS.pad.Pkcs7 //填充
             }).toString();
             // console.log('what');
-            const encryptedFile = new Blob([encryptedData],{type: file.type });
+            const encryptedFile = new Blob([encryptedData], {type: file.type});
             resolve(encryptedFile);
         };
         reader.onerror = (event) => {
@@ -72,19 +60,20 @@ export function encrypt(file:any,AESKey:string){
     });
 }
 
-export function decrypt(file:any,AESKey:any){
+export function decrypt(file: any, AESKey: any) {
     //生成aes密钥
     return new Promise<Blob>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
+            AESKey = CryptoJS.enc.Utf8.parse(AESKey)
             // @ts-ignore
-            const decrypted=CryptoJS.AES.decrypt(event.target.result,AESKey,{
-                iv: CryptoJS.enc.Utf8.parse(AESKey), //偏移量
+            const decrypted = CryptoJS.AES.decrypt(event.target.result, AESKey, {
+                // iv: CryptoJS.enc.Utf8.parse(AESKey), //偏移量
                 mode: CryptoJS.mode.ECB,//加密模式
                 padding: CryptoJS.pad.Pkcs7 //填充
             })
             const typedArray = convertWordArrayToUint8Array(decrypted);
-            let fileDec = new Blob([typedArray],{type:file.type});
+            let fileDec = new Blob([typedArray], {type: file.type});
             // console.log(AESKey);
             // @ts-ignore
             // console.log('what');
