@@ -51,6 +51,7 @@ const Score = (props: any) => {
                     API={async (data: any) => {
                         return Api.getStuConScore({pId: props.pId, cId: props.cId, data: data})
                     }}
+                    search={true}
                     columns={columns}
                 />
             </Modal>

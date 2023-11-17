@@ -348,6 +348,9 @@ export const Api: { [key: string]: any } = {
     addMajorRole:async (data:any)=>{
         return request.get('/permissions/educations/schools/add_major_role',data.data)
     },
+    addClassRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_class_role',data.data);
+    },
 
 
     //个人档案

@@ -196,13 +196,16 @@ const MajorClass = () => {
                                                 }}
                                             />
                                         </Col>
-                                        {/*<Col>*/}
-                                        {/*    <ModalRoleManage*/}
-                                        {/*        newRole={true}*/}
-                                        {/*        editable={true}*/}
-                                        {/*        btnType={'link'}*/}
-                                        {/*        TableName={'ClassRolesTable' + college.college_id}/>*/}
-                                        {/*</Col>*/}
+                                        <Col>
+                                            <ModalRoleManage
+                                                newRole={true}
+                                                editable={true}
+                                                btnType={'link'}
+                                                TableName={'ClassRolesTable' + college.college_id}
+                                                service_type={3} service_id={item.id}
+                                                API={async (data:any)=>{return Api.addClassRole({data:data})}}
+                                            />
+                                        </Col>
                                         <Col>
                                             <DeleteConfirm
                                                 onConfirm={() => {

@@ -137,13 +137,24 @@ export const CreditBankChildColumns = [
     {
         title: "已修",
         dataIndex: 'is_pass',
-        key: 'complete',
+        key: 'is_pass',
         render: (complete: any) => {
             if (complete)
                 return <>已修</>
             else
                 return <>未修</>
-        }
+        },
+        filters: [
+            {
+                text: '已修',
+                value: true
+            },
+            {
+                text: '未修',
+                value: false
+            }
+        ],
+        onFilter: (value: any, record: any) => record.is_pass.indexOf(value) === 0,
     }
 ]
 
