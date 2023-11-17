@@ -4,7 +4,7 @@ import {DataNode} from 'antd/lib/tree';
 import Title from "antd/es/typography/Title";
 import ReactMarkdown from "react-markdown";
 import {useLocation, useParams} from "react-router-dom";
-import {md_str, tagOptions} from "../../Config/Project/data";
+import {tagOptions} from "../../Config/Project/data";
 import ModalContentSubmit from "../../Component/Project/ModalContentSubmit";
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
@@ -18,10 +18,9 @@ import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
-import {DownOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
+import {DownOutlined} from "@ant-design/icons";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {creditsTypeColumn} from "../../Config/Project/columns";
-import UserAvatarByEmail from "../../Component/User/UserAvatarByEmail";
 
 
 const {Sider, Content} = Layout;
@@ -44,6 +43,7 @@ const ProjectInfo: React.FC = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const location = useLocation();
     const {item} = location.state;
+    const [permissions,getPermission] = useState<string[]>([]);
     const generateTreeData = (data: any) => {//根据后端数据递归获得treeData
         return data.map((item: any) => {
             let {key, children, isLeaf} = item;
@@ -218,7 +218,7 @@ const ProjectInfo: React.FC = () => {
                     <Space size={12}>
                         {/*还有一些待传的参数*/}
                         {
-                            selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && (
+                            selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && item.type!=='教学资源'&&(
                                 <>
                                     <Dropdown
                                         menu={{items}}

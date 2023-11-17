@@ -4,6 +4,8 @@ import ItemUpload from "../../Common/Form/Item/ItemUpload";
 import {ModalForm} from "@ant-design/pro-form";
 import {Api} from "../../../API/api";
 import {useDispatch} from "../../../Redux/Store";
+import ItemText from "./Item/ItemText";
+import ReactMarkdown from "react-markdown";
 
 
 const SubmissionSForm = (props: any) => {
@@ -34,10 +36,11 @@ const SubmissionSForm = (props: any) => {
                 title={'提交'}
                 trigger={button}
                 modalProps={{
-                    maskClosable: false,
+                    // maskClosable: false,
                     destroyOnClose: true,
-                    width: 500,
-                    okText: "提交"
+                    width: "1000px",
+                    okText: "提交",
+                    bodyStyle:{height:"500px"}
                 }}
                 onFinish={(values: any) => {
                     console.log(values);
@@ -57,18 +60,25 @@ const SubmissionSForm = (props: any) => {
                         <Form.Item name={'content'} label={'请输入文本'}
                                    rules={[
                                        {required: true, message: '请输入文本'},
-                                       {
-                                           validator: (_, value) => {
-                                               if (value && value.length > props.rows.count_limit) {
-                                                   return Promise.reject(`最多输入 ${props.rows.count_limit} 个字`);
-                                               }
-                                               return Promise.resolve();
-                                           }
-                                       }
                                    ]}
+                                   noStyle
                         >
-                            <Input.TextArea value={inputValue} onChange={handleInputChange}
-                                            placeholder="请输入文本"/>
+                            <div style={{display:'flex',flexDirection:'row',gap:'20px'}}>
+                                <div>
+                                    <div style={{marginBottom: '10px', fontSize: '15px'}}>输入文本:</div>
+                                    <Input.TextArea value={inputValue} onChange={handleInputChange}
+                                                    placeholder="请输入文本" maxLength={props.rows.count_limit} showCount
+                                                    style={{height: '400px', width: '400px'}}
+                                    />
+                                </div>
+                                <div>
+                                    <div style={{marginBottom: '10px', fontSize: '15px'}}>MarkDown实时渲染:</div>
+                                    <ReactMarkdown
+                                        children={inputValue}
+                                    />
+                                </div>
+
+                            </div>
                         </Form.Item>
                     </>
                 )}

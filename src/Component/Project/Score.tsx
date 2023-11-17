@@ -14,19 +14,36 @@ const Score = (props: any) => {
             key: 'student',
         },
         {
-            title: "成绩",
-            key: 'score',
-            dataIndex: 'score',
+            title: "操作",
+            key: 'operator',
             render: (score: any, row: any) => {
                 // console.log('row',row);
                 return (
                     <>
-                        {
-                            score !== null ? <span>{score}</span> :
-                                <StudentScore uId={row.user_id} cId={props.cId} pId={props.pId}/>
-                        }
+                        <StudentScore uId={row.user_id} cId={props.cId} pId={props.pId}/>
                     </>
                 )
+            }
+        },
+        {
+            title: '成绩',
+            key: 'score',
+            dataIndex: 'score'
+        },
+        {
+            title:'提交情况',
+            key:'submit',
+            render:(_:any,record:any)=>{
+                return (<>{record.finish_count}/{record.total_count}</>)
+            }
+        },
+        {
+            title:'通过',
+            key:'pass',
+            dataIndex: 'is_pass',
+            render:(pass:any)=>{
+                if(pass)return <div style={{color:'green'}}>通过</div>
+                else if(pass === false) return <div style={{color:'red'}}>未通过</div>
             }
         }
     ]

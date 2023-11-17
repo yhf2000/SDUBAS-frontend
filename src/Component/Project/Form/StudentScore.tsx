@@ -9,7 +9,7 @@ import TextArea from "antd/es/input/TextArea";
 import {useState} from "react";
 
 
-const MyRender = (props:any)=>{
+export const MyRender = (props:any)=>{
     const [visible,setVisible] = useState(false);
     const {rows} = props;
     if(rows.content)//如果是文本的话
