@@ -51,7 +51,7 @@ const AddBill = (props: any) => {
             </Form.Item>
             <ItemNumber label='数目' name='amount' required={true} min={0}/>
             <Switch title={'使用文件'} checked={file} onChange={()=>{setFile(!file)}} checkedChildren="图片" unCheckedChildren="文本" />
-            {file?<ItemUpload label={'日志'} name={'log_content'} aes={false} accept={'.jpg,.png'}/>:<ItemText label={'日志'} name={'log_content'} required={true}/>}
+            {file?<ItemUpload required={true} label={'日志'} name={'log_file_id'} aes={false} accept={'.jpg,.png'}/>:<ItemText label={'日志'} name={'log_content'} required={true}/>}
         </ModalForm>
     )
 }

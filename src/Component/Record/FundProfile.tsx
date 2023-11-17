@@ -11,6 +11,7 @@ import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import ItemRoles from "../User/Form/Item/ItemRoles";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
+import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
 
 export const FundForm = (
     <>
@@ -30,24 +31,25 @@ const FundProfile = () => {
             <div className={'table-container'}>
                 <Card
                     title={'资金档案'}
-                    style={{minWidth:'1000px'}}
+                    style={{minWidth: '1000px'}}
                     headStyle={{textAlign: 'left'}}
-                    extra={<ModalFormUseForm
-                        title={'新建资金'}
-                        type={'create'}
-                        TableName={'FundTable'}
-                        btnName={'新建资金'}
-                        subForm={[
-                            {
-                                component: FundForm,
-                                label: "",
-                            }
-                        ]}
-                        dataSubmitter={async (value: any) => {
-                            // console.log('fundData:',value);
-                            return Api.newFund({data: value});
-                        }}
-                    />}>
+                    extra={
+                        <ModalFormUseForm
+                            title={'新建资金'}
+                            type={'create'}
+                            TableName={'FundTable'}
+                            btnName={'新建资金'}
+                            subForm={[
+                                {
+                                    component: FundForm,
+                                    label: "",
+                                }
+                            ]}
+                            dataSubmitter={async (value: any) => {
+                                // console.log('fundData:',value);
+                                return Api.newFund({data: value});
+                            }}
+                        />}>
                     <TableWithPagination
                         name={'FundTable'}
                         API={async (data: any) => {
@@ -71,6 +73,13 @@ const FundProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
+                                            <ModalRoleManage
+                                                btnType={'link'}
+                                                newRole={false}
+                                                TableName={'fundRoleTable'+rows.Id}
+                                                service_type={6} service_id={rows.Id}
+                                                editable={false}
+                                            />
                                             <DeleteConfirm
                                                 onConfirm={() => {
                                                     dispatch(getData(

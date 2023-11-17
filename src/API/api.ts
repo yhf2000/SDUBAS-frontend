@@ -197,7 +197,7 @@ export const Api: { [key: string]: any } = {
         return request.delete(`/resources/financial/${data.fId}/delete`, data?.data);//删除资金项目
     },
     updateFund: async (data: any) => {
-        return request.put(`/resources/financial/${data.fId}`, data?.data);//修改资金项目
+        return request.put(`/resources/financial/${data.fId}/revise`, data?.data);//修改资金项目
     },
     getFund: async (data: any) => {
         return request.get('/resources/financial/search', data?.data);//获得资金列表

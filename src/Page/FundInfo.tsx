@@ -1,4 +1,4 @@
-import {Button, Card, message} from "antd";
+import {Button, Card, Image, message} from "antd";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import AddBill from "../Component/Record/Form/AddBill";
 import '../Config/CSS/FundInfo.css'
@@ -46,8 +46,9 @@ const FundInfo = () => {
                                     // }
                                 ]}
                                 initData={row}
+                                width={1000}
                                 dataSubmitter={(value: any) => {
-                                    console.log('data:',value);
+                                    return Api.updateFund({fId:fId,data:value})
                                 }}
                             />
                         </>
@@ -87,8 +88,12 @@ const FundInfo = () => {
                                 },
                                 {
                                     title: '日志记录',
-                                    dataIndex: 'log_content',
-                                    key: 'log_content'
+                                    key: 'log_content',
+                                    render:(_:any,record:any)=>{
+                                       if(record.url !== undefined)
+                                           return(<img alt={'日志'} src={record.url}/>)
+                                        return <>{record.log_content}</>
+                                    }
                                 },
                                 {
                                     title: '操作',

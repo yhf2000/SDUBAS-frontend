@@ -7,8 +7,6 @@ import React from "react";
 import {useLocation, useParams} from "react-router-dom";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {ResourceForm} from "../Component/Record/ResourceProfile";
-import Approval from "../Component/Common/Approval";
-import {ApprovalColumns} from "../Config/Resource/columns";
 
 const {Meta} = Card;
 

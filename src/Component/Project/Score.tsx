@@ -1,8 +1,9 @@
 import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
-import {Button, Modal} from "antd";
+import {Button, Form, Input, Modal, Select, Space} from "antd";
 import {useEffect, useState} from "react";
 import StudentScore from "./Form/StudentScore";
+import {tagOptions} from "../../Config/Project/data";
 
 
 const Score = (props: any) => {
@@ -68,8 +69,16 @@ const Score = (props: any) => {
                     API={async (data: any) => {
                         return Api.getStuConScore({pId: props.pId, cId: props.cId, data: data})
                     }}
-                    search={true}
                     columns={columns}
+                    getForm={(onFinish: any) => {
+                        return (
+                            <Space size={30}>
+                                <Form.Item label={"用户名"} name={"user_name"}>
+                                    <Input onPressEnter={onFinish}/>
+                                </Form.Item>
+                            </Space>
+                        );
+                    }}
                 />
             </Modal>
         </>
