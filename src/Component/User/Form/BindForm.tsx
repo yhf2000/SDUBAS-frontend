@@ -2,6 +2,7 @@ import {DatePicker, Form, Input, Select} from "antd";
 import ItemGender from "./Item/ItemGender";
 import {useState} from "react";
 import college from "../../../Page/School/College";
+import {ItemCadSchool} from "./Item/ItemCadSchool";
 
 
 interface OpType {
@@ -43,6 +44,7 @@ export const BindForm2 = (props: any) => {
             >
                 <DatePicker style={{width: "100%"}} mode={'date'}/>
             </Form.Item>
+            <ItemCadSchool />
         </>
     );
 }

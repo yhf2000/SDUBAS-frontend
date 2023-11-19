@@ -48,6 +48,7 @@ const AddUsersByRole = () => {
                                 }
                             ]}
                             dataSubmitter={async (data: any) => {
+                                console.log(data);
                                 data.enrollment_dt = data.enrollment_dt.split(' ')[0]
                                 data.graduation_dt = data.graduation_dt.split(' ')[0]
                                 data.password = sha256(data.password + data.username)

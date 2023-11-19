@@ -80,7 +80,7 @@ const School = () => {
                                                     dataSubmitter={async (values: any) => {
                                                         return Api.updateSchool({sId: row.id, data: values})
                                                     }}
-                                                    initData={{name:row.name,school_abbreviation:row.school_abbreviation,school_logo_id:{url:row.image,file_id:row.id}}}//还需要有权限,或者使用dataLoader
+                                                    initData={{name:row.name,school_abbreviation:row.school_abbreviation,school_logo_id:{url:row.image,file_id:row.school_logo_id,file_name:'学校logo'}}}//还需要有权限,或者使用dataLoader
                                                 />
                                             </Col>
                                             <Col>
