@@ -77,6 +77,7 @@ export default function ProCard({item, TableName, pathname}: any) {
                         }}
                         // initData={{img_id:{file_name:'what',url:"https://tse3-mm.cn.bing.net/th/id/OIP-C.dGSqeSYfrebW8r7baIn2BQAAAA?rs=1&pid=ImgDetMain"},type:'xx',contents:[{file_id:{file_name:'ww',url:'https://tse3-mm.cn.bing.net/th/id/OIP-C.dGSqeSYfrebW8r7baIn2BQAAAA?rs=1&pid=ImgDetMain'}}]}}
                         dataSubmitter={(value: any) => {
+                            console.log(value)
                             value.tag = arraytostr(value.tag);
                             return Api.updatePro({pId: item.id, data: value});
                         }}

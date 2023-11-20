@@ -1,7 +1,8 @@
 import DeleteConfirm, {Confirm} from "../../Component/Common/DeleteConfirm";
-import {Button, Modal, Progress} from "antd";
+import {Button, message, Modal, Progress} from "antd";
 import {useDispatch} from "../../Redux/Store";
 import Template from "../../Component/Project/Template";
+import {Api} from "../../API/api";
 
 interface ApprovalProps {
     API: any;
@@ -161,13 +162,21 @@ export const CreditBankChildColumns = [
 export const TemplateColumns = [
     {
         title: '模板名称',
-        dataIndex: 'template_name',
+        dataIndex: 'role_name',
         key: 'name'
     },
     {
         title: '模板权限',
-        dataIndex: 'permissions',
-        key: 'permission'
+        dataIndex: 'privilege_list',
+        key: 'permission',
+        render:(list:any)=>{
+            let str = ''
+            for(let i = 0;i < list.length;i++)
+                if(i != list.length-1)
+                    str += list[i]+','
+                else str += list[i]
+            return(<span>{str}</span>)
+        }
     },
     {
         title: '操作',
@@ -175,7 +184,16 @@ export const TemplateColumns = [
         render: (_: any, record: any) => {
             return (
                 <>
-                    <Template record={record}/>
+                    <Button
+                        type={'link'}
+                        onClick={()=>{
+                            Api.applyTemplate({role_id:record.role_id})
+                                .then(()=>{message.success('申请成功')})
+                                .catch(()=>{})
+                        }}
+                    >
+                     申请
+                    </Button>
                 </>
             )
         }

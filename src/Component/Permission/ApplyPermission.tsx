@@ -20,7 +20,7 @@ const ApplyPermission = (props:any)=>{
                 >
                     <TableWithPagination
                         name={'TemplateRolesTable'}
-                        API={async (data:any)=>{return Api.getTemplates({data:data})}}
+                        API={async (data:any)=>{return Api.getTemplates({data:{...data,service_type:props.service_type,service_id: props.service_id}})}}
                         columns={TemplateColumns}
                     />
                 </Modal>

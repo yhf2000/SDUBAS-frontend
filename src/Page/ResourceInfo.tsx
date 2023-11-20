@@ -51,8 +51,9 @@ const ResourceInfo = () => {
                                 // }
                             ]}
                             initData={row}
-                            dataSubmitter={(value: any) => {
+                            dataSubmitter={async (value: any) => {
                                 // console.log('data:',value);
+                                return Api.updateResource({data:value,rId:row.Id})
                             }}
                         />
                     </Space>

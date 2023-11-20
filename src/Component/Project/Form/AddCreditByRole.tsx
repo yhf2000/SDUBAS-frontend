@@ -83,7 +83,7 @@ const AddCreditByRole = (props: any) => {
                 label={'目标角色'}
                 rules={[{required:true}]}
             >
-                <Select mode={'tags'}>
+                <Select>
                     {
                         options.map((option:any)=>{
                             return (<Select.Option key={option.role_id} value={option.role_id}>{option.role_name}</Select.Option>)

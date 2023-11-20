@@ -32,7 +32,7 @@ const Login = (props: any) => {
             "login",
             {data: data},
             (r: any) => {
-                // console.log(r);
+                console.log(r);
                 if (!r.first_time) {
                     dispatch(getData(
                         "getProfile",

@@ -309,14 +309,14 @@ export const Api: { [key: string]: any } = {
         return request.delete(`/resources/resource/delete_user_in_resources/${data.rId}/${data.roleId}/${data.uId}`,);//删除一个角色对某人的分配
     },
     getTemplates: async (data: any) => {
-        // return request.get('/permission/', data.data);  //
-        return {rows:[{id:1,time_limit:1,template_name:'学生',permissions:['查看','提交']}]}
+        return request.get('/permissions/projects/get_template_role', data.data);  //
+        // return {rows:[{id:1,time_limit:1,template_name:'学生',permissions:['查看','提交']}]}
     },
     createTemplates:async (data:any)=>{
-        return request.post('/permission',data.data);//创建模板角色
+        return request.post(`/permissions/projects/add_template_role/${data.service_type}/${data.service_id}`,data.data);//创建模板角色
     },
     applyTemplate:async (data:any)=>{
-        return request.post('/permission',data.data);
+        return request.post(`/permissions/projects/apply_template_role/${data.role_id}`,data.data);
     },
     getPermission: async (data: any) => {
         return request.get('/permissions/return_privilege_list', data.data);//获得对应类型的权限

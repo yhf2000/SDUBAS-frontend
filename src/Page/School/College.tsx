@@ -92,7 +92,7 @@ const College = () => {
                                                 dataSubmitter={async (data: any) => {
                                                     return Api.updateCollege({cId: item.id, data: data})
                                                 }}
-                                                initData={{name:item.name,college_logo_id:{file_id:item.college_logo_id,url:item.image}}}
+                                                initData={{name:item.name,college_logo_id:{file_id:item.college_logo_id,url:item.image,file_name:''}}}
                                             />
                                         </Col>
                                         <Col>

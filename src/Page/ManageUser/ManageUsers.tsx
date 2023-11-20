@@ -18,11 +18,11 @@ const ManageUsers = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <div style={{display:'flex',flexDirection:'row',gap:'20px',justifyContent:'center'}}>
+        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center'}}>
             <Card
                 title={'用户管理'}
                 headStyle={{textAlign: 'left'}}
-                style={{width:'700px'}}
+                style={{width: '700px'}}
                 extra={(
                     <ModalFormUseForm
                         title={'添加角色'}
@@ -83,9 +83,7 @@ const ManageUsers = () => {
                                                             <Form.Item name={'role_name'}>
                                                                 <Input/>
                                                             </Form.Item>
-                                                            <Form.Item name={'privilege'}>
-                                                                <ItemPermission service_type={0}/>
-                                                            </Form.Item>
+                                                            <ItemPermission service_type={0} name={'privilege'}/>
                                                         </>
                                                     ),
                                                     label: ''
@@ -94,7 +92,11 @@ const ManageUsers = () => {
                                             dataSubmitter={async (values: any) => {
                                                 return Api.updateRole({role_id: row.id, data: values})
                                             }}
-                                            initData={row}//还需要有权限,或者使用dataLoader
+                                            initData={{
+                                                role_id: row.role_id,
+                                                role_name: row.role_name,
+                                                privilege: row.privilege_list
+                                            }}
                                         />
                                     </>
                                 )
@@ -106,7 +108,7 @@ const ManageUsers = () => {
             <Card
                 title={'用户表'}
                 headStyle={{textAlign: 'left'}}
-                style={{width:'700px'}}
+                style={{width: '700px'}}
             >
                 <TableWithPagination
                     API={async (data: any) => {
@@ -131,14 +133,14 @@ const ManageUsers = () => {
                     useFormBtn={false}
                     columns={[
                         {
-                            title:'学号/工号',
-                            dataIndex:'card_id',
-                            key:'card_id'
+                            title: '学号/工号',
+                            dataIndex: 'card_id',
+                            key: 'card_id'
                         },
                         {
-                            title:'姓名',
+                            title: '姓名',
                             dataIndex: 'real_name',
-                            key:'real_name'
+                            key: 'real_name'
                         },
                         {
                             title: '用户名',
@@ -146,19 +148,19 @@ const ManageUsers = () => {
                             key: 'username'
                         },
                         {
-                            title:'学校',
-                            dataIndex:'school',
-                            key:'school'
+                            title: '学校',
+                            dataIndex: 'school',
+                            key: 'school'
                         },
                         {
-                            title:'专业',
+                            title: '专业',
                             dataIndex: 'major',
-                            key:'major'
+                            key: 'major'
                         },
                         {
-                            title:'班级',
+                            title: '班级',
                             dataIndex: 'class',
-                            key:'class'
+                            key: 'class'
                         },
                     ]}
                 />

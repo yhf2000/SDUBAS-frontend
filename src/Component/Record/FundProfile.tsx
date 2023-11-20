@@ -15,7 +15,7 @@ import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
 
 export const FundForm = (
     <>
-        <ItemName label={'资金名称'} name={'name'} required={true}/>
+        <ItemName label={'资金名称'} name={'name'} required={true} disabled={true}/>
         <ItemText label={'备注'} name={'note'}/>
         <RoleManageForm service_type={6}/>
     </>

@@ -86,13 +86,13 @@ const ProjectInfo: React.FC = () => {
         {
             key: '1',
             label: (
-                <ApplyPermission/>
+                <ApplyPermission service_type={7} service_id={item.id}/>
             )
         },
         {
             key: '2',
             label: (
-                <CreateTemplate/>
+                <CreateTemplate service_type={7} service_id={item.id}/>
             )
         }
     ]

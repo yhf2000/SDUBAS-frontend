@@ -18,6 +18,14 @@ const RoleManageForm = (props:any) => {
                         <Space key={field.name} style={{display: 'flex', marginBottom: 8}} align="baseline">
                             <Form.Item
                                 {...field}
+                                name={[field.name, 'role_id']}
+                                key={field.name+'role_id'}
+                                style={{display:'none'}}
+                                noStyle
+                            >
+                            </Form.Item>
+                            <Form.Item
+                                {...field}
                                 name={[field.name, 'role_name']}
                                 key={field.name+'role_name'}
                                 label="角色"

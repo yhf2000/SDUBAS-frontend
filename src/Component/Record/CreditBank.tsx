@@ -83,6 +83,7 @@ export const SelectUser = (props: any) => {
                 }}
                 title={'选择查看'}
                 footer={null}
+                width={'800px'}
             >
                 <TableWithPagination
                     API={async (data: any) => {
@@ -102,9 +103,34 @@ export const SelectUser = (props: any) => {
                     useFormBtn={false}
                     columns={[
                         {
+                            title: '学号/工号',
+                            dataIndex: 'card_id',
+                            key: 'card_id'
+                        },
+                        {
+                            title: '姓名',
+                            dataIndex: 'real_name',
+                            key: 'real_name'
+                        },
+                        {
                             title: '用户名',
                             dataIndex: 'user_name',
                             key: 'username'
+                        },
+                        {
+                            title: '学校',
+                            dataIndex: 'school',
+                            key: 'school'
+                        },
+                        {
+                            title: '专业',
+                            dataIndex: 'major',
+                            key: 'major'
+                        },
+                        {
+                            title: '班级',
+                            dataIndex: 'class',
+                            key: 'class'
                         },
                         {
                             title: '操作',
@@ -118,6 +144,9 @@ export const SelectUser = (props: any) => {
                                     }}>选择</Button>
                                 )
                             }
+                        },
+                        {
+
                         }
                     ]}
                 />
