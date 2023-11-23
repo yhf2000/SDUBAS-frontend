@@ -15,7 +15,6 @@ const AddCreditByRole = (props: any) => {
             .then((res:any)=>{
                 setOptions(res.rows);
             }).catch(()=>{})
-        console.log('option',options)
     }, [])
     return (
         <>

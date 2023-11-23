@@ -89,8 +89,8 @@ const ModalContentSubmit = (props: any) => {
     const handleModalClose = () => {
         setModalVisible(false);
     };
-    useEffect(() => {
-    }, [props.cId])
+    // useEffect(() => {
+    // }, [props.cId])
 // console.log('contentId',props.cId);
     return (
         <div>

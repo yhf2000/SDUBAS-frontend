@@ -7,11 +7,13 @@ import ItemName from "../Common/Form/Item/ItemName";
 import ItemText from "../Common/Form/Item/ItemText";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch} from "../../Redux/Store";
 import ItemRoles from "../User/Form/Item/ItemRoles";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
 
 export const FundForm = (
     <>
@@ -23,9 +25,17 @@ export const FundForm = (
 const FundProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[6] ?? []);
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 6}})
+            .then((res: any) => {
+                    dispatch({type: 'setUserPermission', service_type: 6, data: res.map((e: any) => e.label)})
+                }
+            )
+    }, [])
     return (
         <>
             <div className={'table-container'}>
@@ -73,32 +83,36 @@ const FundProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
-                                            <ModalRoleManage
-                                                btnType={'link'}
-                                                newRole={false}
-                                                TableName={'fundRoleTable'+rows.Id}
-                                                service_type={6} service_id={rows.Id}
-                                                editable={false}
-                                            />
-                                            <DeleteConfirm
-                                                onConfirm={() => {
-                                                    dispatch(getData(
-                                                        'deleteFund',
-                                                        {fId: rows.Id},
-                                                        (res: any) => {
-                                                            addTableVersion('FundTable');
-                                                            message.success('删除成功')
-                                                            return Promise.resolve(res);
-                                                        },
-                                                        (error: any) => {
-                                                            message.error('删除失败');
+                                            {
+                                                permissions.some((e: any) => e === '资金管理') && (
+                                                <><ModalRoleManage
+                                                    btnType={'link'}
+                                                    newRole={false}
+                                                    TableName={'fundRoleTable' + rows.Id}
+                                                    service_type={6} service_id={rows.Id}
+                                                    editable={false}
+                                                />
+                                                    <DeleteConfirm
+                                                        onConfirm={() => {
+                                                            dispatch(getData(
+                                                                'deleteFund',
+                                                                {fId: rows.Id},
+                                                                (res: any) => {
+                                                                    addTableVersion('FundTable');
+                                                                    message.success('删除成功')
+                                                                    return Promise.resolve(res);
+                                                                },
+                                                                (error: any) => {
+                                                                    message.error('删除失败');
+                                                                }
+                                                            ));
+                                                        }}//删除的Api
+                                                        content={
+                                                            <Button type={'link'} danger={true}>删除</Button>
                                                         }
-                                                    ));
-                                                }}//删除的Api
-                                                content={
-                                                    <Button type={'link'} danger={true}>删除</Button>
-                                                }
-                                            />
+                                                    />
+                                                </>)
+                                            }
                                         </>
                                     )
                                 }

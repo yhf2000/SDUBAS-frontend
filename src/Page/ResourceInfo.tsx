@@ -7,6 +7,8 @@ import React from "react";
 import {useLocation, useParams} from "react-router-dom";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {ResourceForm} from "../Component/Record/ResourceProfile";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
 
 const {Meta} = Card;
 
@@ -15,7 +17,7 @@ const ResourceInfo = () => {
     const {rId} = useParams();
     const location = useLocation();
     const {row} = location.state;
-
+    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[5] ?? []);
     return (
         <>
             <Card
@@ -30,32 +32,40 @@ const ResourceInfo = () => {
                         {/*    columns={ApprovalColumns({API: 'null'})}*/}
                         {/*    TableName={'Resource' + rId + 'ApplyTable'}*/}
                         {/*/>*/}
-                        <RequestResource rId={rId}
-                                         button={<Button type={'primary'} size={'small'}
-                                                         style={{marginTop: '20px'}}>申请</Button>}
-                                         TableName={'ApplicationTable'}/>
-                        <ModalFormUseForm
-                            title={'编辑资源'}
-                            type={'update'}
-                            TableName={'ApplicationTable'}
-                            btnName={'编辑'}
-                            width={1000}
-                            subForm={[
-                                {
-                                    component: ResourceForm,
-                                    label: '',
-                                },
-                                // {
-                                //     component: ProjectForm2,
-                                //     label:'',
-                                // }
-                            ]}
-                            initData={row}
-                            dataSubmitter={async (value: any) => {
-                                // console.log('data:',value);
-                                return Api.updateResource({data:value,rId:row.Id})
-                            }}
-                        />
+                        {
+                            permissions.some((e:any)=> e === '资源申请')&&(
+                                <RequestResource rId={rId}
+                                                 button={<Button type={'primary'} size={'small'}
+                                                                 style={{marginTop: '20px'}}>申请</Button>}
+                                                 TableName={'ApplicationTable'}/>
+                            )
+                        }
+                        {
+                            permissions.some((e: any) => e === '资源编辑')&&(
+                                <ModalFormUseForm
+                                    title={'编辑资源'}
+                                    type={'update'}
+                                    TableName={'ApplicationTable'}
+                                    btnName={'编辑'}
+                                    width={1000}
+                                    subForm={[
+                                        {
+                                            component: ResourceForm,
+                                            label: '',
+                                        },
+                                        // {
+                                        //     component: ProjectForm2,
+                                        //     label:'',
+                                        // }
+                                    ]}
+                                    initData={row}
+                                    dataSubmitter={async (value: any) => {
+                                        // console.log('data:',value);
+                                        return Api.updateResource({data:value,rId:row.Id})
+                                    }}
+                                />
+                            )
+                        }
                     </Space>
                 )}
             >

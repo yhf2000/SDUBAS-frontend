@@ -351,6 +351,9 @@ export const Api: { [key: string]: any } = {
     addClassRole:async (data:any)=>{
         return request.get('/permissions/educations/schools/add_class_role',data.data);
     },
+    getUserPermission:async (data:any)=>{
+        return request.get('/permissions/return_user_privilege_list',data.data);//获得当前登录用户权限
+    },
 
 
     //个人档案

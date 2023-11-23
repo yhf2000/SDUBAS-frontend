@@ -7,35 +7,45 @@ import {
     Space,
 } from "antd";
 import ProCard from "../../Component/Project/ProCard";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
 import {tagOptions} from "../../Config/Project/data";
+import {useEffect} from "react";
+import {useDispatch} from "../../Redux/Store";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
 
 
 const Experiment = () => {
     const navigate = useNavigate();
-    // useMemo
-
-    // console.log('there is ')
+    const dispatch = useDispatch();
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 7}})
+            .then((res: any) => {
+                    dispatch({type:'setUserPermission',service_type:7,data:res.map((e: any) => e.label)})
+                }
+            )
+    }, [])
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 title={'实验平台'}
                 headStyle={{textAlign: 'left'}}
-                style={{minWidth:'1200px'}}
+                style={{minWidth: '1000px'}}
                 bordered={false}
-                extra={<ModalFormUseForm
+                extra={
+                <ModalFormUseForm
                     title={'新建实验'}
                     type={'create'}
                     btnName={'新建实验'}
                     TableName={'ExperimentMainTable'}
                     subForm={[
                         {
-                            component: ProjectForm1({type:'实验'}),
+                            component: ProjectForm1({type: '实验'}),
                             label: "",
                         },
                         {
@@ -62,8 +72,7 @@ const Experiment = () => {
                         name={'ExperimentMainTable'}
                         useList={true}
                         API={async (data: any) => {
-                            console.log(data)
-                            if(data.tag)
+                            if (data.tag)
                                 data.tag = arraytostr(data.tag);
                             else data.tag = ''
                             return Api.getProListByType({data: {projectType: '实验', ...data}})
@@ -74,9 +83,11 @@ const Experiment = () => {
                             return (
                                 <Space size={30}>
                                     <Form.Item label={'标签'} name={'tag'}>
-                                        <Select onChange={onFinish} mode={'multiple'} style={{width: 120,height:'30px'}}  maxTagCount='responsive'>
-                                            {tagOptions.map((option:any)=>{
-                                                return(<Select.Option key={option.key} value={option.key}>{option.value}</Select.Option>)
+                                        <Select onChange={onFinish} mode={'multiple'}
+                                                style={{width: 120, height: '30px'}} maxTagCount='responsive'>
+                                            {tagOptions.map((option: any) => {
+                                                return (<Select.Option key={option.key}
+                                                                       value={option.key}>{option.value}</Select.Option>)
                                             })}
                                         </Select>
                                     </Form.Item>
@@ -98,7 +109,7 @@ const Experiment = () => {
                     />
                 </div>
             </Card>
-        </>
+        </div>
     );
 }
 

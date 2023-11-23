@@ -10,6 +10,8 @@ import DeleteConfirm from "../Component/Common/DeleteConfirm";
 import {useDispatch} from "../Redux/Store";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {FundForm} from "../Component/Record/FundProfile";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
 
 const {Meta} = Card;
 const FundInfo = () => {
@@ -18,39 +20,45 @@ const FundInfo = () => {
     const location = useLocation();
     const {row} = location.state;
     const dispatch = useDispatch();
-    const addTableVersion = (name:string)=>{
-        dispatch({type:'addTableVersion',name:name})
+    const addTableVersion = (name: string) => {
+        dispatch({type: 'addTableVersion', name: name})
     }
+    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[6] ?? []);
     return (
         <>
             <Card
                 title={row.name}
-                headStyle={{textAlign:'left'}}
+                headStyle={{textAlign: 'left'}}
                 extra={
-                    (
-                        <>
-                            <AddBill fId={fId}
-                                     button={<Button type={"primary"} size={'small'} style={{marginLeft: '1000px'}}>记账</Button>}/>
-                            <ModalFormUseForm
-                                title={'编辑资金'}
-                                type={'update'}
-                                btnName={'编辑'}
-                                subForm={[
-                                    {
-                                        component: FundForm,
-                                        label: '',
-                                    },
-                                    // {
-                                    //     component: ProjectForm2,
-                                    //     label:'',
-                                    // }
-                                ]}
-                                initData={row}
-                                width={1000}
-                                dataSubmitter={(value: any) => {
-                                    return Api.updateFund({fId:fId,data:value})
-                                }}
-                            />
+                    (<>
+                            {
+                                permissions.some((e: any) => e === '资金管理') && (
+                                    <>
+                                        <AddBill fId={fId}
+                                                 button={<Button type={"primary"} size={'small'}
+                                                                 style={{marginLeft: '1000px'}}>记账</Button>}/>
+                                        <ModalFormUseForm
+                                            title={'编辑资金'}
+                                            type={'update'}
+                                            btnName={'编辑'}
+                                            subForm={[
+                                                {
+                                                    component: FundForm,
+                                                    label: '',
+                                                },
+                                                // {
+                                                //     component: ProjectForm2,
+                                                //     label:'',
+                                                // }
+                                            ]}
+                                            initData={row}
+                                            width={1000}
+                                            dataSubmitter={(value: any) => {
+                                                return Api.updateFund({fId: fId, data: value})
+                                            }}
+                                        />
+                                    </>)
+                            }
                         </>
                     )
                 }
@@ -89,9 +97,9 @@ const FundInfo = () => {
                                 {
                                     title: '日志记录',
                                     key: 'log_content',
-                                    render:(_:any,record:any)=>{
-                                       if(record.url !== undefined)
-                                           return(<img alt={'日志'} src={record.url}/>)
+                                    render: (_: any, record: any) => {
+                                        if (record.url !== undefined)
+                                            return (<img alt={'日志'} src={record.url}/>)
                                         return <>{record.log_content}</>
                                     }
                                 },
@@ -104,7 +112,7 @@ const FundInfo = () => {
                                                 onConfirm={() => {
                                                     dispatch(getData(
                                                         'deleteAccount',
-                                                        {fId:row.finance_id,aId:row.Id},
+                                                        {fId: row.finance_id, aId: row.Id},
                                                         (res: any) => {
                                                             addTableVersion('AccountTable');
                                                             message.success('删除成功')

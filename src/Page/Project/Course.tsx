@@ -8,18 +8,28 @@ import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
 import {tagOptions} from "../../Config/Project/data";
+import {useEffect} from "react";
+import {useDispatch} from "../../Redux/Store";
 
 const Course = () => {
     const navigate = useNavigate();
     const handleClick = (item:any)=>{
         navigate(`/c/project-info/${item.id}`)
     }
+    const dispatch = useDispatch();
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 7}})
+            .then((res: any) => {
+                    dispatch({type:'setUserPermission',service_type:7,data:res.map((e: any) => e.label)})
+                }
+            )
+    }, [])
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 title={'课程平台'}
                 headStyle={{textAlign:'left'}}
-                style={{minWidth:'1500px'}}
+                style={{minWidth:'1000px'}}
                 extra={
                     <ModalFormUseForm
                         title={'新建课程'}
@@ -77,7 +87,7 @@ const Course = () => {
                     }}
                 />
             </Card>
-        </>
+        </div>
     );
 }
 

@@ -1,12 +1,11 @@
 import {IUserInfo} from "../../Type/user";
-import {Api} from "../../API/api";
-import {Dispatch} from "react";
 
 export type UserAction =
     setUserInfo |
     userLogin |
     userLogout |
-    userQueryLogin
+    userQueryLogin |
+    setUserPermission
 
 export interface setUserInfo {
     type: "setUserInfo"
@@ -26,4 +25,9 @@ export interface userLogout {
     type: "userLogout"
 }
 
+export interface setUserPermission {
+    type: 'setUserPermission',
+    service_type: any,
+    data: any;
+}
 

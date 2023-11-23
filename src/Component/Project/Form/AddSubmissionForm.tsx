@@ -6,7 +6,6 @@ type SType = "0" | "1";
 const AddSubmissionForm = (props:any) => {
     const [type, setType] = useState<SType[]>([]);
     const handleSelect = (index: number, value: any) => {
-        console.log('type', value);
         let newType = type.slice();
         newType[index] = value;
         setType(newType);

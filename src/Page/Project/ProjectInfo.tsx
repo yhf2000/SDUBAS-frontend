@@ -21,6 +21,7 @@ import CreateTemplate from "../../Component/Project/CreateTemplate";
 import {DownOutlined} from "@ant-design/icons";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import {creditsTypeColumn} from "../../Config/Project/columns";
+import {CreditsRole} from "../../Component/Project/Credits";
 
 
 const {Sider, Content} = Layout;
@@ -43,7 +44,7 @@ const ProjectInfo: React.FC = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const location = useLocation();
     const {item} = location.state;
-    const [permissions,getPermission] = useState<string[]>([]);
+    const permissions = useSelector((state:IState)=>state.UserReducer.userPermission[7]??[]);
     const generateTreeData = (data: any) => {//根据后端数据递归获得treeData
         return data.map((item: any) => {
             let {key, children, isLeaf} = item;
@@ -76,11 +77,9 @@ const ProjectInfo: React.FC = () => {
             })
     }, [])
     useEffect(() => {
-        // console.log(treeData)
-        if(treeData)
-        generateTreeData(treeData);
+        if (treeData)
+            generateTreeData(treeData);
     }, [treeData])
-
     let items: MenuProps['items'] = []
     let manageitems: MenuProps['items'] = [
         {
@@ -97,99 +96,85 @@ const ProjectInfo: React.FC = () => {
         }
     ]
     if (item.type !== '教学资源') {
-        manageitems.push({
-            key: '3', label: (<ModalFormUseForm
-                btnName={'学分认定'}
-                btnType={'text'}
-                title={'学分认定'}
-                subForm={[
-                    {
-                        component: AddCreditByRole({pId: pId}),
-                        label: ''
-                    }
-                ]}
-                // dataLoader
-                dataSubmitter={async (value: any) => {
-                    return Api.addProCredit({pId: pId, data: value})
-                }}
-                otherContent={
-                    <TableWithPagination
-                        name={'CreditsTypeTable'}
-                        API={async (data: any) => {
-                            return Api.getTypeCredits({pId: pId, data: data})
-                        }}
-                        columns={creditsTypeColumn}
-                    />
-                }
-            />)
-        })
+        if (permissions.some((e: any) => e === '项目学分认定'))
+            manageitems.push({
+                key: '3', label: (
+                    <CreditsRole pId={pId}/>
+                )
+            })
     }
     if (selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf) {
-        items = [
-            {
-                key: '1',
-                label: (
-                    <UserContentScore pId={pId}/>
-                )
-            },
-            {
-                key: '2',
-                label: (
-                    <ModalContentSubmit
-                        pId={pId} // @ts-ignore
-                        cId={keyIdMap[selectedMenuKey].key}
-                        username={userinfo?.username}//这里可能会替换成userid
-                    />
-                )
-            },
-            {
-                key: '3',
-                label: (
-                    // @ts-ignore
-                    <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
-                )
-            },
-            {
-                key: '4',
-                label: (
-                    <Button type={'ghost'} onClick={() => {
+        if (permissions.some((e: any) => e === '项目提交'))
+            items = [
+                {
+                    key: '1',
+                    label: (
+                        <UserContentScore pId={pId}/>
+                    )
+                },
+                {
+                    key: '2',
+                    label: (
+                        <ModalContentSubmit
+                            pId={pId} // @ts-ignore
+                            cId={keyIdMap[selectedMenuKey].key}
+                            username={userinfo?.username}//这里可能会替换成userid
+                        />
+                    )
+                },
+                {
+                    key: '4',
+                    label: (
+                        <Button type={'ghost'} onClick={() => {
+                            // @ts-ignore
+                            Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                        }}>更新我的</Button>
+                    )
+                }
+            ]
+        if (permissions.some((e: any) => e === '项目批阅'))
+            items.push(
+                {
+                    key: '3',
+                    label: (
                         // @ts-ignore
-                        Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
-                    }}>更新我的</Button>
-                )
-            }
-        ]
+                        <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
+                    )
+                }
+            )
         if (item.type !== '教学资源') {
-            manageitems.push({
-                key: '', label: (<ModalFormUseForm
-                    title={'添加提交任务'}
-                    btnName={'添加提交'}
-                    btnType={'text'}
-                    TableName={`SubmitContentTable-${keyIdMap[selectedMenuKey].key}`}
-                    subForm={[
-                        {
-                            component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
-                            label: '',
-                        }
-                    ]}
-                    dataSubmitter={async (data: any) => {
-                        // console.log('data',data);
-                        return Api.submitProContent({
-                            pId: pId,
-                            cId: keyIdMap[selectedMenuKey].key,
-                            data: data
-                        })
-                    }}
-                />)
-            })
-            manageitems.push({
-                key: '5', label: (<Button type={'text'} onClick={() => {
-                    Api.getRefreshAll({pId: pId, cId: keyIdMap[selectedMenuKey].key})
-                }}>更新全部</Button>)
-            })
+            if(permissions.some((e:any)=>e === '项目批阅'))
+            {
+                manageitems.push({
+                    key: '', label: (<ModalFormUseForm
+                        title={'添加提交任务'}
+                        btnName={'添加提交'}
+                        btnType={'text'}
+                        TableName={`SubmitContentTable-${keyIdMap[selectedMenuKey].key}`}
+                        subForm={[
+                            {
+                                component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
+                                label: '',
+                            }
+                        ]}
+                        dataSubmitter={async (data: any) => {
+                            // console.log('data',data);
+                            return Api.submitProContent({
+                                pId: pId,
+                                cId: keyIdMap[selectedMenuKey].key,
+                                data: data
+                            })
+                        }}
+                    />)
+                })
+                manageitems.push({
+                    key: '5', label: (<Button type={'text'} onClick={() => {
+                        Api.getRefreshAll({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                    }}>更新全部</Button>)
+                })
+            }
         }
     }
-
     return (
         <div style={{minWidth: 800}}>
             <div style={{textAlign: "left", marginBottom: 12, marginLeft: 6}}>
@@ -218,7 +203,7 @@ const ProjectInfo: React.FC = () => {
                     <Space size={12}>
                         {/*还有一些待传的参数*/}
                         {
-                            selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && item.type!=='教学资源'&&(
+                            selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && item.type !== '教学资源' && (
                                 <>
                                     <Dropdown
                                         menu={{items}}
@@ -245,7 +230,7 @@ const ProjectInfo: React.FC = () => {
                             showLine
                             autoExpandParent={true}
                             switcherIcon={<DownOutlined/>}
-                            defaultExpandedKeys={selectedMenuKey?[selectedMenuKey]:[]}
+                            defaultExpandedKeys={selectedMenuKey ? [selectedMenuKey] : []}
                             onSelect={handleMenuSelect}
                             // selectedKeys={selectedMenuKey !== null ? [selectedMenuKey] : []}
                             treeData={treeData}

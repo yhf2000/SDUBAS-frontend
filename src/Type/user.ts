@@ -24,6 +24,7 @@ export interface IUserState {
     isLogin: boolean
     queryLogin: boolean
     userInfo: IUserInfo | undefined
+    userPermission:IUserPermission
 }
 
 export interface IUserAvatar {
@@ -31,4 +32,8 @@ export interface IUserAvatar {
     size?: AvatarSize
     shape?: 'circle' | 'square'
     className?: string | null
+}
+
+export interface IUserPermission{
+        [key:string]:any
 }
