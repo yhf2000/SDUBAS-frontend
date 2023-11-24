@@ -4,9 +4,9 @@ export const Api: { [key: string]: any } = {
     checkFile: async (data: any) => {
         return request.post('/files/upload/valid', data.data);
     },
-    uploadFile: async (data: any) => {
+    uploadFile: async (data: any,options:any) => {
         return request.post('/files/upload', data.data,
-            {headers: {"Content-Type": "multipart/form-data"}});
+            {headers: {"Content-Type": "multipart/form-data"},...options});
     },
     getDownLoadUrl: async (data: any) => {
         return request.get('/files/download', data.data);
@@ -316,7 +316,13 @@ export const Api: { [key: string]: any } = {
         return request.post(`/permissions/projects/add_template_role/${data.service_type}/${data.service_id}`,data.data);//创建模板角色
     },
     applyTemplate:async (data:any)=>{
-        return request.post(`/permissions/projects/apply_template_role/${data.role_id}`,data.data);
+        return request.post(`/permissions/projects/apply_template_role/${data.pId}/${data.role_id}`,data.data);//申请模板角色
+    },
+    getApplication:async (data:any)=>{
+        return request.get('/permissions/projects/get_applied_template_role',data.data);//请求项目待审批的申请
+    },
+    approve:async (data:any)=>{
+      return request.post(`/permissions/projects/approve_template_role/${data.service_id}/${data.id}`,data.data);
     },
     getPermission: async (data: any) => {
         return request.get('/permissions/return_privilege_list', data.data);//获得对应类型的权限

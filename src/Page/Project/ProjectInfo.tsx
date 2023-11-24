@@ -13,15 +13,14 @@ import AddSubmissionForm from "../../Component/Project/Form/AddSubmissionForm";
 import {Api} from "../../API/api";
 import Score from "../../Component/Project/Score";
 import {buildTree} from "../../Utils/buildTree";
-import AddCreditByRole from "../../Component/Project/Form/AddCreditByRole";
 import ApplyPermission from "../../Component/Permission/ApplyPermission";
 import UserContentScore from "./Info/UserContentScore";
 import PlayerWithDuration from "../../Component/Common/PlayerWithDuration";
 import CreateTemplate from "../../Component/Project/CreateTemplate";
 import {DownOutlined} from "@ant-design/icons";
-import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
-import {creditsTypeColumn} from "../../Config/Project/columns";
 import {CreditsRole} from "../../Component/Project/Credits";
+import Approval from "../../Component/Permission/Approval";
+import DocViewer from '@cyntler/react-doc-viewer';
 
 
 const {Sider, Content} = Layout;
@@ -43,8 +42,7 @@ const ProjectInfo: React.FC = () => {
     const {pId} = useParams();
     const userinfo = useSelector((state: IState) => state.UserReducer.userInfo);
     const location = useLocation();
-    const {item} = location.state;
-    const permissions = useSelector((state:IState)=>state.UserReducer.userPermission[7]??[]);
+    const {item, permissions} = location.state;
     const generateTreeData = (data: any) => {//根据后端数据递归获得treeData
         return data.map((item: any) => {
             let {key, children, isLeaf} = item;
@@ -92,6 +90,12 @@ const ProjectInfo: React.FC = () => {
             key: '2',
             label: (
                 <CreateTemplate service_type={7} service_id={item.id}/>
+            )
+        },
+        {
+            key: '10',
+            label: (
+                <Approval pId={pId} service_type={7}/>
             )
         }
     ]
@@ -143,29 +147,29 @@ const ProjectInfo: React.FC = () => {
                 }
             )
         if (item.type !== '教学资源') {
-            if(permissions.some((e:any)=>e === '项目批阅'))
-            {
+            if (permissions.some((e: any) => e === '项目批阅')) {
                 manageitems.push({
-                    key: '', label: (<ModalFormUseForm
-                        title={'添加提交任务'}
-                        btnName={'添加提交'}
-                        btnType={'text'}
-                        TableName={`SubmitContentTable-${keyIdMap[selectedMenuKey].key}`}
-                        subForm={[
-                            {
-                                component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
-                                label: '',
-                            }
-                        ]}
-                        dataSubmitter={async (data: any) => {
-                            // console.log('data',data);
-                            return Api.submitProContent({
-                                pId: pId,
-                                cId: keyIdMap[selectedMenuKey].key,
-                                data: data
-                            })
-                        }}
-                    />)
+                    key: '', label: (
+                        <ModalFormUseForm
+                            title={'添加提交任务'}
+                            btnName={'添加提交'}
+                            btnType={'text'}
+                            TableName={`SubmitContentTable`}
+                            subForm={[
+                                {
+                                    component: () => AddSubmissionForm({cId: keyIdMap[selectedMenuKey].key}),
+                                    label: '',
+                                }
+                            ]}
+                            dataSubmitter={async (data: any) => {
+                                // console.log('data',data);
+                                return Api.submitProContent({
+                                    pId: pId,
+                                    cId: keyIdMap[selectedMenuKey].key,
+                                    data: data
+                                })
+                            }}
+                        />)
                 })
                 manageitems.push({
                     key: '5', label: (<Button type={'text'} onClick={() => {

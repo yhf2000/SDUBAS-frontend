@@ -6,14 +6,11 @@ import { Col, Image, Row} from "antd";
 import React from "react";
 import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
-import Information from "../Component/Record/Information";
-import ItemUpload from "../Component/Common/Form/Item/ItemUpload";
-
 const Home = () => {
     // Api.logout()
     return (
         <>
-            {/*<ItemUpload accept={'.*'} aes={true}/>*/}
+            {/*<FilePreview url={'https://calibre-ebook.com/downloads/demos/demo.docx'} />*/}
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>

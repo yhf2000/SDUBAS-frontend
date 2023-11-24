@@ -4,7 +4,7 @@ import AddBill from "../Component/Record/Form/AddBill";
 import '../Config/CSS/FundInfo.css'
 import {Api} from "../API/api";
 import {useLocation, useParams} from "react-router-dom";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import getData from "../API/getData";
 import DeleteConfirm from "../Component/Common/DeleteConfirm";
 import {useDispatch} from "../Redux/Store";
@@ -20,10 +20,17 @@ const FundInfo = () => {
     const location = useLocation();
     const {row} = location.state;
     const dispatch = useDispatch();
+    const [permissions,setPermissions] = useState<any>([])
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
-    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[6] ?? []);
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 6}})
+            .then((res: any) => {
+                    setPermissions(res.map((e: any) => e.label))
+                }
+            )
+    }, [])
     return (
         <>
             <Card

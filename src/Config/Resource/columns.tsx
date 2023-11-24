@@ -159,7 +159,7 @@ export const CreditBankChildColumns = [
     }
 ]
 
-export const TemplateColumns = [
+export const TemplateColumns = (props:any)=>[
     {
         title: '模板名称',
         dataIndex: 'role_name',
@@ -184,16 +184,25 @@ export const TemplateColumns = [
         render: (_: any, record: any) => {
             return (
                 <>
-                    <Button
-                        type={'link'}
-                        onClick={()=>{
-                            Api.applyTemplate({role_id:record.role_id})
-                                .then(()=>{message.success('申请成功')})
-                                .catch(()=>{})
-                        }}
-                    >
-                     申请
-                    </Button>
+                    {
+                        record.status === -1?(
+                            <Button
+                                type={'link'}
+                                onClick={()=>{
+                                    Api.applyTemplate({pId:props.pId,role_id:record.role_id})
+                                        .then(()=>{
+                                            message.success('申请成功');
+                                            props.addTableVersion('TemplateRolesTable');
+                                        })
+                                        .catch(()=>{})
+                                }}
+                            >
+                                申请
+                            </Button>
+                        ):record.status === 1?(
+                            <div style={{color:'blue'}}>申请中</div>
+                        ):record.status === 0?<div style={{color:'green'}}>通过</div>:<div style={{color:'red'}}>拒绝</div>
+                    }
                 </>
             )
         }

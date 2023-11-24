@@ -16,8 +16,6 @@ import {arraytostr} from "../../Utils/arraytostr";
 import {tagOptions} from "../../Config/Project/data";
 import {useEffect} from "react";
 import {useDispatch} from "../../Redux/Store";
-import {useSelector} from "react-redux";
-import {IState} from "../../Type/base";
 
 
 const Experiment = () => {

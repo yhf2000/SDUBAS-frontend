@@ -38,15 +38,15 @@ const SubmissionSForm = (props: any) => {
                 modalProps={{
                     // maskClosable: false,
                     destroyOnClose: true,
-                    width: "1000px",
+                    // width: "1000px",
                     okText: "提交",
-                    bodyStyle:{height:"500px"}
+                    // bodyStyle:{height:"500px"}
                 }}
                 onFinish={(values: any) => {
                     console.log(values);
                     return Api.submit({pId: props.pId, cId: props.cId, data: values}).then(() => {
                         message.success('提交成功');
-                        addTableVersion(`SubmitContentTable-${props.cId}`);
+                        addTableVersion(`SubmitContentTable`);
                         return Promise.resolve(true);
                     }).catch(() => {
                         // message.error('错误')

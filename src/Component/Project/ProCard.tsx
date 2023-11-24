@@ -46,7 +46,7 @@ export default function ProCard({item, TableName, pathname}: any) {
                          if (item.active === 0) {
                              message.info('未开放');
                          } else {
-                             navigate(`/c/project-info/${item.id}`, {state: {url: item.url, item: item}});
+                             navigate(`/c/project-info/${item.id}`, {state: {url: item.url, item: item,permissions:permission}});
                          }
                      }}
                 >

@@ -49,7 +49,7 @@ const ModalContentSubmit = (props: any) => {
                                         setVisible(false)
                                     }}
                                     width={'1000px'}
-                                    bodyStyle={{height:'500px'}}
+                                    // bodyStyle={{height:'500px'}}
                                 >
                                     <div style={{display:'flex',flexDirection:'row',gap:'20px'}}>
                                         <div>
@@ -103,7 +103,7 @@ const ModalContentSubmit = (props: any) => {
                 width={'600px'}
             >
                 <TableWithPagination
-                    name={`SubmitContentTable-${props.cId}`}
+                    name={`SubmitContentTable`}
                     API={async (data: any) => {
                         return Api.getPCSubmission({
                             pId: props.pId,

@@ -25,17 +25,9 @@ export const FundForm = (
 const FundProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[6] ?? []);
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
-    useEffect(() => {
-        Api.getUserPermission({data: {service_type: 6}})
-            .then((res: any) => {
-                    dispatch({type: 'setUserPermission', service_type: 6, data: res.map((e: any) => e.label)})
-                }
-            )
-    }, [])
     return (
         <>
             <div className={'table-container'}>
@@ -83,36 +75,34 @@ const FundProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
-                                            {
-                                                permissions.some((e: any) => e === '资金管理') && (
-                                                <><ModalRoleManage
-                                                    btnType={'link'}
-                                                    newRole={false}
-                                                    TableName={'fundRoleTable' + rows.Id}
-                                                    service_type={6} service_id={rows.Id}
-                                                    editable={false}
+
+                                            <><ModalRoleManage
+                                                btnType={'link'}
+                                                newRole={false}
+                                                TableName={'fundRoleTable' + rows.Id}
+                                                service_type={6} service_id={rows.Id}
+                                                editable={false}
+                                            />
+                                                <DeleteConfirm
+                                                    onConfirm={() => {
+                                                        dispatch(getData(
+                                                            'deleteFund',
+                                                            {fId: rows.Id},
+                                                            (res: any) => {
+                                                                addTableVersion('FundTable');
+                                                                message.success('删除成功')
+                                                                return Promise.resolve(res);
+                                                            },
+                                                            (error: any) => {
+                                                                message.error('删除失败');
+                                                            }
+                                                        ));
+                                                    }}//删除的Api
+                                                    content={
+                                                        <Button type={'link'} danger={true}>删除</Button>
+                                                    }
                                                 />
-                                                    <DeleteConfirm
-                                                        onConfirm={() => {
-                                                            dispatch(getData(
-                                                                'deleteFund',
-                                                                {fId: rows.Id},
-                                                                (res: any) => {
-                                                                    addTableVersion('FundTable');
-                                                                    message.success('删除成功')
-                                                                    return Promise.resolve(res);
-                                                                },
-                                                                (error: any) => {
-                                                                    message.error('删除失败');
-                                                                }
-                                                            ));
-                                                        }}//删除的Api
-                                                        content={
-                                                            <Button type={'link'} danger={true}>删除</Button>
-                                                        }
-                                                    />
-                                                </>)
-                                            }
+                                            </>
                                         </>
                                     )
                                 }
