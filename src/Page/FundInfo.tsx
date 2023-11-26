@@ -9,10 +9,17 @@ import getData from "../API/getData";
 import DeleteConfirm from "../Component/Common/DeleteConfirm";
 import {useDispatch} from "../Redux/Store";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
-import {FundForm} from "../Component/Record/FundProfile";
-import {useSelector} from "react-redux";
-import {IState} from "../Type/base";
+import ItemName from "../Component/Common/Form/Item/ItemName";
+import ItemText from "../Component/Common/Form/Item/ItemText";
+import RoleManageForm from "../Component/Permission/Form/RoleManageForm";
 
+const FundForm = (
+    <>
+        <ItemName label={'资金名称'} name={'name'} required={true} disabled={true}/>
+        <ItemText label={'备注'} name={'note'}/>
+        <RoleManageForm service_type={6}/>
+    </>
+);
 const {Meta} = Card;
 const FundInfo = () => {
 

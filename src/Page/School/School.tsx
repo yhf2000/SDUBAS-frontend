@@ -6,10 +6,8 @@ import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {SchoolForm} from "../../Component/User/Form/SchoolForms";
-import AssignRole from "../../Component/Permission/AssignRole";
-
 const School = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

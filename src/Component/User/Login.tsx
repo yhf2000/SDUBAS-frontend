@@ -117,8 +117,10 @@ const Login = (props: any) => {
                                 prefix: <UserOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
                                     formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        if (value)
+                                        if (value.username && value.password){
+                                            value.password = sha256(value.password+value.username)
                                             login(value);
+                                        }
                                     }).catch(() => {
                                         formRef.current?.setFields(
                                             [
@@ -146,7 +148,10 @@ const Login = (props: any) => {
                                 prefix: <LockOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
                                     formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        login(value);
+                                        if (value.username && value.password){
+                                            value.password = sha256(value.password+value.username)
+                                            login(value);
+                                        }
                                     }).catch(() => {
                                         formRef.current?.setFields(
                                             [

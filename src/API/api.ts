@@ -225,7 +225,7 @@ export const Api: { [key: string]: any } = {
     },
     getProListByType: async (data: any) => {
         return request.get('/projects/project/type', data.data);
-        // return {rows:[{}]}
+        // return {rows:[{active:1,create_dy:"1697112050000",file_type:'image/jpeg',id:0,img_id:"15",name:"oj测试",tag:'11',type:"实验",url:"http://127.0.0.1:8000/files/download/0ea610721fe64a06a4312d035c3ca657"}]}
     },
     getProInfo: async (data: any) => {
         return request.get(`/projects/get/${data.pId}`, data?.data);//查询项目详情
@@ -280,6 +280,13 @@ export const Api: { [key: string]: any } = {
     },
     getTypeCredits:async (data:any)=>{
         return request.get(`/projects/${data.pId}/credits/all`,data.data);//获得所有的学分认证
+    },
+    //oj
+    getOjContent:async (data:any)=>{
+        return [{id:1,content:'222',prefix:'A题',name:'what'}]
+    },
+    getSubmissionList:async (data:any)=>{
+      return {rows:[{submissionId:1,username:'202100150155',problemCode:'SDUOJ-1000',problemTitle:'A+B problem',result:'1',score:90,submitTime:'2023-11-01',code:'#include'}]}
     },
     //creditBank学分银行
     getUserCredits: async (data: any) => {

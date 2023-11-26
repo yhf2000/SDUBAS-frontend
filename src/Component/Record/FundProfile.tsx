@@ -7,17 +7,14 @@ import ItemName from "../Common/Form/Item/ItemName";
 import ItemText from "../Common/Form/Item/ItemText";
 import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
-import React, {useEffect} from "react";
+import React from "react";
 import {useDispatch} from "../../Redux/Store";
-import ItemRoles from "../User/Form/Item/ItemRoles";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
-import {useSelector} from "react-redux";
-import {IState} from "../../Type/base";
 
-export const FundForm = (
+const FundForm = (
     <>
-        <ItemName label={'资金名称'} name={'name'} required={true} disabled={true}/>
+        <ItemName label={'资金名称'} name={'name'} required={true}/>
         <ItemText label={'备注'} name={'note'}/>
         <RoleManageForm service_type={6}/>
     </>

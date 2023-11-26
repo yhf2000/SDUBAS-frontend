@@ -7,10 +7,8 @@ import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import getData from "../../API/getData";
 import React, {useState} from "react";
 import {useDispatch} from "../../Redux/Store";
-import {ClassForm, CollegeForm, MajorForm} from "../../Component/User/Form/SchoolForms";
+import {ClassForm, MajorForm} from "../../Component/User/Form/SchoolForms";
 import Title from "antd/es/typography/Title";
-import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
-import {AssignmentForm} from "../../Component/Permission/Form/Assignment";
 import ModalRoleManage from "./Component/ModalRoleManage";
 import BatchImport from "../../Component/Common/BatchImport";
 
@@ -51,7 +49,7 @@ const MajorClass = () => {
                                     btnName={'添加专业'}
                                     subForm={[
                                         {
-                                            component: () => MajorForm({college_id: college.id, create: 1}),
+                                            component: () => MajorForm({college_id: college.id, create: 1,required:true}),
                                             label: '',
                                         }
                                     ]}

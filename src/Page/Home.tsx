@@ -2,15 +2,32 @@ import BK1 from "../Assert/img/ban1news.jpg"
 import BC from "../Assert/img/bolckchain.jpg"
 import CB from "../Assert/img/creditbank.jpg"
 import PP from "../Assert/img/personalprofile.jpg"
-import { Col, Image, Row} from "antd";
+import {Col, Image, Row} from "antd";
 import React from "react";
 import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
+
 const Home = () => {
     // Api.logout()
     return (
         <>
             {/*<FilePreview url={'https://calibre-ebook.com/downloads/demos/demo.docx'} />*/}
+            {/*<DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8000'}*/}
+            {/*                config={{*/}
+            {/*                    "document":{*/}
+            {/*                        "fileType":"docx",*/}
+            {/*                        "key":"",*/}
+            {/*                        "title":'预览文件',*/}
+            {/*                        "url":"https://calibre-ebook.com/downloads/demos/demo.docx",*/}
+            {/*                        permissions: {*/}
+            {/*                            edit: false, // 禁用编辑权限*/}
+            {/*                            download: true, // 启用下载权限*/}
+            {/*                        },*/}
+            {/*                    },*/}
+            {/*                    "documentType":'word',*/}
+            {/*                }}*/}
+            {/*                height={'1000px'}*/}
+            {/*/>*/}
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>

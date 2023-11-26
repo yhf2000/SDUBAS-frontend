@@ -6,7 +6,7 @@ import {Api} from "../../API/api";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import getData from "../../API/getData";
 import DeleteConfirm from "../../Component/Common/DeleteConfirm";
-import React, {useState} from "react";
+import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import {CollegeForm} from "../../Component/User/Form/SchoolForms";
 import ModalRoleManage from "./Component/ModalRoleManage";
@@ -92,7 +92,7 @@ const College = () => {
                                                 dataSubmitter={async (data: any) => {
                                                     return Api.updateCollege({cId: item.id, data: data})
                                                 }}
-                                                initData={{name:item.name,college_logo_id:{file_id:item.college_logo_id,url:item.image,file_name:''}}}
+                                                initData={{name:item.name,college_logo_id:{file_id:item.college_logo_id,url:item.image,file_name:item.name}}}
                                             />
                                         </Col>
                                         <Col>

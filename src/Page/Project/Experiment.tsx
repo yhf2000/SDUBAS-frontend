@@ -26,7 +26,7 @@ const Experiment = () => {
             .then((res: any) => {
                     dispatch({type:'setUserPermission',service_type:7,data:res.map((e: any) => e.label)})
                 }
-            )
+            ).catch(()=>{})
     }, [])
     return (
         <div className={"table-container"}>

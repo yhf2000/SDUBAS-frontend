@@ -1,4 +1,4 @@
-import TableWithPagination from "../Common/Table/TableWithPagination";
+    import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import {Button, Card, Form, Input, message, Modal, Select, Space, Table} from "antd";
 import {useEffect, useState} from "react";
@@ -46,7 +46,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {User?.user_name === undefined ? `当前用户：${userinfo.userInfo?.username}` : `${User.user_name} 已修学分:${credits}`}
+                        {User.user_name === undefined ? (userinfo.userInfo?.username===undefined?`未登录` : `${userinfo.userInfo.username} 已修学分:${credits}`):`${User.name} 已修学分:${credits}`}
                     </span>
                 </>
             }>

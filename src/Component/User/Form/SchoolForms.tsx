@@ -53,7 +53,7 @@ export const MajorForm=(props:any)=>{
                     </Form.Item>
                 )
             }
-            <Form.Item name={'education_program'} label={'培养方案'}>
+            <Form.Item name={'education_program'} label={'培养方案'} rules={[{required:props.required,message:'创建专业时，培养方案不能为空'}]}>
                 <BatchImport item={true} btnName={'上传方案'} btnType={'default'} />
             </Form.Item>
         </>

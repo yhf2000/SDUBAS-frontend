@@ -94,7 +94,7 @@ const ItemContent = (props: any) => {
                                 </Select>
                             </Form.Item>
                             <ItemUpload {...field} key={field.name + 'file_id'} name={[field.name, 'file_id']}
-                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4'} aes={props.pathname === '/c/resources'}/>
+                                        accept={'.docx,.zip,.doc,.pdf,.ppt,.mp4,.pptx'} aes={props.pathname === '/c/resources'}/>
                             <ItemText {...field} key={field.name + 'content'} name={[field.name, 'content']}/>
                             {
                                 <Form.Item {...field} key={field.name + 'set_list'} name={[field.name, 'feature']}>

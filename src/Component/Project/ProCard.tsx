@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Card, Col, Divider, Image, message, Modal, Row} from "antd";
+import {Button, Card, Col, Divider, Image, message, Modal, Row, Tag} from "antd";
 import Meta from "antd/es/card/Meta";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
 import {Api} from "../../API/api";
@@ -14,6 +14,8 @@ import {arraytostr} from "../../Utils/arraytostr";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
+import {convertTimestamp} from "../../Utils/convertTimestamp";
+import {convertTagstr} from "../../Utils/convertTagstr";
 
 
 export default function ProCard({item, TableName, pathname}: any) {
@@ -22,6 +24,7 @@ export default function ProCard({item, TableName, pathname}: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const permission = useSelector((state: IState) => state.UserReducer.userPermission[7] ?? []);
+    const tags = convertTagstr(item.tag);
     const AddTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name});
     }
@@ -36,7 +39,6 @@ export default function ProCard({item, TableName, pathname}: any) {
                 <Col span={2} style={{height: "80px"}}>
                     <Image
                         src={item.url}
-                        // src={"https://th.bing.com/th?id=OIP.nkWmM-lReaN8kH-ieXmZrQHaEo&w=316&h=197&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"}
                         alt="Item Image" style={{height: '80px'}} preview={false}/>
                 </Col>
                 <Col span={5}
@@ -46,21 +48,44 @@ export default function ProCard({item, TableName, pathname}: any) {
                          if (item.active === 0) {
                              message.info('未开放');
                          } else {
-                             navigate(`/c/project-info/${item.id}`, {state: {url: item.url, item: item,permissions:permission}});
+                             if(tags === 'SDUOJ ') {
+                                 navigate(`/c/sduoj/project-info/${item.id}`, {
+                                     state: {
+                                         url: item.url,
+                                         item: item,
+                                         permissions: permission
+                                     }
+                                 });
+                             }
+                             else {
+                                 navigate(`/c/project-info/${item.id}`, {
+                                     state: {
+                                         url: item.url,
+                                         item: item,
+                                         permissions: permission
+                                     }
+                                 });
+                             }
                          }
                      }}
                 >
                     <div style={{fontWeight: 'bold', textAlign: 'center', justifyContent: 'center'}}>{item.name}</div>
+                    <div style={{display:'flex',justifyContent:'center',gap:'10px',marginTop:'5px'}}>
+                        <div style={{ fontSize: '12px' }}>
+                            {convertTimestamp(item.create_dt)}
+                        </div>
+                        <Tag style={{ fontSize: '12px' }}>{tags}</Tag>
+                    </div>
                 </Col>
                 <Col span={2}>
                     {
-                        item.active === 0 && <Button type={'text'} style={{color: 'red'}}>未开放</Button>
+                        item.active === 0 && <Tag style={{color: 'red'}}>未开放</Tag>
                     }
                     {
-                        item.active === 1 && <Button type={'text'} style={{color: 'green'}}>进行中</Button>
+                        item.active === 1 && <Tag style={{color: 'green'}}>进行中</Tag>
                     }
                     {
-                        item.active === 2 && <Button type={'text'} style={{color: 'yellow'}}>归档</Button>
+                        item.active === 2 && <Tag style={{color: 'yellow'}}>归档</Tag>
                     }
                 </Col>
                 <Col style={{display: 'flex', justifyContent: 'flex-start'}} span={4}>

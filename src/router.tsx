@@ -20,6 +20,7 @@ import MajorClass from "./Page/School/MajorClass";
 import ManageUsers from "./Page/ManageUser/ManageUsers";
 import AddUsersByRole from "./Page/ManageUser/AddUsersByRole";
 import OperationRecords from "./Page/OperationRecords";
+import SDUOJProjectInfo from "./Page/Project/SDUOJProjectInfo";
 
 export interface IBaseRouter {
     id: number
@@ -63,6 +64,7 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 21, path: '/users', component: <ManageUsers/>},//用户管理的页面
     {id: 22, path: '/addUsers/:role_id', component: <AddUsersByRole/>},
     {id: 23, path: '/log', component: <OperationRecords/>},
+    {id:24,path:'/sduoj/project-info/:pId',component:<SDUOJProjectInfo />}
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},

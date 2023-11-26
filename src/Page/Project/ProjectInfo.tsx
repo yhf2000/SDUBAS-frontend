@@ -20,7 +20,7 @@ import CreateTemplate from "../../Component/Project/CreateTemplate";
 import {DownOutlined} from "@ant-design/icons";
 import {CreditsRole} from "../../Component/Project/Credits";
 import Approval from "../../Component/Permission/Approval";
-import DocViewer from '@cyntler/react-doc-viewer';
+import {DocumentEditor} from "@onlyoffice/document-editor-react";
 
 
 const {Sider, Content} = Layout;
@@ -60,11 +60,12 @@ const ProjectInfo: React.FC = () => {
     useEffect(() => {
         Api.getProContent({pId: pId})
             .then(async (data: any) => {
-                setSelectedMenuKey(data[0].id)
+                // console.log(data)
                 data.map((d: any) => {
                     const {id} = d;
                     IdConMap[id] = d;
                 })
+                setSelectedMenuKey(data[0].id);
                 // console.log(IdConMap);
                 const Tree = buildTree(data);
                 setTreeData(() => {
@@ -99,7 +100,7 @@ const ProjectInfo: React.FC = () => {
             )
         }
     ]
-    if (item.type !== '教学资源') {
+    if (item.type !== '教学资源' || item.type !== '实验' ) {
         if (permissions.some((e: any) => e === '项目学分认定'))
             manageitems.push({
                 key: '3', label: (
@@ -107,7 +108,7 @@ const ProjectInfo: React.FC = () => {
                 )
             })
     }
-    if (selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf) {
+    if (selectedMenuKey && IdConMap[selectedMenuKey]) {
         if (permissions.some((e: any) => e === '项目提交'))
             items = [
                 {
@@ -121,7 +122,7 @@ const ProjectInfo: React.FC = () => {
                     label: (
                         <ModalContentSubmit
                             pId={pId} // @ts-ignore
-                            cId={keyIdMap[selectedMenuKey].key}
+                            cId={IdConMap[selectedMenuKey].id}
                             username={userinfo?.username}//这里可能会替换成userid
                         />
                     )
@@ -131,7 +132,7 @@ const ProjectInfo: React.FC = () => {
                     label: (
                         <Button type={'ghost'} onClick={() => {
                             // @ts-ignore
-                            Api.getRefresh({pId: pId, cId: keyIdMap[selectedMenuKey].key})
+                            Api.getRefresh({pId: pId, cId: IdConMap[selectedMenuKey].id}).catch(()=>{})
                         }}>更新我的</Button>
                     )
                 }
@@ -142,7 +143,7 @@ const ProjectInfo: React.FC = () => {
                     key: '3',
                     label: (
                         // @ts-ignore
-                        <Score pId={pId} cId={keyIdMap[selectedMenuKey].key}/>
+                        <Score pId={pId} cId={IdConMap[selectedMenuKey].id}/>
                     )
                 }
             )
@@ -207,7 +208,7 @@ const ProjectInfo: React.FC = () => {
                     <Space size={12}>
                         {/*还有一些待传的参数*/}
                         {
-                            selectedMenuKey && keyIdMap[selectedMenuKey] && keyIdMap[selectedMenuKey].isLeaf && item.type !== '教学资源' && (
+                            selectedMenuKey &&IdConMap[selectedMenuKey] && item.type !== '教学资源' && (
                                 <>
                                     <Dropdown
                                         menu={{items}}
@@ -260,16 +261,17 @@ const ProjectInfo: React.FC = () => {
                 <Layout>
                     <Content style={{padding: '24px'}}>
                         {
-                            selectedMenuKey ? selectedMenuKey in IdConMap &&
-                                <ContentPlay url={IdConMap[selectedMenuKey].file_id?.url}
-                                             type={IdConMap[selectedMenuKey].file_type} pId={pId}
+                            selectedMenuKey && IdConMap[selectedMenuKey] ?
+                                <ContentPlay pId={pId}
+                                             file={{
+                                                 file_type: IdConMap[selectedMenuKey].file_type,
+                                                 file_name: IdConMap[selectedMenuKey].file_id?.file_name,
+                                                 url: IdConMap[selectedMenuKey].file_id?.url
+                                             }}
                                              content={IdConMap[selectedMenuKey].content}
                                              cId={selectedMenuKey}/>
                                 : (
-                                    <div
-                                        style={{textAlign: "left"}}
-                                    >
-                                    </div>
+                                    <>您正在查看目录页</>
                                 )
                         }
                     </Content>
@@ -281,25 +283,65 @@ const ProjectInfo: React.FC = () => {
 };
 
 const ContentPlay = (props: any) => {
-    // console.log(props.type)
+    const {file, content} = props;
     return (
         <>
             {
-                props.type === "video" && (
+                file.type === "video" && (
                     <PlayerWithDuration
-                        url={props.url}
+                        url={file.url}
                         pId={props.pId}
                         cId={props.cId}
                     />
                 )
             }
             {
-                (props.type === "office_word" || props.type === "office_ppt") && (
-                    <iframe
-                        title="demo.docx"
-                        src={"https://view.xdocin.com/view?src=" + props.url}
-                        width="100%"
-                        height="720px"
+                (file.type === "office_word") && (
+                    <DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8080'}
+                                    config={{
+                                        "document": {
+                                            "fileType": "docx",
+                                            "key": "",
+                                            "title": file.file_name,
+                                            "url": file.url,
+                                            permissions: {
+                                                edit: false, // 禁用编辑权限
+                                                download: true, // 启用下载权限
+                                                chat: false
+                                            },
+                                        },
+                                        "documentType": 'word',
+                                    }}
+                                    height={'729px'}
+                                    width={'100%'}
+                    />
+                    // <iframe
+                    //     title="demo.docx"
+                    //     src={"https://view.xdocin.com/view?src=" + props.url}
+                    //     width="100%"
+                    //     height="720px"
+                    // />
+                )
+            }
+            {
+                file.type === "office_ppt" && (
+                    <DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8080'}
+                                    config={{
+                                        "document": {
+                                            "fileType": "ppt",
+                                            "key": "",
+                                            "title": file.file_name,
+                                            "url": file.url,
+                                            permissions: {
+                                                edit: false, // 禁用编辑权限
+                                                download: true, // 启用下载权限
+                                                chat: false
+                                            },
+                                        },
+                                        "documentType": 'slide',
+                                    }}
+                                    height={'720px'}
+                                    width={'100%'}
                     />
                 )
             }
@@ -307,14 +349,30 @@ const ContentPlay = (props: any) => {
                 props.type === 'application/pdf' && (
                     <iframe
                         title="demo.docx"
-                        src={props.url}
+                        src={file.url}
                         width="100%"
                         height="720px"
                     />
                 )
             }
             {
-                props.content && (
+                file.type === 'zip' && (
+                    <>
+                        <div style={{ display: "table", width: "200px", textAlign: "left", margin: "20px" }}>
+                            <div style={{ display: "table-row" }}>
+                                <div style={{ display: "table-cell", padding: "10px", border: "1px solid #ccc" }}>
+                                    {file.file_name}
+                                </div>
+                                <div style={{ display: "table-cell", padding: "10px", border: "1px solid #ccc"}}>
+                                    <Button type={'link'} onClick={()=>{window.open(file.url)}}>下载</Button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            }
+            {
+                content && (
                     <div style={{textAlign: "left"}}>
                         <ReactMarkdown children={props.content}/>
                     </div>
