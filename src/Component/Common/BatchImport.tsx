@@ -47,7 +47,7 @@ const BatchImport = (props: any) => {
                     ).catch(() => {
                         // message.error('导入失败')
                     })
-                }, 5000);
+                }, 50000);
             }
         };
     };

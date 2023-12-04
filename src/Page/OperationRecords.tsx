@@ -63,7 +63,7 @@ const OperationRecords = () => {
                     if (res[index].verify === false) {
                         flag = false
                     }
-                    return {...d, result: res[index].verify,block_number:res[index].block_number}
+                    return {...d, result: res[index].verify,block_number:res[index].block_number,blockchain_hash:res[index].blockchain_hash}
                 })
                 setIsPass(flag)
                 setDataSource(data, 'OperationsTable');
@@ -83,11 +83,12 @@ const OperationRecords = () => {
                 bordered
             >
                 <Descriptions.Item label={'节点id'}>{blockInfo?.id}</Descriptions.Item>
-                <Descriptions.Item label={'版本信息'}>{JSON.stringify(blockInfo?.protocol_version)}</Descriptions.Item>
-                <Descriptions.Item label={'节点名称'}>{blockInfo?.moniker}</Descriptions.Item>
+                <Descriptions.Item label={'用户数量'}>{blockInfo?.user_cnt}</Descriptions.Item>
+                <Descriptions.Item label={'交易总数'}>{blockInfo?.deal_cnt}</Descriptions.Item>
                 <Descriptions.Item label={'最新区块高度'}>{blockInfo?.latest_block_height}</Descriptions.Item>
                 <Descriptions.Item label={'最新区块时间戳'}>{blockInfo?.latest_block_time}</Descriptions.Item>
                 <Descriptions.Item label={'验证者地址'}>{blockInfo?.address}</Descriptions.Item>
+                <Descriptions.Item label={'创世区块时间'}>{blockInfo?.earliest_block_time}</Descriptions.Item>
             </Descriptions>
             <Card
                 title={'日志记录'}
@@ -121,23 +122,37 @@ const OperationRecords = () => {
                         {
                             title: '操作',
                             key: 'operation',
-                            dataIndex: 'func'
+                            dataIndex: 'func',
+                            width:'200px'
                         },
                         {
                             title: '时间',
                             key: 'time',
-                            dataIndex: 'oper_dt'
+                            dataIndex: 'oper_dt',
+                            width:'150px'
+                        },
+                        {
+                            title:'本地hash',
+                            key:'local_hash',
+                            dataIndex:'local_hash',
+                            width:'180px'
                         },
                         {
                             title: '验证结果',
                             key: 'result',
                             dataIndex: 'result',
-                            render: (pass: any, record: any) => {
+                            render: (pass: any, record: any,index:number) => {
                                 return (
-                                    <ValidButton record={record} loading={loading} isPass={record?.result}/>
+                                    <ValidButton record={record} loading={loading} isPass={record?.result} index={index} setDataSource={setDataSource}/>
                                 )
                             },
                             width: "200px"
+                        },
+                        {
+                            title:'区块链hash',
+                            key:'blockchain_hash',
+                            dataIndex: "blockchain_hash",
+                            width:'180px'
                         },
                         {
                             title:'区块号',
@@ -145,7 +160,8 @@ const OperationRecords = () => {
                             dataIndex:'block_number',
                             render:(block_number:number)=>{
                                 return(block_number === undefined ? (<>未验证</>) : (<>{block_number}</>))
-                            }
+                            },
+                            width: "180px"
                         }
                     ]}
                 />
