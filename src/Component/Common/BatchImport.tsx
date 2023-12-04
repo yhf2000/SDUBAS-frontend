@@ -5,6 +5,7 @@ import {InboxOutlined} from "@ant-design/icons";
 import {Api} from "../../API/api";
 import moment from "moment";
 import {useDispatch} from "../../Redux/Store";
+import {sha256} from "js-sha256";
 
 const {Dragger} = Upload;
 const BatchImport = (props: any) => {
@@ -28,6 +29,9 @@ const BatchImport = (props: any) => {
                 if (item.入学时间) {
                     item.入学时间 = moment(new Date((item.入学时间 - 25569) * 86400 * 1000)).format('YYYY-MM-DD');
                     item.毕业时间 = moment(new Date((item.毕业时间 - 25569) * 86400 * 1000)).format('YYYY-MM-DD');
+                }
+                if(item.password){
+                    item.password = sha256(item.password + item.username);
                 }
                 return item
             })

@@ -22,12 +22,12 @@ const SubmissionSForm = (props: any) => {
 
     const button = (props.rows.type === 0 ? (
             <Button type="link">
-                {text+"文本"}
+                {text + "文本"}
             </Button>
         )
         : (
             <Button type="link">
-                {text+"文件"}
+                {text + "文件"}
             </Button>
         ))
     return (
@@ -63,19 +63,22 @@ const SubmissionSForm = (props: any) => {
                                    ]}
                                    noStyle
                         >
-                            <div style={{display:'flex',flexDirection:'row',gap:'20px'}}>
+                            <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                                 <div>
                                     <div style={{marginBottom: '10px', fontSize: '15px'}}>输入文本:</div>
                                     <Input.TextArea value={inputValue} onChange={handleInputChange}
-                                                    placeholder="请输入文本" maxLength={props.rows.count_limit} showCount
+                                                    placeholder="请输入文本" maxLength={props.rows.count_limit}
+                                                    showCount
                                                     style={{height: '400px', width: '400px'}}
                                     />
                                 </div>
                                 <div>
                                     <div style={{marginBottom: '10px', fontSize: '15px'}}>MarkDown实时渲染:</div>
-                                    <ReactMarkdown
-                                        children={inputValue}
-                                    />
+                                    <div style={{height: '400px', width: '400px',overflow:'auto'}}>
+                                        <ReactMarkdown
+                                            children={inputValue}
+                                        />
+                                    </div>
                                 </div>
 
                             </div>

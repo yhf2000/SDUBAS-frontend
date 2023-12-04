@@ -5,7 +5,7 @@ import {getAddress} from "../config";
 const baseUrl = getAddress().SERVER
 const service = axios.create({
     baseURL: baseUrl,
-    timeout: 5000,
+    timeout: 50000,
 })
 service.defaults.withCredentials = true
 let isLogin = false;

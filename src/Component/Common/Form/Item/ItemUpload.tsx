@@ -140,9 +140,9 @@ const UploadFile = (props: any) => {
             rsaEncrypt.setPublicKey(RSAPbKey);
             const encryptedAESKey = rsaEncrypt.encrypt(AESKey);
             if (encryptedAESKey)
-                formData.append('ase_key', encryptedAESKey);
+                formData.append('aes_key', encryptedAESKey);
         } else {
-            formData.append('ase_key', ' ');
+            formData.append('aes_key', ' ');
         }
         const options = {
             onUploadProgress: (progressEvent:any) => {

@@ -297,7 +297,7 @@ const ContentPlay = (props: any) => {
             }
             {
                 (file.type === "office_word") && (
-                    <DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8080'}
+                    <DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8000'}
                                     config={{
                                         "document": {
                                             "fileType": "docx",

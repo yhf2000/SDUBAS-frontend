@@ -1,17 +1,13 @@
-import {Button, Form, Input, Modal} from "antd";
+import {Button, Modal} from "antd";
 import TableWithPagination from "../Common/Table/TableWithPagination";
-import {useEffect, useState} from "react";
-import projectInfo from "../../Page/Project/ProjectInfo";
+import {useState} from "react";
 import {Api} from "../../API/api";
-import ItemUpload from "../Common/Form/Item/ItemUpload";
 import SubmissionSForm from "./Form/SubmissionSForm";
-import ItemText from "./Form/Item/ItemText";
 import TextArea from "antd/es/input/TextArea";
-import {hex} from "js-md5";
 import ReactMarkdown from "react-markdown";
 
 const ModalContentSubmit = (props: any) => {
-    const [visible,setVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
     const columns = [
             {
                 title: "名称",
@@ -35,7 +31,7 @@ const ModalContentSubmit = (props: any) => {
             {
                 title: '查看',
                 render: (_: any, record: any) => {
-                    if(record.commit === 0)return <>未提交</>
+                    if (record.commit === 0) return <>未提交</>
                     if (record.type === 1) return (<Button type={'link'} onClick={() => {
                             window.open(record.url)
                         }}>下载</Button>
@@ -51,7 +47,7 @@ const ModalContentSubmit = (props: any) => {
                                     width={'1000px'}
                                     // bodyStyle={{height:'500px'}}
                                 >
-                                    <div style={{display:'flex',flexDirection:'row',gap:'20px'}}>
+                                    <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                                         <div>
                                             <div style={{marginBottom: '10px', fontSize: '15px'}}>文本显示:</div>
                                             <TextArea
@@ -64,9 +60,11 @@ const ModalContentSubmit = (props: any) => {
                                         </div>
                                         <div>
                                             <div style={{marginBottom: '10px', fontSize: '15px'}}>MarkDown实时渲染:</div>
-                                            <ReactMarkdown
-                                                children={record.content}
-                                            />
+                                            <div style={{height: '400px', width: '400px',overflow:'auto'}}>
+                                                <ReactMarkdown
+                                                    children={record.content}
+                                                />
+                                            </div>
                                         </div>
 
                                     </div>

@@ -24,7 +24,7 @@ export const MyRender = (props: any) => {
                     }}
                     width={'1000px'}
                     footer={null}
-                    bodyStyle={{height:'500px'}}
+                    bodyStyle={{height: '500px'}}
                 >
                     <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                         <div>
@@ -38,9 +38,11 @@ export const MyRender = (props: any) => {
                         </div>
                         <div>
                             <div style={{marginBottom: '10px', fontSize: '15px'}}>MarkDown实时渲染:</div>
-                            <ReactMarkdown
-                                children={rows.content}
-                            />
+                            <div style={{height: '400px', width: '400px', overflow: 'auto'}}>
+                                <ReactMarkdown
+                                    children={rows.content}
+                                />
+                            </div>
                         </div>
 
                     </div>

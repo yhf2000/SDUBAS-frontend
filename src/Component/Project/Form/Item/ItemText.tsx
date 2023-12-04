@@ -1,6 +1,7 @@
 import {Button, Form, Input, Modal} from "antd";
 import {useState} from "react";
 import ReactMarkdown from "react-markdown";
+import TextArea from "antd/es/input/TextArea";
 
 const ItemText = (props: any) => {
     return (
@@ -36,7 +37,7 @@ const Text = (props: any) => {
                 width={'1000px'}
                 bodyStyle={{height: '500px'}}
             >
-                <div style={{display:'flex',flexDirection:'row',gap:'20px'}}>
+                <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                     <div>
                         <div style={{marginBottom: '10px', fontSize: '15px'}}>输入文本:</div>
                         <Input.TextArea
@@ -49,9 +50,11 @@ const Text = (props: any) => {
                     </div>
                     <div>
                         <div style={{marginBottom: '10px', fontSize: '15px'}}>MarkDown实时渲染:</div>
-                        <ReactMarkdown
-                            children={value}
-                        />
+                        <div style={{height: '400px', width: '400px',overflow:'auto'}}>
+                            <ReactMarkdown
+                                children={value}
+                            />
+                        </div>
                     </div>
 
                 </div>
