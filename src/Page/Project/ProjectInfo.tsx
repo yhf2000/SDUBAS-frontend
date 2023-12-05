@@ -21,6 +21,7 @@ import {DownOutlined} from "@ant-design/icons";
 import {CreditsRole} from "../../Component/Project/Credits";
 import Approval from "../../Component/Permission/Approval";
 import {DocumentEditor} from "@onlyoffice/document-editor-react";
+import {WorkLog} from "../../Component/Common/WorkLog";
 
 
 const {Sider, Content} = Layout;
@@ -97,6 +98,12 @@ const ProjectInfo: React.FC = () => {
             key: '10',
             label: (
                 <Approval pId={pId} service_type={7}/>
+            )
+        },
+        {
+            key:'11',
+            label:(
+                <WorkLog service_type={7} service_id={pId} btnType={'text'}/>
             )
         }
     ]

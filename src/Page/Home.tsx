@@ -6,29 +6,17 @@ import {Col, Image, Row} from "antd";
 import React from "react";
 import JumpButton from "../Component/Common/JumpButton";
 import Title from "antd/es/typography/Title";
-import {DocumentEditor} from "@onlyoffice/document-editor-react";
 
 const Home = () => {
     // Api.logout()
+    // useEffect(()=>{
+    //     axios.get("https://43.143.149.67:7359/api/site/getCopyright")
+    //         .then((res:any)=>{
+    //             console.log(res)
+    //         })
+    // },[])
     return (
         <>
-            {/*<FilePreview url={'https://calibre-ebook.com/downloads/demos/demo.docx'} />*/}
-            {/*<DocumentEditor id={"docxEditor"} documentServerUrl={'http://43.138.34.119:8000'}*/}
-            {/*                config={{*/}
-            {/*                    "document":{*/}
-            {/*                        "fileType":"docx",*/}
-            {/*                        "key":"",*/}
-            {/*                        "title":'预览文件',*/}
-            {/*                        "url":"https://calibre-ebook.com/downloads/demos/demo.docx",*/}
-            {/*                        permissions: {*/}
-            {/*                            edit: false, // 禁用编辑权限*/}
-            {/*                            download: true, // 启用下载权限*/}
-            {/*                        },*/}
-            {/*                    },*/}
-            {/*                    "documentType":'word',*/}
-            {/*                }}*/}
-            {/*                height={'1000px'}*/}
-            {/*/>*/}
             <Image src={BK1}
                    preview={false}
                    style={{maxWidth: "1500px", boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)"}}/>

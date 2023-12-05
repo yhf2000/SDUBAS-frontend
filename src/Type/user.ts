@@ -17,7 +17,9 @@ export interface IUserInfo {
     roles: Role
     enrollment_dt:string
     graduation_dt:string
-    realname:string
+    realname:string,
+    oj_bind:boolean//oj绑定
+    oj_username:string,
 }
 
 export interface IUserState {

@@ -13,22 +13,28 @@ import EditableInput from "../../Component/User/EditableInput";
 import {useForm} from "antd/es/form/Form";
 import ItemEmail from "../../Component/User/Form/Item/ItemEmail";
 import {sha256} from "js-sha256";
+import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
+import {IKeyState} from "../../Type/key";
+import JSEncrypt from "jsencrypt";
+import DeleteConfirm, {Confirm} from "../../Component/Common/DeleteConfirm";
 
 
 const UserInfo = () => {
     const userPro = useSelector((state: IState) => state.UserReducer.userInfo);
-    const [username,setUsername] = useState(userPro?.username)
-    const [email,setEmail] = useState(userPro?.email)
+    const RSAKey = useSelector((state: IKeyState) => state.RSAPbKey)
+    const [username, setUsername] = useState(userPro?.username)
+    const [email, setEmail] = useState(userPro?.email)
+    const [oj_username,setOjUsername] = useState(userPro?.oj_username);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [form] = useForm<any>();
-    useEffect(()=>{
-        if(userPro)
-        {
+    useEffect(() => {
+        if (userPro) {
             setUsername(userPro.username);
             setEmail(userPro.email);
+            setOjUsername(userPro.oj_username);
         }
-    },[userPro])
+    }, [userPro])
     return (
         <div className="user-info-container">
             <div className="user-info-header">
@@ -45,9 +51,9 @@ const UserInfo = () => {
                     }}
                     onFinish={(values) => {
                         //将密码+用户名加密发送到后端
-                        values.old_password = sha256(values.old_password+username);
-                        values.new_password = sha256(values.new_password+username);
-                        return Api.updatePwd({data:values}).then((res: any) => {
+                        values.old_password = sha256(values.old_password + username);
+                        values.new_password = sha256(values.new_password + username);
+                        return Api.updatePwd({data: values}).then((res: any) => {
                             dispatch(getData(
                                 'logout',
                                 {},
@@ -60,7 +66,7 @@ const UserInfo = () => {
                                 }
                             ))
                             message.success('修改成功,请重新登录');
-                            navigate('/c/login',{replace:true});
+                            navigate('/c/login', {replace: true});
                         }).catch((error: any) => {
 
                         })
@@ -78,7 +84,7 @@ const UserInfo = () => {
                     {/*>*/}
                     {/*    <Input.Password/>*/}
                     {/*</Form.Item>*/}
-                    <ItemPassword oldpass={true} />
+                    <ItemPassword oldpass={true}/>
                     <ItemPassword newpass={true}/>
                 </ModalForm>
             </div>
@@ -97,7 +103,7 @@ const UserInfo = () => {
                     style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
                 >
                     <div style={{minWidth: "100px"}}>用户名:</div>
-                    <Input value={username} disabled />
+                    <Input value={username} disabled/>
                 </div>
                 <EditableInput
                     label={'邮箱'}
@@ -118,6 +124,16 @@ const UserInfo = () => {
                             onFinish={(data: any) => {
                                 return Api.updateEmail({data: data}).then((res: any) => {
                                     message.success('绑定成功');
+                                    dispatch(getData(
+                                        "getProfile",
+                                        {},
+                                        (res: any) => {
+                                            console.log(res);
+                                            dispatch({type: "setUserInfo", data: res});
+                                        },
+                                        () => {
+                                        }
+                                    ))
                                     return true;
                                 }).catch((error: any) => {
                                 })
@@ -189,6 +205,84 @@ const UserInfo = () => {
                 {/*    /!*    }*!/*/}
                 {/*    /!*</div>*!/*/}
                 {/*</div>*/}
+                {
+                    userPro?.oj_bind ? (
+                        <>
+                            <div
+                                style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                            >
+                                <div style={{minWidth: "100px"}}>SDUOJ用户名:</div>
+                                <Input value={oj_username} disabled/>
+                                <Confirm
+                                    title={'确认解绑'}
+                                    onConfirm={()=>{
+                                        //解绑API
+                                    }}
+                                    content={
+                                        <Button type={'link'} danger>解绑</Button>
+                                    }
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div style={{display:'flex',gap:'50px'}}>
+                            <label style={{marginTop:'8px',minWidth:'100px'}}>绑定SDUOJ账户:</label>
+                            <ModalFormUseForm
+                                title={'绑定SDUOJ账户'}
+                                btnType={'link'}
+                                btnName={'绑定'}
+                                subForm={[
+                                    {
+                                        component: (
+                                            <>
+                                                <Form.Item
+                                                    name={'oj_username'}
+                                                    label={'SDUOJ用户名'}
+                                                    rules={[{
+                                                        required: true,
+                                                        message: '输入用户名'
+                                                    }]}
+                                                >
+                                                    <Input placeholder={'用户名'}/>
+                                                </Form.Item>
+                                                <Form.Item
+                                                    name={'oj_password'}
+                                                    label={'SDUOJ密码'}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: '输入密码'
+                                                        }
+                                                    ]}
+                                                >
+                                                    <Input placeholder={'密码'}/>
+                                                </Form.Item>
+                                            </>
+                                        ),
+                                        label: ''
+                                    }
+                                ]}
+                                dataSubmitter={async (data: any) => {
+                                    const rsaEncrypt = new JSEncrypt();
+                                    rsaEncrypt.setPublicKey(RSAKey);
+                                    data.oj_password = rsaEncrypt.encrypt(data.oj_password);
+                                    return Api.bindOJ({data: data})
+                                }}
+                                afterSubmit={async ()=>{
+                                    dispatch(getData(
+                                        "getProfile",
+                                        {},
+                                        (res: any) => {
+                                            dispatch({type: "setUserInfo", data: res});
+                                        },
+                                        () => {
+                                        }
+                                    ))
+                                }}
+                            />
+                        </div>
+                    )
+                }
             </Space>
         </div>
     );

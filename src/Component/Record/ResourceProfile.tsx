@@ -13,6 +13,7 @@ import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {WorkLog} from "../Common/WorkLog";
 
 
 export const ResourceForm = (
@@ -35,7 +36,8 @@ const ResourceProfile = () => {
             .then((res: any) => {
                     dispatch({type: 'setUserPermission', service_type: 5, data: res.map((e: any) => e.label)})
                 }
-            ).catch(()=>{})
+            ).catch(() => {
+        })
     }, [])
     return (
         <>
@@ -94,6 +96,7 @@ const ResourceProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
+                                            <WorkLog service_type={5} service_id={rows.Id} btnType={'link'}/>
                                             {permissions.some((e: any) => e === '资源编辑') && (
                                                 <ModalRoleManage editable={false} newRole={false} newUser={false}
                                                                  btnType={'link'}

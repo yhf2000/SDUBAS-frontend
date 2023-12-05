@@ -98,7 +98,7 @@ const Login = (props: any) => {
                             }
                             }
                             loading={loading}
-                            > Login </Button>
+                            > 登录 </Button>
                     },
                 }}
             >

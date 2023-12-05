@@ -11,6 +11,7 @@ import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {WorkLog} from "../Common/WorkLog";
 
 const FundForm = (
     <>
@@ -73,13 +74,15 @@ const FundProfile = () => {
                                     return (
                                         <>
 
-                                            <><ModalRoleManage
-                                                btnType={'link'}
-                                                newRole={false}
-                                                TableName={'fundRoleTable' + rows.Id}
-                                                service_type={6} service_id={rows.Id}
-                                                editable={false}
-                                            />
+                                            <>
+                                                <WorkLog service_type={6} service_id={rows.Id} btnType={'link'}/>
+                                                <ModalRoleManage
+                                                    btnType={'link'}
+                                                    newRole={false}
+                                                    TableName={'fundRoleTable' + rows.Id}
+                                                    service_type={6} service_id={rows.Id}
+                                                    editable={false}
+                                                />
                                                 <DeleteConfirm
                                                     onConfirm={() => {
                                                         dispatch(getData(

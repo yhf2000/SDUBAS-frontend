@@ -65,8 +65,9 @@ export const Api: { [key: string]: any } = {
     active:async (data:any)=>{
         return request.put('/users/activation',data.data)//用户激活
     },
-
-
+    bindOJ:async (data:any)=>{
+        return request.post('/users/oj_bind',data.data);//绑定oj
+    },
     //管理院添加用户部分
     //1.管理员添加角色
     // newRole: async (data: any) => {
@@ -192,6 +193,7 @@ export const Api: { [key: string]: any } = {
     },
     getFundInfo: async (data: any) => {
         return request.get(`/resources/financial/${data.fId}/accountbook`, data?.data);//查看账单
+        // return {rows:[{amount:10000,log_content:'实验室显示器购买',state:1},{amount:20000,log_content:'实验室安全隐患排查',state:1}]}
     },
     deleteFund: async (data: any) => {
         return request.delete(`/resources/financial/${data.fId}/delete`, data?.data);//删除资金项目

@@ -7,7 +7,7 @@ import {IState} from "../../Type/base";
 
 const ValidButton = (props: any) => {
     const [loadings, setLoadings] = useState<boolean>(false);
-    const dataSource = useSelector((state: IState) => state.TableReducer.tableData['OperationsTable'])
+    const dataSource = useSelector((state: IState) => state.TableReducer.tableData[props.TableName])
     const [res, setRes] = useState<boolean | undefined>(undefined)
     useEffect(() => {
         setRes(props.isPass);
@@ -19,7 +19,7 @@ const ValidButton = (props: any) => {
                 setRes(data[0].verify);
                 const dt = dataSource['dataSource']
                 dt['dataSource'][props.index] = {...dt['dataSource'][props.index],result:data[0].verify,block_number:data[0].block_number,blockchain_hash:data[0].blockchain_hash}
-                props.setDataSource(data,'OperationsTable');
+                props.setDataSource(data,props.TableName);
             }).catch(() => {
             setLoadings(false)
         })

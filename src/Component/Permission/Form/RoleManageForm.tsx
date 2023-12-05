@@ -45,7 +45,7 @@ const RoleManageForm = (props:any) => {
                                 type={'link'}
                                 style={{width: 50}}
                                 onClick={() => remove(field.name)}>
-                                Remove
+                                移除
                             </Button>
                         </Space>
                     ))}
