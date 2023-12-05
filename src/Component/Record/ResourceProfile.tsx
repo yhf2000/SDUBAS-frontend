@@ -2,7 +2,7 @@ import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import {Button, Card, message} from "antd";
 import {useNavigate} from "react-router-dom";
-import React from "react";
+import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {IState} from "../../Type/base";
 import ModalFormUseForm from "../Common/Form/ModalFormUseForm";
@@ -13,6 +13,7 @@ import getData from "../../API/getData";
 import {useDispatch} from "../../Redux/Store";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
 import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {WorkLog} from "../Common/WorkLog";
 
 
 export const ResourceForm = (
@@ -25,16 +26,24 @@ export const ResourceForm = (
 const ResourceProfile = () => {
 
     const navigate = useNavigate();
-    const userInfo = useSelector((state: IState) => state.UserReducer.userInfo);
+    const permissions = useSelector((state: IState) => state.UserReducer.userPermission[5] ?? []);
     const dispatch = useDispatch();
     const addTableVersion = (name: string) => {
         dispatch({type: 'addTableVersion', name: name})
     }
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 5}})
+            .then((res: any) => {
+                    dispatch({type: 'setUserPermission', service_type: 5, data: res.map((e: any) => e.label)})
+                }
+            ).catch(() => {
+        })
+    }, [])
     return (
         <>
             <div className={"table-container"}>
                 <Card
-                    style={{minWidth:'1000px'}}
+                    style={{minWidth: '1000px'}}
                     title={'资源档案'}
                     headStyle={{textAlign: 'left'}}
                     extra={<ModalFormUseForm
@@ -49,7 +58,6 @@ const ResourceProfile = () => {
                             }
                         ]}
                         dataSubmitter={async (value: any) => {
-                            console.log(value);
                             return Api.newResource({data: value});
                         }}
                     />}
@@ -88,29 +96,34 @@ const ResourceProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
-                                            <ModalRoleManage editable={false} newRole={false} newUser={false}
-                                                             btnType={'link'}
-                                                             TableName={`Resource${rows.Id}Roles`} service_type={5}
-                                                             service_id={rows.Id}/>
-                                            <DeleteConfirm
-                                                onConfirm={() => {
-                                                    dispatch(getData(
-                                                        'deleteResource',
-                                                        {rId: rows.Id},
-                                                        (res: any) => {
-                                                            addTableVersion('ResourceTable')
-                                                            message.success('删除成功')
-                                                            return Promise.resolve(res);
-                                                        },
-                                                        (error: any) => {
-                                                            message.error('删除失败');
-                                                        }
-                                                    ));
-                                                }}//删除的Api
-                                                content={
-                                                    <Button type={'link'} danger={true}>删除</Button>
-                                                }
-                                            />
+                                            <WorkLog service_type={5} service_id={rows.Id} btnType={'link'}/>
+                                            {permissions.some((e: any) => e === '资源编辑') && (
+                                                <ModalRoleManage editable={false} newRole={false} newUser={false}
+                                                                 btnType={'link'}
+                                                                 TableName={`Resource${rows.Id}Roles`}
+                                                                 service_type={5}
+                                                                 service_id={rows.Id}/>)}
+                                            {permissions.some((e: any) => e === '资源删除') && (
+                                                <DeleteConfirm
+                                                    onConfirm={() => {
+                                                        dispatch(getData(
+                                                            'deleteResource',
+                                                            {rId: rows.Id},
+                                                            (res: any) => {
+                                                                addTableVersion('ResourceTable')
+                                                                message.success('删除成功')
+                                                                return Promise.resolve(res);
+                                                            },
+                                                            (error: any) => {
+                                                                message.error('删除失败');
+                                                            }
+                                                        ));
+                                                    }}//删除的Api
+                                                    content={
+                                                        <Button type={'link'} danger={true}>删除</Button>
+                                                    }
+                                                />
+                                            )}
                                         </>
                                     )
                                 },

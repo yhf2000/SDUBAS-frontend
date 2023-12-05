@@ -2,18 +2,24 @@ import React, {useEffect, useState} from "react";
 import {Button} from "antd";
 import {Api} from "../../API/api";
 import {CheckCircleTwoTone, CloseCircleOutlined, CloseOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
+import {IState} from "../../Type/base";
 
 const ValidButton = (props: any) => {
     const [loadings, setLoadings] = useState<boolean>(false);
+    const dataSource = useSelector((state: IState) => state.TableReducer.tableData[props.TableName])
     const [res, setRes] = useState<boolean | undefined>(undefined)
     useEffect(() => {
         setRes(props.isPass);
     }, [props.isPass])
     const enterLoading = () => {
         setLoadings(true);
-        Api.getValid({id: props.record.id})
+        Api.getValidAll({data:{id_list: [props.record.id]}})
             .then((data: any) => {
-                setRes(data.data);
+                setRes(data[0].verify);
+                const dt = dataSource['dataSource']
+                dt['dataSource'][props.index] = {...dt['dataSource'][props.index],result:data[0].verify,block_number:data[0].block_number,blockchain_hash:data[0].blockchain_hash}
+                props.setDataSource(data,props.TableName);
             }).catch(() => {
             setLoadings(false)
         })
@@ -27,7 +33,7 @@ const ValidButton = (props: any) => {
                         onClick={() => enterLoading()}
                         loading={props.loading || loadings}
                     >
-                        Click me!
+                        验证
                     </Button>
                 )
             }

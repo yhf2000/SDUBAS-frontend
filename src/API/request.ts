@@ -1,13 +1,11 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {message} from "antd";
 import {getAddress} from "../config";
-import {useSelector} from "react-redux";
-import {IState} from "../Type/base";
 
 const baseUrl = getAddress().SERVER
 const service = axios.create({
     baseURL: baseUrl,
-    timeout: 5000,
+    timeout: 50000,
 })
 service.defaults.withCredentials = true
 let isLogin = false;
@@ -52,7 +50,7 @@ const DealResponse = async (resp: any, url: string) => {
                 return response.data.data
             default:
                 // if(isLogin)
-                    message.error(response.data.message);
+                message.error(response.data.message);
                 return Promise.reject(response.data.message)
         }
     } catch (e: any) {

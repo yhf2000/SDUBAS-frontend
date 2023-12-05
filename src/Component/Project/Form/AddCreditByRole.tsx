@@ -1,16 +1,21 @@
 import {Button, Form, Input, Select, Space} from "antd"
-import ItemName from "../../Common/Form/Item/ItemName";
 import ItemNumber from "../../Record/Form/Item/ItemNumber";
 import {useEffect, useState} from "react";
+import {Api} from "../../../API/api";
+import {creditsType} from "../../../Config/Project/data";
 
 //学分认定
 const AddCreditByRole = (props: any) => {
     // const [roles, setRoles] = useState([]);
-    //请求该项目可以添加的角色
-    // useEffect(() => {
-    //     //Api.getProRole().then((res:any)=>{setRoles(res.roles)}).catch(()=>{})
-    // }, [])
+    const [options,setOptions] = useState([]);
 
+    //请求该项目可以添加的角色
+    useEffect(() => {
+        Api.getRoles({data:{pageNow:1,pageSize:100000000}})//请求type==x所有权限
+            .then((res:any)=>{
+                setOptions(res.rows);
+            }).catch(()=>{})
+    }, [])
     return (
         <>
             {/*<Form.List name={'role_credits'}>*/}
@@ -77,14 +82,28 @@ const AddCreditByRole = (props: any) => {
                 label={'目标角色'}
                 rules={[{required:true}]}
             >
-                <Input placeholder={'请输入角色'}/>
+                <Select>
+                    {
+                        options.map((option:any)=>{
+                            return (<Select.Option key={option.role_id} value={option.role_id}>{option.role_name}</Select.Option>)
+                        })
+                    }
+                </Select>
             </Form.Item>
             <Form.Item
                 name={'type'}
                 label={'类型'}
                 rules={[{required:true}]}
             >
-                <Input placeholder={'请输入学分类型'}/>
+                <Select>
+                    {
+                        creditsType.map((option:any)=>{
+                            return(
+                                <Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>
+                            )
+                        })
+                    }
+                </Select>
             </Form.Item>
             {/*<Form.Item*/}
             {/*    {...field}*/}

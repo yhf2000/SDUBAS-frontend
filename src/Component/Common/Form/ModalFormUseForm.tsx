@@ -40,6 +40,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
     const [formVis, setFormVis] = useState<boolean>(false)
     const [saveInitData, setSaveInitData] = useState();
     const [current, setCurrent] = useState<number>(0)
+    const [submitting, setSubmitting] = useState<boolean>(false);
 
     const BtnTypeMap: { [key: string]: ButtonType } = {
         create: "primary",
@@ -125,6 +126,7 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
     const submitData = (values: any) => {
         const submit = (value: any) => {
             // console.log("inner", value)
+            setSubmitting(true);
             // 在提交表单数据之前，追加数据
             props.updateAppendProps && Object.assign(value, props.updateAppendProps)
             props.dataSubmitter(value).then((res: any) => {
@@ -135,6 +137,8 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                 setFormVis(false)
                 message.success("成功")
             }).catch((error:any)=>{
+            }).finally(()=>{
+                setSubmitting(false);
             })
         }
 
@@ -197,8 +201,8 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                         setFormVis(false)
                     }}
                     footer={[
-                        <Button type="primary" key="submit" onClick={submitData}>
-                            Submit
+                        <Button type="primary" key="submit" onClick={submitData} loading={submitting}>
+                            提交
                         </Button>
                     ]}
                 >
@@ -223,6 +227,11 @@ const ModalFormUseForm = (props: ModalFormProps & any) => {
                     formMapRef={formMapRef}
                     onFinish={async (values: any) => {
                         submitData(values)
+                    }}
+                    submitter={{
+                        submitButtonProps: {
+                            loading: submitting
+                        }
                     }}
                     stepsFormRender={(dom: any, submitter: any) => {
                         return (

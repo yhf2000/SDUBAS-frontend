@@ -7,31 +7,29 @@ import ProjectForm1 from "../../Component/Project/Form/ProjectForm1";
 import {Api} from "../../API/api";
 import ProjectForm2 from "../../Component/Project/Form/ProjectForm2";
 import {arraytostr} from "../../Utils/arraytostr";
+import {tagOptions} from "../../Config/Project/data";
+import {useEffect} from "react";
+import {useDispatch} from "../../Redux/Store";
 
-//
-// const initData=[
-//     {
-//         'id':'3',
-//         'name':'操作系统',
-//         'credit':'5',
-//         'progress':'3',
-//         'totalProjects':'10',
-//         'date':'2023-8-11',
-//         'proImage':'https://www.neea.edu.cn/res/Home/1711/171116582.jpg',
-//         'score':undefined
-//     }
-// ]
 const Course = () => {
     const navigate = useNavigate();
     const handleClick = (item:any)=>{
         navigate(`/c/project-info/${item.id}`)
     }
+    const dispatch = useDispatch();
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 7}})
+            .then((res: any) => {
+                    dispatch({type:'setUserPermission',service_type:7,data:res.map((e: any) => e.label)})
+                }
+            ).catch(()=>{})
+    }, [])
     return (
-        <>
+        <div className={"table-container"}>
             <Card
                 title={'课程平台'}
                 headStyle={{textAlign:'left'}}
-                style={{minWidth:'1500px'}}
+                style={{minWidth:'1000px'}}
                 extra={
                     <ModalFormUseForm
                         title={'新建课程'}
@@ -40,7 +38,7 @@ const Course = () => {
                         TableName={'CourseTable'}
                         subForm={[
                             {
-                                component: ProjectForm1,
+                                component: ProjectForm1({type:'课程'}),
                                 label: "",
                             },
                             {
@@ -67,23 +65,19 @@ const Course = () => {
                     getForm={(onFinish: any) => {
                         return (
                             <Space size={30}>
-                                <Form.Item label={'标签'} name={'tag'} >
-                                    <Select onChange={onFinish} mode={'multiple'} style={{width:120}}>
-                                        <Select.Option value={'1'}>国家</Select.Option>
-                                        <Select.Option value={'2'}>省级</Select.Option>
-                                        <Select.Option value={'3'}>校级</Select.Option>
+                                <Form.Item label={'标签'} name={'tag'}>
+                                    <Select onChange={onFinish} mode={'multiple'} style={{width: 120,height:'30px'}}  maxTagCount='responsive'>
+                                        {tagOptions.map((option:any)=>{
+                                            return(<Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>)
+                                        })}
                                     </Select>
                                 </Form.Item>
-                                <Form.Item label={"搜索"} name={"title"}>
-                                    <Input onPressEnter={() => {
-                                        onFinish()
-                                    }}/>
+                                <Form.Item label={"名称"} name={"project_name"}>
+                                    <Input onPressEnter={onFinish}/>
                                 </Form.Item>
                             </Space>
                         );
                     }}
-                    useFormBtn={false}
-                    defaultPageSize={5}
                     renderItem={(item: any) => {
                         return (
                             <List.Item key={item.name}>
@@ -93,7 +87,7 @@ const Course = () => {
                     }}
                 />
             </Card>
-        </>
+        </div>
     );
 }
 

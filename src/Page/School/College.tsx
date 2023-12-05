@@ -6,7 +6,7 @@ import {Api} from "../../API/api";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import getData from "../../API/getData";
 import DeleteConfirm from "../../Component/Common/DeleteConfirm";
-import React, {useState} from "react";
+import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import {CollegeForm} from "../../Component/User/Form/SchoolForms";
 import ModalRoleManage from "./Component/ModalRoleManage";
@@ -34,7 +34,7 @@ const College = () => {
                     extra={
                         (
                             <Space>
-                                <ModalRoleManage newRole={true} TableName={'SchoolRolesTable' + row.id} service_type={1} service_id={row.id}/>
+                                <ModalRoleManage newRole={true} TableName={'SchoolRolesTable' + row.id} service_type={2} service_id={row.id} API={async (data:any)=>{return Api.addCollegeRole({data:data})}}/>
                                 <ModalFormUseForm
                                     title={'添加学院'}
                                     TableName={row.id + 'CollegeTable'}
@@ -47,7 +47,6 @@ const College = () => {
                                         }
                                     ]}
                                     dataSubmitter={async (data: any) => {
-                                        console.log(data);
                                         return Api.newCollege({data: data})
                                     }}
                                 />
@@ -93,7 +92,7 @@ const College = () => {
                                                 dataSubmitter={async (data: any) => {
                                                     return Api.updateCollege({cId: item.id, data: data})
                                                 }}
-                                                initData={item}
+                                                initData={{name:item.name,college_logo_id:{file_id:item.college_logo_id,url:item.image,file_name:item.name}}}
                                             />
                                         </Col>
                                         <Col>

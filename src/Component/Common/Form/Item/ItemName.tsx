@@ -11,7 +11,7 @@ const ItemName = (props: any) => {
                            }
                        ]}
             >
-                <Input />
+                <Input disabled={props.disabled}/>
             </Form.Item>
         </>
     );

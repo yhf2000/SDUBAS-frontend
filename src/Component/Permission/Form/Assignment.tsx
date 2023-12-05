@@ -140,7 +140,7 @@ export const AssignmentForm = (props: any) => {
                             />) : null
                     )}
                 >
-                    <Assignment editable={true} {...props}/>
+                    <Assignment editable={false} {...props}/>
                 </Card>
             </Modal>
             <Button type={'link'} onClick={() => {

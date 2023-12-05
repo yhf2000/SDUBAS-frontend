@@ -1,16 +1,18 @@
 import {ModalForm} from "@ant-design/pro-form";
-import {Form, message, Select, Tabs} from "antd";
+import {Form, message, Select, Switch, Tabs} from "antd";
 import React, {useState} from "react";
 import ItemNumber from "./Item/ItemNumber";
 import ItemText from "../../Common/Form/Item/ItemText";
 import {useDispatch} from "../../../Redux/Store";
 import getData from "../../../API/getData";
 import {Api} from "../../../API/api";
+import ItemUpload from "../../Common/Form/Item/ItemUpload";
 
 const AddBill = (props: any) => {
 
     const [imgId, setImgId] = useState<string>()
     const dispatch = useDispatch();
+    const [file,setFile] = useState(false);
 
     const AddTableVersion = (name:string)=>{
         dispatch({type:'addTableVersion',name:name});
@@ -48,7 +50,8 @@ const AddBill = (props: any) => {
                 </Select>
             </Form.Item>
             <ItemNumber label='数目' name='amount' required={true} min={0}/>
-            <ItemText label={'日志'} name={'log_content'} required={true}/>
+            <Switch title={'使用文件'} checked={file} onChange={()=>{setFile(!file)}} checkedChildren="图片" unCheckedChildren="文本" />
+            {file?<ItemUpload required={true} label={'日志'} name={'log_file_id'} aes={false} accept={'.jpg,.png'}/>:<ItemText label={'日志'} name={'log_content'} required={true}/>}
         </ModalForm>
     )
 }

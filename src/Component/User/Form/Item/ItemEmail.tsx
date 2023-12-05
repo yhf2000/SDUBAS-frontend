@@ -14,7 +14,8 @@ const ItemEmail = (props: ItemEmailProps & any) => {
     const [canSend, setCanSend] = useState<number>(0);
     const [modalVis, setModalVis] = useState<boolean>(false);
     const [imgId, setImgId] = useState<string>("")
-    const [captcha, setCaptcha] = useState<string>("")
+    const [captcha, setCaptcha] = useState<string>('')
+    const [captchaV,setCaptchaV] = useState<number>(0)
     const [email, setEmail] = useState<string>("")
 
     const reduce = () => {
@@ -22,7 +23,6 @@ const ItemEmail = (props: ItemEmailProps & any) => {
             setCanSend(canSend - 1)
         }
     }
-
     useEffect(() => {
         let intervalId = setInterval(() => reduce(), 1000)
         return () => clearInterval(intervalId)
@@ -51,7 +51,6 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                         maskClosable={false}
                         destroyOnClose={true}
                         onOk={() => {
-                            console.log(email)
                             Api.sendVerificationEmail({
                                 data: {
                                     username:props.username || undefined,
@@ -66,6 +65,7 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                 setCanSend(60);
                                 setModalVis(false)
                             }).catch(() => {
+                                setCaptchaV(captchaV+1);
                             })
                         }}
                         onCancel={() => {
@@ -75,11 +75,12 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                         <ItemCaptcha
                             setImgId={setImgId}
                             setCaptcha={setCaptcha}
+                            cap={captchaV}//填写失败时通知组件刷新
                         />
                     </Modal>
-                    <Form.Item name="email" label={props.t("email")}
+                    <Form.Item name="email" label={"邮箱"}
                                rules={[
-                                   {type: 'email', message: props.t('emailError'),},
+                                   {type: 'email', message: "邮箱错误",},
                                    {required: true},
                                    ({getFieldValue}) => (props.exist&&{
                                        validator(_, value) {
@@ -107,11 +108,11 @@ const ItemEmail = (props: ItemEmailProps & any) => {
                                         })
                                     }}
                                 >
-                                    {(canSend !== 0 ? canSend + "s" : props.t("Verify"))}
+                                    {(canSend !== 0 ? canSend + "s" : "验证")}
                                 </Button>
                             }/>
                     </Form.Item>
-                    <Form.Item name={props.name?props.name:"captcha"} label={props.t("emailCode")}
+                    <Form.Item name={props.name?props.name:"captcha"} label={"邮箱验证码"}
                                rules={[{required: true}]}>
                         <Input/>
                     </Form.Item>

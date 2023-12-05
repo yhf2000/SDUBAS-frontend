@@ -13,7 +13,7 @@ const UserContentScore = (props:any)=>{
     },[visible])
     return(
         <>
-            <Button onClick={()=>setVisible(true)} type={'text'}>成绩查询</Button>
+            <Button onClick={()=>setVisible(true)} type={'ghost'}>成绩查询</Button>
             <Modal
                 open={visible}
                 onCancel={()=>setVisible(false)}

@@ -18,7 +18,7 @@ const ItemPermission = (props: any) => {
                 label={props.label?props.label:''}
                 key={props.key}
                 rules={[
-                    {required:false,message:"权限"}
+                    {required:true,message:"填写权限"}
                 ]}
             >
                 <Checkbox.Group options={options} />

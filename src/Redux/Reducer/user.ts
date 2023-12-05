@@ -5,7 +5,8 @@ import {IUserState} from "../../Type/user";
 const initState: IUserState = {
     isLogin: false,
     queryLogin: false,
-    userInfo: undefined
+    userInfo: undefined,
+    userPermission:{}
 }
 
 export const UserReducer = (state: IUserState = initState, action: UserAction) => {
@@ -24,7 +25,10 @@ export const UserReducer = (state: IUserState = initState, action: UserAction) =
         case "userQueryLogin":
             State.queryLogin = action.data
             break
-
+        case "setUserPermission":
+            if(action.service_type !== undefined)
+                State.userPermission[action.service_type] = action.data
+            break
         default:
             break
     }

@@ -1,4 +1,4 @@
-import {Button, Form, Input, message, Modal, Upload} from "antd";
+import {Button, Form, Input, message, Modal, Progress, Upload} from "antd";
 import {InboxOutlined, UploadOutlined} from "@ant-design/icons";
 import {calculateHash} from "../../../../Utils/fileUpload";
 import {useEffect, useState} from "react";
@@ -9,24 +9,37 @@ import {useSelector} from "react-redux";
 import {IState} from "../../../../Type/base";
 import {encrypt, generateAESKey} from "../../../../Utils/encrypt";
 import JSEncrypt from 'jsencrypt';
-import {setState} from "@antv/s2";
+import {getBase64} from "../../../../Utils/fileUpload";
+import {RcFile} from "antd/es/upload";
 
 const {Dragger} = Upload;
+
+
 const UploadFile = (props: any) => {
     const {value, onChange} = props;
     const [visible, setVisible] = useState(false);
-    console.log(value)
-    const [fileName, setFileName] = useState(value?.name);
+    // console.log(value)
+    const [fileName, setFileName] = useState(value?.file_name);
+    const [previewImg, setPreviewImg] = useState('')
+    const [fileDd, setFileDd] = useState<any | undefined>(undefined);
     const {RSAPbKey} = useSelector((state: IState) => state.KeyReducer)
-    const [AESKey,setAESKey] = useState<any>();
+    const [AESKey, setAESKey] = useState<any>();
+    const [uploadProgress, setUploadProgress] = useState(0);
     const dispatch = useDispatch();
     const setRSAPbKey = (data: any) => {
         dispatch({type: 'setRSAPbKey', data: data})
     }
+    //初始传入的参数
     useEffect(() => {
-        if(props.value?.name)
-        {
-            setFileName(value?.name)
+        if (props.value?.file_name) {
+            setFileName(value?.file_name)
+            //如果是图片需要预览
+            if (props.type === 'image') {
+                setPreviewImg(value.url);
+            } else {
+                setFileDd(value.url);
+            }
+            //将其变为file_id
             onChange(value?.file_id);
         }
     }, [props.value])
@@ -35,57 +48,87 @@ const UploadFile = (props: any) => {
     for (let nm of props.accept.split(",")) {
         nameList.push("*" + nm)
     }
+
+    //始终使用file_id作为返回值
     const callback = (value: any) => {
         onChange(value.file_id)
     }
 
     const preUpload = async (file: any) => {
-        if(props.sizeLimit)
-        {
-            if(file.size/(1024*1024) > props.sizeLimit)//MB
-            {
-                return new Promise<void>((resolve,reject)=>{message.error('文件大小超过限制');return reject();})
-            }
-        }
-        //先计算时长
-        const fileType = file.type;
-        let duration: number | null = null;
-        if (fileType.startsWith("video/")) {
-            const url = window.URL.createObjectURL(file);
-            const audioElement = new Audio(url);
-            audioElement.addEventListener("loadedmetadata", function (_event) {
-                duration = audioElement.duration;
-            });
-        }
-        //如果需要加密则加密
-        if(props.aes)
-        {
-            setAESKey(generateAESKey());
-            // console.log(file)
-            file = await encrypt(file,AESKey);
-        }
-        const code = await calculateHash(file);
-        // console.log(code);
-        const size = file.size;
-        return new Promise<void>((resolve, reject) => {
-            let data;
-            if (duration)
-                data = {size: size, ...code, time: duration}
-            else
-                data = {size: size, ...code}
-            Api.checkFile({data: {...data,type:props.aes}})
-                .then((res: any) => {
-                    if (res.file_id !== null) {
-                        callback(res);
-                        setFileName(file.name);
-                        setVisible(false);
+        if (nameList.some((name: string) => name === '*.' + file.name.split('.').pop())) {
+            //大小判断
+            if (props.sizeLimit) {
+                if (file.size / (1024 * 1024) > props.sizeLimit)//MB
+                {
+                    return new Promise<void>((resolve, reject) => {
+                        message.error('文件大小超过限制');
                         return reject();
-                    } else {
-                        setRSAPbKey(res.public_key)
-                        return resolve(file);
+                    })
+                }
+            }
+            //如果是图片需要预览
+            if (props.type === 'image') {
+                const img = await getBase64(file as RcFile);
+                setPreviewImg(img);
+            }
+            //先计算时长
+            const fileType = file.type;
+            let duration: number | null = null;
+            if (fileType.startsWith("video/")) {
+                let flag = false;
+                const fileSizeInBytes = file.size;
+                const url = window.URL.createObjectURL(file);
+                const audioElement = new Audio(url);
+                audioElement.addEventListener("loadedmetadata", function (_event) {
+                    duration = audioElement.duration;
+                    const bitrateInBitsPerSecond = (fileSizeInBytes * 8) / duration;
+                    if (bitrateInBitsPerSecond >= 10e6) {
+                        message.error('视频码率过大');
+                        flag = true;
                     }
-                }).catch(()=>{return reject()})
-        })
+                });
+                if (flag)
+                    return false
+            }
+            //如果需要加密则加密
+            if (props.aes) {
+                const k = generateAESKey();
+                setAESKey(k);
+                file = await encrypt(file, k);
+                // const file2 = await decrypt(file,k);
+            }
+            const code = await calculateHash(file);
+            // console.log(code);
+            const size = file.size;
+            return new Promise<void>((resolve, reject) => {
+                let data;
+                if (duration)
+                {
+                    data = {size: size, ...code, time: duration}
+                }
+                else
+                    data = {size: size, ...code}
+                console.log(data)
+                Api.checkFile({data: {...data, type: props.aes}})
+                    .then((res: any) => {
+                        if (res.file_id !== null) {
+                            callback(res);
+                            setFileName(file.name);
+                            setVisible(false);
+                            return reject();
+                        } else {
+                            setRSAPbKey(res.public_key)
+                            return resolve(file);
+                        }
+                    }).catch(() => {
+                    return reject()
+                })
+            })
+        } else {
+            message.error('文件类型不符合要求');
+            return false;
+        }
+
     }
 
     const handleUpload = async (file: any) => {
@@ -95,13 +138,18 @@ const UploadFile = (props: any) => {
             const rsaEncrypt = new JSEncrypt();
             rsaEncrypt.setPublicKey(RSAPbKey);
             const encryptedAESKey = rsaEncrypt.encrypt(AESKey);
-            if(encryptedAESKey)
-                formData.append('ase_key', encryptedAESKey);
+            if (encryptedAESKey)
+                formData.append('aes_key', encryptedAESKey);
+        } else {
+            formData.append('aes_key', ' ');
         }
-        else{
-            formData.append('ase_key',' ');
-        }
-        Api.uploadFile({data: formData})
+        const options = {
+            onUploadProgress: (progressEvent:any) => {
+                const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setUploadProgress(progress);
+            },
+        };
+        Api.uploadFile({data: formData},options)
             .then((res: any) => {
                 message.success('上传成功')
                 setFileName(file.name);
@@ -109,18 +157,22 @@ const UploadFile = (props: any) => {
                 callback(res);
             })
             .catch(() => {
-                message.error('上传失败，请重新上传')
+                // message.error('上传失败，请重新上传')
             })
     }
     return (
         <>
             {!isValueEmpty(value) ? (
                 <>
-                    <Button type={'link'} onClick={() => {
-                        Api.getDownLoadUrl({data: {id: value.file_id ? value.file_id : value}}).then((data: any) => {
-                            window.open(data.url);
-                        })
-                    }}>{fileName||value?.name}</Button>
+                    {props.type === 'image' ? (<img alt='图片' src={previewImg} style={{
+                        height: '80px',
+                        marginRight: '20px',
+                        marginTop: '10px'
+                    }}/>) : (
+                        <Button type={'link'} onClick={() => {
+                            // console.log(fileDd)
+                            if (fileDd !== undefined) window.open(fileDd);
+                        }}>{fileName || value?.file_name}</Button>)}
                     <Button danger onClick={() => {
                         setVisible(true);
                         onChange(null);
@@ -155,19 +207,25 @@ const UploadFile = (props: any) => {
                     <p className="ant-upload-hint">
                         请上传一个 {nameList} 文件
                     </p>
+                    {uploadProgress > 0 && (
+                        <Progress percent={uploadProgress} size="small" />
+                    )}
                 </Dragger>
             </Modal>
         </>
-
     )
 }
 const ItemUpload = (props: any) => {
     return (
         <Form.Item
             name={props.name ?? 'file_id'}
-            // label={props.label ?? '上传文件 '}
+            label={props.label || undefined}
             {...props}
-            noStyle
+            required={props.required}
+            rules={[{
+                required: props.required,
+            }]}
+            // noStyle={props.label===undefined}
         >
             <UploadFile {...props} />
         </Form.Item>

@@ -52,8 +52,9 @@ const ModalRoleManage = (props: any) => {
                                     },
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    console.log('update',data);
-                                    return Api.addDefaultRole({data: data});
+                                    // console.log('update',data);
+                                    // return Api.addDefaultRole({data: data});
+                                    return props.API(data);
                                 }}
                             />) : null
                         )
@@ -64,7 +65,7 @@ const ModalRoleManage = (props: any) => {
                             // console.log('id',props.service_id)
                             // console.log('type',props.service_type)
                             data = {...data,service_type:props.service_type,service_id:props.service_id}
-                            console.log(data)
+                            // console.log(data)
                             return Api.getWorkRole({data: data})//可能需要请求对象的id,type;
                         }}
                         name={props.TableName}
@@ -80,34 +81,34 @@ const ModalRoleManage = (props: any) => {
                                 render: (_: any, row: any) => {
                                     return (
                                         <>
-                                            {
-                                                props.newRole &&
-                                                (<ModalFormUseForm
-                                                    title={'编辑角色'}
-                                                    TableName={props.TableName}
-                                                    btnName={'编辑'}
-                                                    type={'update'}
-                                                    subForm={[
-                                                        {
-                                                            component: (
-                                                                <>
-                                                                    <Form.Item name={'role_name'}>
-                                                                        <Input/>
-                                                                    </Form.Item>
-                                                                    <Form.Item name={'privilege'}>
-                                                                        <ItemPermission service_type={props.service_type}/>
-                                                                    </Form.Item>
-                                                                </>
-                                                            ),
-                                                            label: ''
-                                                        },
-                                                    ]}
-                                                    // dataSubmitter={async (values: any) => {
-                                                    //     return Api.updateUser({: row.id, data: values})
-                                                    // }}
-                                                    initData={row}//还需要有权限,或者使用dataLoader
-                                                />)
-                                            }
+                                            {/*{*/}
+                                            {/*    props.newRole &&*/}
+                                            {/*    (<ModalFormUseForm*/}
+                                            {/*        title={'编辑角色'}*/}
+                                            {/*        TableName={props.TableName}*/}
+                                            {/*        btnName={'编辑'}*/}
+                                            {/*        type={'update'}*/}
+                                            {/*        subForm={[*/}
+                                            {/*            {*/}
+                                            {/*                component: (*/}
+                                            {/*                    <>*/}
+                                            {/*                        <Form.Item name={'role_name'}>*/}
+                                            {/*                            <Input/>*/}
+                                            {/*                        </Form.Item>*/}
+                                            {/*                        <Form.Item name={'privilege'}>*/}
+                                            {/*                            <ItemPermission service_type={props.service_type}/>*/}
+                                            {/*                        </Form.Item>*/}
+                                            {/*                    </>*/}
+                                            {/*                ),*/}
+                                            {/*                label: ''*/}
+                                            {/*            },*/}
+                                            {/*        ]}*/}
+                                            {/*        // dataSubmitter={async (values: any) => {*/}
+                                            {/*        //     return Api.updateUser({: row.id, data: values})*/}
+                                            {/*        // }}*/}
+                                            {/*        initData={row}//还需要有权限,或者使用dataLoader*/}
+                                            {/*    />)*/}
+                                            {/*}*/}
                                             <AssignmentForm roleId={row.role_id} {...props}/>
                                         </>
                                     )

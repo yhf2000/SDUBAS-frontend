@@ -15,12 +15,18 @@ export interface IUserInfo {
     status: any
     card_id:string
     roles: Role
+    enrollment_dt:string
+    graduation_dt:string
+    realname:string,
+    oj_bind:boolean//oj绑定
+    oj_username:string,
 }
 
 export interface IUserState {
     isLogin: boolean
     queryLogin: boolean
     userInfo: IUserInfo | undefined
+    userPermission:IUserPermission
 }
 
 export interface IUserAvatar {
@@ -28,4 +34,8 @@ export interface IUserAvatar {
     size?: AvatarSize
     shape?: 'circle' | 'square'
     className?: string | null
+}
+
+export interface IUserPermission{
+        [key:string]:any
 }

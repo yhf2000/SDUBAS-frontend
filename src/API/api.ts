@@ -4,9 +4,9 @@ export const Api: { [key: string]: any } = {
     checkFile: async (data: any) => {
         return request.post('/files/upload/valid', data.data);
     },
-    uploadFile: async (data: any) => {
+    uploadFile: async (data: any,options:any) => {
         return request.post('/files/upload', data.data,
-            {headers: {"Content-Type": "multipart/form-data"}});
+            {headers: {"Content-Type": "multipart/form-data"},...options});
     },
     getDownLoadUrl: async (data: any) => {
         return request.get('/files/download', data.data);
@@ -65,8 +65,9 @@ export const Api: { [key: string]: any } = {
     active:async (data:any)=>{
         return request.put('/users/activation',data.data)//用户激活
     },
-
-
+    bindOJ:async (data:any)=>{
+        return request.post('/users/oj_bind',data.data);//绑定oj
+    },
     //管理院添加用户部分
     //1.管理员添加角色
     // newRole: async (data: any) => {
@@ -192,12 +193,13 @@ export const Api: { [key: string]: any } = {
     },
     getFundInfo: async (data: any) => {
         return request.get(`/resources/financial/${data.fId}/accountbook`, data?.data);//查看账单
+        // return {rows:[{amount:10000,log_content:'实验室显示器购买',state:1},{amount:20000,log_content:'实验室安全隐患排查',state:1}]}
     },
     deleteFund: async (data: any) => {
-        return request.delete(`/resources/financial/${data.fId}`, data?.data);//删除资金项目
+        return request.delete(`/resources/financial/${data.fId}/delete`, data?.data);//删除资金项目
     },
     updateFund: async (data: any) => {
-        return request.put(`/resources/financial/${data.fId}`, data?.data);//修改资金项目
+        return request.put(`/resources/financial/${data.fId}/revise`, data?.data);//修改资金项目
     },
     getFund: async (data: any) => {
         return request.get('/resources/financial/search', data?.data);//获得资金列表
@@ -225,6 +227,7 @@ export const Api: { [key: string]: any } = {
     },
     getProListByType: async (data: any) => {
         return request.get('/projects/project/type', data.data);
+        // return {rows:[{active:1,create_dy:"1697112050000",file_type:'image/jpeg',id:0,img_id:"15",name:"oj测试",tag:'11',type:"实验",url:"http://127.0.0.1:8000/files/download/0ea610721fe64a06a4312d035c3ca657"}]}
     },
     getProInfo: async (data: any) => {
         return request.get(`/projects/get/${data.pId}`, data?.data);//查询项目详情
@@ -280,6 +283,13 @@ export const Api: { [key: string]: any } = {
     getTypeCredits:async (data:any)=>{
         return request.get(`/projects/${data.pId}/credits/all`,data.data);//获得所有的学分认证
     },
+    //oj
+    getOjContent:async (data:any)=>{
+        return [{id:1,content:'222',prefix:'A题',name:'what'}]
+    },
+    getSubmissionList:async (data:any)=>{
+      return {rows:[{submissionId:1,username:'202100150155',problemCode:'SDUOJ-1000',problemTitle:'A+B problem',result:'1',score:90,submitTime:'2023-11-01',code:'#include'}]}
+    },
     //creditBank学分银行
     getUserCredits: async (data: any) => {
         return request.get('/projects/user/credits',data.data);
@@ -308,14 +318,20 @@ export const Api: { [key: string]: any } = {
         return request.delete(`/resources/resource/delete_user_in_resources/${data.rId}/${data.roleId}/${data.uId}`,);//删除一个角色对某人的分配
     },
     getTemplates: async (data: any) => {
-        // return request.get('/permission/', data.data);  //
-        return {rows:[{id:1,time_limit:1,template_name:'学生',permissions:['查看','提交']}]}
+        return request.get('/permissions/projects/get_template_role', data.data);  //
+        // return {rows:[{id:1,time_limit:1,template_name:'学生',permissions:['查看','提交']}]}
     },
     createTemplates:async (data:any)=>{
-        return request.post('/permission',data.data);//创建模板角色
+        return request.post(`/permissions/projects/add_template_role/${data.service_type}/${data.service_id}`,data.data);//创建模板角色
     },
     applyTemplate:async (data:any)=>{
-        return request.post('/permission',data.data);
+        return request.post(`/permissions/projects/apply_template_role/${data.pId}/${data.role_id}`,data.data);//申请模板角色
+    },
+    getApplication:async (data:any)=>{
+        return request.get('/permissions/projects/get_applied_template_role',data.data);//请求项目待审批的申请
+    },
+    approve:async (data:any)=>{
+      return request.post(`/permissions/projects/approve_template_role/${data.service_id}/${data.id}`,data.data);
     },
     getPermission: async (data: any) => {
         return request.get('/permissions/return_privilege_list', data.data);//获得对应类型的权限
@@ -338,6 +354,21 @@ export const Api: { [key: string]: any } = {
     getCreatedUsers:async (data:any)=>{
         return request.get('/permissions/search_created_user',data.data);
     },
+    addSchoolRole:async (data:any)=>{
+      return request.get('/permissions/educations/schools/add_school_role',data.data)
+    },
+    addCollegeRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_college_role',data.data)
+    },
+    addMajorRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_major_role',data.data)
+    },
+    addClassRole:async (data:any)=>{
+        return request.get('/permissions/educations/schools/add_class_role',data.data);
+    },
+    getUserPermission:async (data:any)=>{
+        return request.get('/permissions/return_user_privilege_list',data.data);//获得当前登录用户权限
+    },
 
 
     //个人档案
@@ -357,6 +388,12 @@ export const Api: { [key: string]: any } = {
         return request.get('/users/verify_hash',data.data);
     },
     getOperationLogs:async (data:any)=>{
-        return request.get("/users/get_operation",data.data)
+        return request.get("/users/get_operation",data.data)//获得所有操作日志
+    },
+    getBlockInfo:async (data:any)=>{
+        return request.get('/users/block_chain_information')//获取区块链信息
+    },
+    download:async (data:any)=>{
+        return request.get(`/files/download/${data.token}`)
     }
 }

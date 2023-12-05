@@ -9,10 +9,11 @@ import DeleteConfirm from "../Common/DeleteConfirm";
 import getData from "../../API/getData";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
-import ItemRoles from "../User/Form/Item/ItemRoles";
 import RoleManageForm from "../Permission/Form/RoleManageForm";
+import ModalRoleManage from "../../Page/School/Component/ModalRoleManage";
+import {WorkLog} from "../Common/WorkLog";
 
-export const FundForm = (
+const FundForm = (
     <>
         <ItemName label={'资金名称'} name={'name'} required={true}/>
         <ItemText label={'备注'} name={'note'}/>
@@ -30,24 +31,25 @@ const FundProfile = () => {
             <div className={'table-container'}>
                 <Card
                     title={'资金档案'}
-                    style={{minWidth:'1000px'}}
+                    style={{minWidth: '1000px'}}
                     headStyle={{textAlign: 'left'}}
-                    extra={<ModalFormUseForm
-                        title={'新建资金'}
-                        type={'create'}
-                        TableName={'FundTable'}
-                        btnName={'新建资金'}
-                        subForm={[
-                            {
-                                component: FundForm,
-                                label: "",
-                            }
-                        ]}
-                        dataSubmitter={async (value: any) => {
-                            // console.log('fundData:',value);
-                            return Api.newFund({data: value});
-                        }}
-                    />}>
+                    extra={
+                        <ModalFormUseForm
+                            title={'新建资金'}
+                            type={'create'}
+                            TableName={'FundTable'}
+                            btnName={'新建资金'}
+                            subForm={[
+                                {
+                                    component: FundForm,
+                                    label: "",
+                                }
+                            ]}
+                            dataSubmitter={async (value: any) => {
+                                // console.log('fundData:',value);
+                                return Api.newFund({data: value});
+                            }}
+                        />}>
                     <TableWithPagination
                         name={'FundTable'}
                         API={async (data: any) => {
@@ -71,25 +73,36 @@ const FundProfile = () => {
                                 render: (_: any, rows: any) => {
                                     return (
                                         <>
-                                            <DeleteConfirm
-                                                onConfirm={() => {
-                                                    dispatch(getData(
-                                                        'deleteFund',
-                                                        {fId: rows.Id},
-                                                        (res: any) => {
-                                                            addTableVersion('FundTable');
-                                                            message.success('删除成功')
-                                                            return Promise.resolve(res);
-                                                        },
-                                                        (error: any) => {
-                                                            message.error('删除失败');
-                                                        }
-                                                    ));
-                                                }}//删除的Api
-                                                content={
-                                                    <Button type={'link'} danger={true}>删除</Button>
-                                                }
-                                            />
+
+                                            <>
+                                                <WorkLog service_type={6} service_id={rows.Id} btnType={'link'}/>
+                                                <ModalRoleManage
+                                                    btnType={'link'}
+                                                    newRole={false}
+                                                    TableName={'fundRoleTable' + rows.Id}
+                                                    service_type={6} service_id={rows.Id}
+                                                    editable={false}
+                                                />
+                                                <DeleteConfirm
+                                                    onConfirm={() => {
+                                                        dispatch(getData(
+                                                            'deleteFund',
+                                                            {fId: rows.Id},
+                                                            (res: any) => {
+                                                                addTableVersion('FundTable');
+                                                                message.success('删除成功')
+                                                                return Promise.resolve(res);
+                                                            },
+                                                            (error: any) => {
+                                                                message.error('删除失败');
+                                                            }
+                                                        ));
+                                                    }}//删除的Api
+                                                    content={
+                                                        <Button type={'link'} danger={true}>删除</Button>
+                                                    }
+                                                />
+                                            </>
                                         </>
                                     )
                                 }

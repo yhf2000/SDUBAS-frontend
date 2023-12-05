@@ -7,10 +7,8 @@ import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import getData from "../../API/getData";
 import React, {useState} from "react";
 import {useDispatch} from "../../Redux/Store";
-import {ClassForm, CollegeForm, MajorForm} from "../../Component/User/Form/SchoolForms";
+import {ClassForm, MajorForm} from "../../Component/User/Form/SchoolForms";
 import Title from "antd/es/typography/Title";
-import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
-import {AssignmentForm} from "../../Component/Permission/Form/Assignment";
 import ModalRoleManage from "./Component/ModalRoleManage";
 import BatchImport from "../../Component/Common/BatchImport";
 
@@ -51,7 +49,7 @@ const MajorClass = () => {
                                     btnName={'添加专业'}
                                     subForm={[
                                         {
-                                            component: () => MajorForm({college_id: college.id, create: 1}),
+                                            component: () => MajorForm({college_id: college.id, create: 1,required:true}),
                                             label: '',
                                         }
                                     ]}
@@ -86,13 +84,14 @@ const MajorClass = () => {
                                                 btnName={'编辑'}
                                                 subForm={[
                                                     {
-                                                        component: () => MajorForm({college_id: college.id}),
+                                                        component: () => MajorForm({college_id: college.id,create:0,school_id:school.id,major_id:item.id}),
                                                         label: ''
                                                     }
                                                 ]}
                                                 // dataLoader={async ()=>{return }}
                                                 initData={item}
                                                 dataSubmitter={async (data: any) => {
+                                                    console.log(data)
                                                     return Api.updateMajor({mId: item.id, data: data})
                                                 }}
                                             />
@@ -102,6 +101,7 @@ const MajorClass = () => {
                                                 newRole={true} btnType={'link'}
                                                 TableName={'MajorRolesTable' + college.college_id}
                                                 service_type={3} service_id={item.id}
+                                                API={async (data:any)=>{return Api.addMajorRole({data:data})}}
                                             />
                                         </Col>
                                         <Col>
@@ -199,7 +199,10 @@ const MajorClass = () => {
                                                 newRole={true}
                                                 editable={true}
                                                 btnType={'link'}
-                                                TableName={'ClassRolesTable' + college.college_id}/>
+                                                TableName={'ClassRolesTable' + college.college_id}
+                                                service_type={3} service_id={item.id}
+                                                API={async (data:any)=>{return Api.addClassRole({data:data})}}
+                                            />
                                         </Col>
                                         <Col>
                                             <DeleteConfirm

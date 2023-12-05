@@ -6,13 +6,13 @@ import {
 } from "@ant-design/icons";
 import TableWithPagination from "../Component/Common/Table/TableWithPagination";
 import ValidButton from "../Component/Record/ValidButton";
-import {Button, Card} from "antd";
+import {Button, Card, Descriptions} from "antd";
 import "../Config/CSS/Table.css";
 import {useSelector} from "react-redux";
 import {IState} from "../Type/base";
 import {useDispatch} from "../Redux/Store";
 
-const Pass = () => {
+export const Pass = () => {
     return (
         <div style={{display: 'flex'}}>
             <CheckCircleOutlined style={{color: 'green', fontSize: '24px'}}/>
@@ -21,7 +21,7 @@ const Pass = () => {
     )
 }
 
-const Reject = () => (
+export const Reject = () => (
     // <div style={{
     //     display: 'flex'
     // }}>
@@ -38,7 +38,8 @@ const Reject = () => (
 const OperationRecords = () => {
     const dataSource = useSelector((state: IState) => state.TableReducer.tableData['OperationsTable'])
     const [isPass, setIsPass] = useState<any>(undefined);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [blockInfo, setBlockInfo] = useState<any | undefined>(undefined);
     const dispatch = useDispatch();
     const setDataSource = (data: any, name: string) => {
         return dispatch({type: 'setDataSource', data: data, name: name, add: true})
@@ -46,6 +47,13 @@ const OperationRecords = () => {
     useEffect(() => {
         setIsPass(undefined);
     }, [dataSource?.tablePageInfo?.pageNow])
+    useEffect(() => {
+        Api.getBlockInfo().then((res: any) => {
+            console.log(res);
+            setBlockInfo(res);
+        }).catch(() => {
+        })
+    }, [])
     const onClick = () => {
         if (dataSource) {
             setLoading(true)
@@ -56,7 +64,12 @@ const OperationRecords = () => {
                     if (res[index].verify === false) {
                         flag = false
                     }
-                    return {...d, result: res[index].verify,block_number:res[index].block_number}
+                    return {
+                        ...d,
+                        result: res[index].verify,
+                        block_number: res[index].block_number,
+                        blockchain_hash: res[index].blockchain_hash
+                    }
                 })
                 setIsPass(flag)
                 setDataSource(data, 'OperationsTable');
@@ -71,9 +84,29 @@ const OperationRecords = () => {
         <div
             className={"table-container"}
         >
+            <Descriptions
+                title={'区块链节点信息'}
+                bordered
+            >
+                <Descriptions.Item label={'节点id'}>{blockInfo?.id}</Descriptions.Item>
+                <Descriptions.Item label={'用户数量'}>{blockInfo?.user_cnt}</Descriptions.Item>
+                <Descriptions.Item label={'交易总数'}>{blockInfo?.deal_cnt}</Descriptions.Item>
+                <Descriptions.Item label={'最新区块高度'}>{blockInfo?.latest_block_height}</Descriptions.Item>
+                <Descriptions.Item label={'最新区块时间戳'}>{blockInfo?.latest_block_time}</Descriptions.Item>
+                <Descriptions.Item label={'验证者地址'}>{blockInfo?.address}</Descriptions.Item>
+                <Descriptions.Item label={'创世区块时间'}>{blockInfo?.earliest_block_time}</Descriptions.Item>
+                {/*<Descriptions.Item label={'节点id'}>ddc4b1fd46771dcaabd4e30ed7d8d0039ebc532a</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'用户数量'}>2573</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'交易总数'} style={{width:'150px'}}>14235</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'最新区块高度'}>66710</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'最新区块时间戳'}>2023-12-04T12:22:39.066334994Z</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'验证者地址'}>E0013A41EA84B6B77440266DDB8E8CDBDC04E054</Descriptions.Item>*/}
+                {/*<Descriptions.Item label={'创世区块时间'}>2023-11-26T06:38:23.283227273Z</Descriptions.Item>*/}
+            </Descriptions>
             <Card
                 title={'日志记录'}
-                headStyle={{textAlign:'left'}}
+                headStyle={{textAlign: 'left'}}
+                style={{top: '20px'}}
                 extra={
                     isPass === undefined ? <Button style={{
                         // // padding: '10px 20px',
@@ -102,31 +135,47 @@ const OperationRecords = () => {
                         {
                             title: '操作',
                             key: 'operation',
-                            dataIndex: 'func'
+                            dataIndex: 'func',
+                            width: '200px'
                         },
                         {
                             title: '时间',
                             key: 'time',
-                            dataIndex: 'oper_dt'
+                            dataIndex: 'oper_dt',
+                            width: '150px'
+                        },
+                        {
+                            title: '本地hash',
+                            key: 'local_hash',
+                            dataIndex: 'local_hash',
+                            width: '180px'
                         },
                         {
                             title: '验证结果',
                             key: 'result',
                             dataIndex: 'result',
-                            render: (pass: any, record: any) => {
+                            render: (pass: any, record: any, index: number) => {
                                 return (
-                                    <ValidButton record={record} loading={loading} isPass={record?.result}/>
+                                    <ValidButton record={record} loading={loading} isPass={record?.result} index={index}
+                                                 setDataSource={setDataSource} TableName={'OperationsTable'}/>
                                 )
                             },
                             width: "200px"
                         },
                         {
-                            title:'区块号',
-                            key:'block_number',
-                            dataIndex:'block_number',
-                            render:(block_number:number)=>{
-                                return(block_number === undefined ? (<>未验证</>) : (<>{block_number}</>))
-                            }
+                            title: '区块链hash',
+                            key: 'blockchain_hash',
+                            dataIndex: "blockchain_hash",
+                            width: '180px'
+                        },
+                        {
+                            title: '区块号',
+                            key: 'block_number',
+                            dataIndex: 'block_number',
+                            render: (block_number: number) => {
+                                return (block_number === undefined ? (<>未验证</>) : (<>{block_number}</>))
+                            },
+                            width: "180px"
                         }
                     ]}
                 />

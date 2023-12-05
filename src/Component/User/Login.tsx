@@ -32,7 +32,6 @@ const Login = (props: any) => {
             "login",
             {data: data},
             (r: any) => {
-                // console.log(r);
                 if (!r.first_time) {
                     dispatch(getData(
                         "getProfile",
@@ -40,6 +39,7 @@ const Login = (props: any) => {
                         (res: any) => {
                             dispatch({type: "setUserInfo", data: res});
                             dispatch({type: "userLogin"});
+                            console.log('what')
                             navigate("/c/home", {replace: true});
                         },
                         () => {
@@ -98,7 +98,7 @@ const Login = (props: any) => {
                             }
                             }
                             loading={loading}
-                            > Login </Button>
+                            > 登录 </Button>
                     },
                 }}
             >
@@ -117,8 +117,10 @@ const Login = (props: any) => {
                                 prefix: <UserOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
                                     formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        if (value)
+                                        if (value.username && value.password){
+                                            value.password = sha256(value.password+value.username)
                                             login(value);
+                                        }
                                     }).catch(() => {
                                         formRef.current?.setFields(
                                             [
@@ -146,7 +148,10 @@ const Login = (props: any) => {
                                 prefix: <LockOutlined className={'prefixIcon'}/>,
                                 onPressEnter: () => {
                                     formRef.current?.validateFieldsReturnFormatValue?.()?.then((value: any) => {
-                                        login(value);
+                                        if (value.username && value.password){
+                                            value.password = sha256(value.password+value.username)
+                                            login(value);
+                                        }
                                     }).catch(() => {
                                         formRef.current?.setFields(
                                             [

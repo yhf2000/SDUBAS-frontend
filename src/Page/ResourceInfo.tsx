@@ -7,8 +7,8 @@ import React, {useEffect, useState} from "react";
 import {useLocation, useParams} from "react-router-dom";
 import ModalFormUseForm from "../Component/Common/Form/ModalFormUseForm";
 import {ResourceForm} from "../Component/Record/ResourceProfile";
-import Approval from "../Component/Common/Approval";
-import {ApprovalColumns} from "../Config/Resource/columns";
+import {useSelector} from "react-redux";
+import {IState} from "../Type/base";
 
 const {Meta} = Card;
 
@@ -17,7 +17,14 @@ const ResourceInfo = () => {
     const {rId} = useParams();
     const location = useLocation();
     const {row} = location.state;
-
+    const [permissions,setPermissions] = useState<any>([]);
+    useEffect(() => {
+        Api.getUserPermission({data: {service_type: 5}})
+            .then((res: any) => {
+                    setPermissions(res.map((e: any) => e.label))
+                }
+            )
+    }, [])
     return (
         <>
             <Card
@@ -25,38 +32,47 @@ const ResourceInfo = () => {
                 headStyle={{textAlign: 'left'}}
                 extra={(
                     <Space>
-                        <Approval
-                            API={async (data: any) => {
-                                return Api.getApplyInfo()
-                            }}
-                            columns={ApprovalColumns({API: 'null'})}
-                            TableName={'Resource' + rId + 'ApplyTable'}
-                        />
-                        <RequestResource rId={rId}
-                                         button={<Button type={'primary'} size={'small'}
-                                                         style={{marginTop: '20px'}}>申请</Button>}
-                                         TableName={'ApplicationTable'}/>
-                        <ModalFormUseForm
-                            title={'编辑资源'}
-                            type={'update'}
-                            TableName={'ApplicationTable'}
-                            btnName={'编辑'}
-                            width={1000}
-                            subForm={[
-                                {
-                                    component: ResourceForm,
-                                    label: '',
-                                },
-                                // {
-                                //     component: ProjectForm2,
-                                //     label:'',
-                                // }
-                            ]}
-                            initData={row}
-                            dataSubmitter={(value: any) => {
-                                // console.log('data:',value);
-                            }}
-                        />
+                        {/*<Approval*/}
+                        {/*    API={async (data: any) => {*/}
+                        {/*        return Api.getApplyInfo()*/}
+                        {/*    }}*/}
+                        {/*    columns={ApprovalColumns({API: 'null'})}*/}
+                        {/*    TableName={'Resource' + rId + 'ApplyTable'}*/}
+                        {/*/>*/}
+                        {
+                            permissions.some((e: any) => e === '资源申请') && (
+                                <RequestResource rId={rId}
+                                                 button={<Button type={'primary'} size={'small'}
+                                                                 style={{marginTop: '20px'}}>申请</Button>}
+                                                 TableName={'ApplicationTable'}/>
+                            )
+                        }
+                        {
+                            permissions.some((e: any) => e === '资源编辑') && (
+                                <ModalFormUseForm
+                                    title={'编辑资源'}
+                                    type={'update'}
+                                    TableName={'ApplicationTable'}
+                                    btnName={'编辑'}
+                                    width={1000}
+                                    subForm={[
+                                        {
+                                            component: ResourceForm,
+                                            label: '',
+                                        },
+                                        // {
+                                        //     component: ProjectForm2,
+                                        //     label:'',
+                                        // }
+                                    ]}
+                                    initData={row}
+                                    dataSubmitter={async (value: any) => {
+                                        // console.log('data:',value);
+                                        return Api.updateResource({data: value, rId: row.Id})
+                                    }}
+                                />
+                            )
+                        }
                     </Space>
                 )}
             >
@@ -70,7 +86,7 @@ const ResourceInfo = () => {
                             API={async (data: any) => {
                                 return Api.getApplyInfo({rId: rId, data: data})
                             }}
-                            defaultPageSize = {2}
+                            defaultPageSize={2}
                             columns={[
                                 {
                                     title: '申请人',

@@ -1,15 +1,16 @@
 import {Form, Select} from "antd";
-import {Option} from "antd/es/mentions";
 import {useState} from "react";
 
 const ItemType = (props: any) => {
-    const [select,setSelect] = useState(props.default);
-    const handleChange = (value:any)=>{
-        setSelect(value);
-    }
+    // const [select,setSelect] = useState(props.default);
+    // const handleChange = (value:any)=>{
+    //     console.log(value);
+    //     setSelect(value);
+    // }
     return (
         <>
             <Form.Item label={props.label} name={props.name}
+                       initialValue={props.default||undefined}
                        rules={[
                            {
                                required: props.required,
@@ -17,7 +18,7 @@ const ItemType = (props: any) => {
                            }
                        ]}
             >
-                <Select value={select} onChange={handleChange} mode={props.mode}>
+                <Select mode={props.mode} disabled={props.disabled}>
                     {props.options.map((option: { key: string, value: string }) => {
                         return (
                             <Select.Option key={option.key} value={option.key}>{option.value}</Select.Option>

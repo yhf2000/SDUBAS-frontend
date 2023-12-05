@@ -20,6 +20,7 @@ import MajorClass from "./Page/School/MajorClass";
 import ManageUsers from "./Page/ManageUser/ManageUsers";
 import AddUsersByRole from "./Page/ManageUser/AddUsersByRole";
 import OperationRecords from "./Page/OperationRecords";
+import SDUOJProjectInfo from "./Page/Project/SDUOJProjectInfo";
 
 export interface IBaseRouter {
     id: number
@@ -41,7 +42,7 @@ export const mainRouter: IBaseRouter[] = [
 
 export const CLayoutRouter: IBaseRouter[] = [
     {id: 0, path: "/home", component: <Home/>},
-    {id: 1, path: "/profile", component: <></>},
+    // {id: 1, path: "/profile", component: <></>},
     {id: 2, path: "/login", component: <CLogin/>},
     {id: 3, path: "/register", component: <></>},
     {id: 4, path: "/Project-info/:pId", component: <ProjectInfo/>},
@@ -56,13 +57,14 @@ export const CLayoutRouter: IBaseRouter[] = [
     {id: 14, path: "/record_resource", component: <ResourceProfile/>},
     {id: 15, path: "/creditBank", component: <CreditBank/>},
     {id: 16, path: '/record_personal', component: <PersonalProfile/>},
-    {id: 17, path: '/set_password/:token', component: <NewPwd/>},
+    {id: 17, path: '/set_password/:username/:token', component: <NewPwd/>},
     {id: 18, path: '/school', component: <School/>},
     {id: 19, path: 'school/:school_id/college', component: <College/>},
     {id: 20, path: 'school/:school_id/college/:college_id/MajorClass', component: <MajorClass/>},
     {id: 21, path: '/users', component: <ManageUsers/>},//用户管理的页面
     {id: 22, path: '/addUsers/:role_id', component: <AddUsersByRole/>},
-    {id: 23, path: '/log', component: <OperationRecords/>}
+    {id: 23, path: '/log', component: <OperationRecords/>},
+    {id:24,path:'/sduoj/project-info/:pId',component:<SDUOJProjectInfo />}
 ]
 export const headerMenu: IRouter[] = [
     {id: 0, title: "主页", path: "/c/home",},

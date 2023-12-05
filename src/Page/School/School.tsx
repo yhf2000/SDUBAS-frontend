@@ -6,10 +6,8 @@ import DeleteConfirm from "../../Component/Common/DeleteConfirm";
 import React from "react";
 import {useDispatch} from "../../Redux/Store";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {SchoolForm} from "../../Component/User/Form/SchoolForms";
-import AssignRole from "../../Component/Permission/AssignRole";
-
 const School = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -37,7 +35,7 @@ const School = () => {
                                     }
                                 ]}
                                 dataSubmitter={async (data: any) => {
-                                    console.log(data)
+                                    // console.log(data)
                                     return Api.newSchool({data: data})
                                 }}
                             />
@@ -56,9 +54,9 @@ const School = () => {
                             return (
                                 <>
                                     <List.Item>
-                                        <Row>
+                                        <Row gutter={16} style={{minWidth:'800px'}}>
                                             <Col>
-                                                <Image src={row.image} alt={'学校校徽'} style={{width:'125px'}}/>
+                                                <Image src={row.image} alt={'学校校徽'} style={{height:'80px'}}/>
                                             </Col>
                                             <Col flex={'auto'}>
                                                 <Button type={'link'} onClick={() => {
@@ -80,7 +78,7 @@ const School = () => {
                                                     dataSubmitter={async (values: any) => {
                                                         return Api.updateSchool({sId: row.id, data: values})
                                                     }}
-                                                    initData={row}//还需要有权限,或者使用dataLoader
+                                                    initData={{name:row.name,school_abbreviation:row.school_abbreviation,school_logo_id:{url:row.image,file_id:row.school_logo_id,file_name:'学校logo'}}}//还需要有权限,或者使用dataLoader
                                                 />
                                             </Col>
                                             <Col>

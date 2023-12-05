@@ -133,6 +133,10 @@ export const tagOptions = [
         key: '10',
         value: '创业创新',
     },
+    {
+        key:'11',
+        value:'SDUOJ'
+    }
 ]
 
 
@@ -148,5 +152,21 @@ export const activeType = [
     {
         key: 2,
         value: '归档'
+    }
+]
+
+
+export const creditsType = [
+    {
+        key:0,
+        value:'国学修养'
+    },
+    {
+        key:1,
+        value:'大学英语'
+    },
+    {
+        key:2,
+        value:'专业必修'
     }
 ]

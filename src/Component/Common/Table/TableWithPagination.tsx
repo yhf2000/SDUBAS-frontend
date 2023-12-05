@@ -135,6 +135,7 @@ const TableWithPagination = (props: any) => {
             moreProps: undefined
         })
         const valuesAfter = form.getFieldsValue()
+        // console.log(valuesAfter)
         // 重置前后若发生改变，则重新加载表格
         if (JSON.stringify(values) !== JSON.stringify(valuesAfter))
             getInfo(1, PageSize, undefined, undefined)
@@ -256,10 +257,10 @@ const TableWithPagination = (props: any) => {
                                         {props.useFormBtn&&(
                                             <Space style={{marginLeft: "30px"}} size={20}>
                                                 <Button type="primary" onClick={onFinish}>
-                                                    {"filtering"}
+                                                    筛选
                                                 </Button>
                                                 <Button htmlType="button" onClick={onReset}>
-                                                    {"Reset"}
+                                                    重置
                                                 </Button>
                                             </Space>
                                         )}

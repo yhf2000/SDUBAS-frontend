@@ -9,7 +9,7 @@ const ItemCaptcha = (props: any) => {
     const [image, setImage] = useState<string>()
 
     const getCaptcha = () => {
-        Api.getCaptcha().then((data: any) => {
+        Api.getCaptcha().then((data:any)=>{
             console.log(data);
             setImage(data.captcha)
             props.setImgId(data.captchaId)
@@ -18,7 +18,7 @@ const ItemCaptcha = (props: any) => {
 
     useEffect(() => {
         getCaptcha()
-    }, [])
+    }, [props.cap])
 
     const content = (
         <Row>
@@ -29,7 +29,7 @@ const ItemCaptcha = (props: any) => {
                 }}/>
             </Col>
             <Col offset={1} span={8}>
-                <Image src={image} height={32}/>
+                <Image src={image} height={32} preview={false}/>
             </Col>
             <Col span={1}>
                 <Button

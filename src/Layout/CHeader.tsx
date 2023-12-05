@@ -13,7 +13,6 @@ import {Api} from "../API/api";
 const {Header} = Layout;
 
 
-
 const CHeader = () => {
     const navigator = useNavigate();
     const location = useLocation();
@@ -23,7 +22,7 @@ const CHeader = () => {
     const [selectedKey, setSelectedKey] = useState('0');
     const [userLoginState, setUserLoginState] = useState(isLogin);
 
-    const items:MenuProps['items'] = [
+    const items: MenuProps['items'] = [
         {
             key: '1',
             label: (
@@ -31,12 +30,16 @@ const CHeader = () => {
             )
         },
         {
-            key:'2',
-            label:(
+            key: '2',
+            label: (
                 <Button icon={<LogoutOutlined/>}
                         onClick={() => Api.logout()
-                            .then(() => dispatch({type: "userLogout"}))
-                            .catch(()=>{})
+                            .then(() => {
+                                dispatch({type: "userLogout"})
+                                navigator('/c/home',{replace:true})
+                            })
+                            .catch(() => {
+                            })
                         }
                         type={"ghost"}>
                     用户登出
@@ -96,20 +99,20 @@ const CHeader = () => {
             <div style={{flex: "0"}} key={"operator"}>
                 {isLogin ? (
                     <Dropdown
-                    //     overlay={
-                    //     <Menu>
-                    //         <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
-                    //             用户概况
-                    //         </Menu.Item>
-                    //         <Menu.Item key="2" icon={<LogoutOutlined/>}
-                    //                    onClick={() => Api.logout()
-                    //                        .then(() => dispatch({type: "userLogout"}))
-                    //                        .catch(()=>{})
-                    //         }>
-                    //             登出
-                    //         </Menu.Item>
-                    //     </Menu>
-                    // }
+                        //     overlay={
+                        //     <Menu>
+                        //         <Menu.Item key="1" icon={<UserOutlined/>} onClick={() => navigator("/c/user")}>
+                        //             用户概况
+                        //         </Menu.Item>
+                        //         <Menu.Item key="2" icon={<LogoutOutlined/>}
+                        //                    onClick={() => Api.logout()
+                        //                        .then(() => dispatch({type: "userLogout"}))
+                        //                        .catch(()=>{})
+                        //         }>
+                        //             登出
+                        //         </Menu.Item>
+                        //     </Menu>
+                        // }
                         menu={{items}}
                     >
                         <Button type="text" size={"large"}>

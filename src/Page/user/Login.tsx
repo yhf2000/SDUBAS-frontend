@@ -9,9 +9,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 const UrlPrefix = "/v2";
 const CLogin = () => {
-    const location = useLocation()
-    const isLogin = useSelector((state: IState) => state.UserReducer.isLogin)
-    const navigate = useNavigate();
     // const testLogin = () => {
     //     if (isLogin) {
     //         let to = getUrlParams(location.search).to

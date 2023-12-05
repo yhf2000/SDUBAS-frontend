@@ -1,7 +1,8 @@
 import DeleteConfirm, {Confirm} from "../../Component/Common/DeleteConfirm";
-import {Button, Modal, Progress} from "antd";
+import {Button, message, Modal, Progress} from "antd";
 import {useDispatch} from "../../Redux/Store";
 import Template from "../../Component/Project/Template";
+import {Api} from "../../API/api";
 
 interface ApprovalProps {
     API: any;
@@ -137,26 +138,45 @@ export const CreditBankChildColumns = [
     {
         title: "已修",
         dataIndex: 'is_pass',
-        key: 'complete',
+        key: 'is_pass',
         render: (complete: any) => {
             if (complete)
                 return <>已修</>
             else
                 return <>未修</>
-        }
+        },
+        filters: [
+            {
+                text: '已修',
+                value: true
+            },
+            {
+                text: '未修',
+                value: false
+            }
+        ],
+        onFilter: (value: any, record: any) => record.is_pass.indexOf(value) === 0,
     }
 ]
 
-export const TemplateColumns = [
+export const TemplateColumns = (props:any)=>[
     {
         title: '模板名称',
-        dataIndex: 'template_name',
+        dataIndex: 'role_name',
         key: 'name'
     },
     {
         title: '模板权限',
-        dataIndex: 'permissions',
-        key: 'permission'
+        dataIndex: 'privilege_list',
+        key: 'permission',
+        render:(list:any)=>{
+            let str = ''
+            for(let i = 0;i < list.length;i++)
+                if(i != list.length-1)
+                    str += list[i]+','
+                else str += list[i]
+            return(<span>{str}</span>)
+        }
     },
     {
         title: '操作',
@@ -164,7 +184,25 @@ export const TemplateColumns = [
         render: (_: any, record: any) => {
             return (
                 <>
-                    <Template record={record}/>
+                    {
+                        record.status === -1?(
+                            <Button
+                                type={'link'}
+                                onClick={()=>{
+                                    Api.applyTemplate({pId:props.pId,role_id:record.role_id})
+                                        .then(()=>{
+                                            message.success('申请成功');
+                                            props.addTableVersion('TemplateRolesTable');
+                                        })
+                                        .catch(()=>{})
+                                }}
+                            >
+                                申请
+                            </Button>
+                        ):record.status === 1?(
+                            <div style={{color:'blue'}}>申请中</div>
+                        ):record.status === 0?<div style={{color:'green'}}>通过</div>:<div style={{color:'red'}}>拒绝</div>
+                    }
                 </>
             )
         }

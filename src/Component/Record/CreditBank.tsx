@@ -1,4 +1,4 @@
-import TableWithPagination from "../Common/Table/TableWithPagination";
+    import TableWithPagination from "../Common/Table/TableWithPagination";
 import {Api} from "../../API/api";
 import {Button, Card, Form, Input, message, Modal, Select, Space, Table} from "antd";
 import {useEffect, useState} from "react";
@@ -10,7 +10,7 @@ import {IState} from "../../Type/base";
 
 const CreditBank = () => {
     const userinfo = useSelector((state: IState) => state.UserReducer)
-    const [credits, setCredits] = useState<any>();
+    const [credits, setCredits] = useState<any>(0);
     const [User, setUser] = useState<any>({user_name:userinfo.userInfo?.username});
     const dispatch = useDispatch();
     const AddTableVersion = (name: string) => {
@@ -46,7 +46,7 @@ const CreditBank = () => {
                             borderRadius: '4px',
                         }}
                     >
-                        {User?.user_name === undefined ? "请选择" : `${User.user_name} 已修学分:${credits}`}
+                        {User.user_name === undefined ? (userinfo.userInfo?.username===undefined?`未登录` : `${userinfo.userInfo.username} 已修学分:${credits}`):`${User.name} 已修学分:${credits}`}
                     </span>
                 </>
             }>
@@ -83,6 +83,7 @@ export const SelectUser = (props: any) => {
                 }}
                 title={'选择查看'}
                 footer={null}
+                width={'800px'}
             >
                 <TableWithPagination
                     API={async (data: any) => {
@@ -102,9 +103,34 @@ export const SelectUser = (props: any) => {
                     useFormBtn={false}
                     columns={[
                         {
+                            title: '学号/工号',
+                            dataIndex: 'card_id',
+                            key: 'card_id'
+                        },
+                        {
+                            title: '姓名',
+                            dataIndex: 'real_name',
+                            key: 'real_name'
+                        },
+                        {
                             title: '用户名',
                             dataIndex: 'user_name',
                             key: 'username'
+                        },
+                        {
+                            title: '学校',
+                            dataIndex: 'school',
+                            key: 'school'
+                        },
+                        {
+                            title: '专业',
+                            dataIndex: 'major',
+                            key: 'major'
+                        },
+                        {
+                            title: '班级',
+                            dataIndex: 'class',
+                            key: 'class'
                         },
                         {
                             title: '操作',
@@ -118,6 +144,9 @@ export const SelectUser = (props: any) => {
                                     }}>选择</Button>
                                 )
                             }
+                        },
+                        {
+
                         }
                     ]}
                 />

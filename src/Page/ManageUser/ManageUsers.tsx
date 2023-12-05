@@ -1,4 +1,4 @@
-import {Button, Card, Form, Input} from "antd";
+import {Button, Card, Form, Input, Space} from "antd";
 import TableWithPagination from "../../Component/Common/Table/TableWithPagination";
 import ModalFormUseForm from "../../Component/Common/Form/ModalFormUseForm";
 import {Api} from "../../API/api";
@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import ItemPermission from "../../Component/Permission/Form/Item/ItemPermission";
 import RoleManageForm from "../../Component/Permission/Form/RoleManageForm";
 import "../../Config/CSS/Table.css";
+import {FrownFilled} from "@ant-design/icons";
 
 
 const ManageUsers = () => {
@@ -17,10 +18,11 @@ const ManageUsers = () => {
         dispatch({type: 'addTableVersion', name: name})
     }
     return (
-        <div className={"table-container"}>
+        <div style={{display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center'}}>
             <Card
                 title={'用户管理'}
-                headStyle={{textAlign:'left'}}
+                headStyle={{textAlign: 'left'}}
+                style={{width: '700px'}}
                 extra={(
                     <ModalFormUseForm
                         title={'添加角色'}
@@ -34,7 +36,7 @@ const ManageUsers = () => {
                             },
                         ]}
                         dataSubmitter={async (data: any) => {
-                            console.log('sub', data);
+                            // console.log('sub', data);
                             return Api.addDefaultRole({data: data});
                         }}
                     />
@@ -75,14 +77,13 @@ const ManageUsers = () => {
                                                 {
                                                     component: (
                                                         <>
-                                                            <Form.Item name={'role_id'} style={{display:'none'}} initialValue={row.role_id}>
+                                                            <Form.Item name={'role_id'} style={{display: 'none'}}
+                                                                       initialValue={row.role_id}>
                                                             </Form.Item>
                                                             <Form.Item name={'role_name'}>
                                                                 <Input/>
                                                             </Form.Item>
-                                                            <Form.Item name={'privilege'}>
-                                                                <ItemPermission service_type = {0}/>
-                                                            </Form.Item>
+                                                            <ItemPermission service_type={0} name={'privilege'}/>
                                                         </>
                                                     ),
                                                     label: ''
@@ -91,12 +92,76 @@ const ManageUsers = () => {
                                             dataSubmitter={async (values: any) => {
                                                 return Api.updateRole({role_id: row.id, data: values})
                                             }}
-                                            initData={row}//还需要有权限,或者使用dataLoader
+                                            initData={{
+                                                role_id: row.role_id,
+                                                role_name: row.role_name,
+                                                privilege: row.privilege_list
+                                            }}
                                         />
                                     </>
                                 )
                             }
                         }
+                    ]}
+                />
+            </Card>
+            <Card
+                title={'用户表'}
+                headStyle={{textAlign: 'left'}}
+                style={{width: '700px'}}
+            >
+                <TableWithPagination
+                    API={async (data: any) => {
+                        return Api.getCreatedUsers({data: data})
+                    }}
+                    getForm={(onFinish: any) => {
+                        return (
+                            <Space size={30}>
+                                <Form.Item label={"用户名"} name={"user_name"}>
+                                    <Input onPressEnter={() => {
+                                        onFinish();
+                                    }}/>
+                                </Form.Item>
+                                <Form.Item label={'学校'} name={'school'}>
+                                    <Input onPressEnter={() => {
+                                        onFinish();
+                                    }}/>
+                                </Form.Item>
+                            </Space>
+                        );
+                    }}
+                    useFormBtn={false}
+                    columns={[
+                        {
+                            title: '学号/工号',
+                            dataIndex: 'card_id',
+                            key: 'card_id'
+                        },
+                        {
+                            title: '姓名',
+                            dataIndex: 'real_name',
+                            key: 'real_name'
+                        },
+                        {
+                            title: '用户名',
+                            dataIndex: 'user_name',
+                            key: 'username'
+                        },
+                        {
+                            title: '学校',
+                            dataIndex: 'school',
+                            key: 'school'
+                        },
+                        {
+                            title: '专业',
+                            dataIndex: 'major',
+                            key: 'major'
+                        },
+                        {
+                            title: '班级',
+                            dataIndex: 'class',
+                            key: 'class'
+                        },
                     ]}
                 />
             </Card>

@@ -140,6 +140,7 @@ const ContinuousTimeGrid: React.FC<Props> = ({id, apply, start, end}) => {
                             type={'create'}
                             btnName={'申请'}
                             btnType={'ghost'}
+                            TableName={'ApplicationTable'}
                             subForm={[
                                 {
                                     component: (
